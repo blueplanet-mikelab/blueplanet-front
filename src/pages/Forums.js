@@ -8,6 +8,8 @@ const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
 
+const includesCountry = (a,b) =>  a.some(x => b.includes(x))
+
 export default class Forums extends Component {
     constructor(props) {
         super(props);
@@ -44,7 +46,7 @@ export default class Forums extends Component {
                 thumbnail: datas[i].thumbnail,
                 vote: datas[i].totalVote,
                 popular: datas[i].popularity,
-                country: datas[i].countries.nameEnglish
+                country: datas[i].countries.map(c => c.nameEnglish)
               };
             });
             this.setState(
@@ -117,15 +119,17 @@ export default class Forums extends Component {
     //     })
     // }
 
+  
+
     handleChange = (value) => {
         console.log("data: "+this.state.data);
         console.log("fulldata: "+this.state.fullData);
-        this.setState({ data: this.state.fullData.filter(d => d.country === value )},
-        ()=>
-      
-        console.log("data"+this.state.data)
-        );
-    }
+        this.setState({ data: this.state.fullData.filter(d => includesCountry(d.country, value)
+          )}
+        );        
+   };
+
+     
    
     render() {
 
