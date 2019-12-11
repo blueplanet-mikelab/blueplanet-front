@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, Input, Slider} from 'antd';
+import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox} from 'antd';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
 
 const includesCountry = (a,b) =>  a.some(x => b.includes(x))
+const checkTheme = (a,b) =>  a.some(x => b.includes(x))
+const checkMonth = (a,b) =>  a.some(x => b.includes(x))
 
 export default class Forums extends Component {
     constructor(props) {
@@ -17,7 +19,9 @@ export default class Forums extends Component {
             threads: [],
             data: [],
             value: 1,
-            fullData: []
+            fullData: [],
+            inputMinValue: 10000,
+            inputMaxValue: 100000,
         };
     }
 
@@ -25,19 +29,71 @@ export default class Forums extends Component {
         console.log("click ", e);
     };
 
-    onChange = e => {
+    onChangeBudget = value => {
+      this.setState({
+        inputMinValue: value,
+      });
+    };
+
+    onChangeBudgetMax = value => {
+      this.setState({
+        inputMaxValue: value,
+      });
+    };
+
+    onBlur() {
+      console.log('blur');
+    }
+    
+    onFocus() {
+      console.log('focus');
+    }
+    
+    onSearch(val) {
+      console.log('search:', val);
+    }
+
+    handleChange = (value) => {
+      console.log("data: "+this.state.data);
+      console.log("fulldata: "+this.state.fullData);
+      this.setState({ data: this.state.fullData.filter(d => 
+        includesCountry(d.country, value) 
+        )}
+      );   
+    };
+    
+    onChangeTheme = (e) =>  {
+      console.log("e.target.value: " + e.target.value);
+      this.setState({ data: this.state.fullData.filter(d => {
+        console.log(d.theme)
+        return checkTheme(d.theme, e.target.value) }) 
+      });    
+    }
+
+      onChangeMonth = (value) => {
+        console.log(`selected ${value}`);
+        this.setState({ data: this.state.fullData.filter(d => {
+          console.log(d.month);
+          if(d.month != null) {
+            return checkMonth(d.month, value)
+          } 
+        }) 
+        });    
+      }  
+
+      onChangeDuration = e => {
         console.log('radio checked', e.target.value);
         this.setState({
           value: e.target.value,
         });
     };
-   
+
     componentDidMount() {
         axios
           .get("http://localhost:3001/forums")
           .then(res => {
             const datas = res.data;
-            const data = [...Array(10).keys()].map(i => {
+            const data = [...Array(20).keys()].map(i => {
               return {
                 title: datas[i].title,
                 link: "https://pantip.com/topic/" + datas[i].topic_id,
@@ -46,7 +102,10 @@ export default class Forums extends Component {
                 thumbnail: datas[i].thumbnail,
                 vote: datas[i].totalVote,
                 popular: datas[i].popularity,
-                country: datas[i].countries.map(c => c.nameEnglish)
+                country: datas[i].countries.map(c => c.nameEnglish),
+                typeday: datas[i].duration.days,
+                theme: datas[i].theme.map(c => c.theme),
+                month: datas[i].month
               };
             });
             this.setState(
@@ -113,25 +172,11 @@ export default class Forums extends Component {
           );
         });
       };
-    // threadList() {
-    //     return this.state.threads.map((currentThread, i) => {
-    //         // return List of threads
-    //     })
-    // }
-
-  
-
-    handleChange = (value) => {
-        console.log("data: "+this.state.data);
-        console.log("fulldata: "+this.state.fullData);
-        this.setState({ data: this.state.fullData.filter(d => includesCountry(d.country, value)
-          )}
-        );        
-   };
-
      
    
     render() {
+
+      const { inputMinValue, inputMaxValue } = this.state;
 
         const radioStyle = {
             display: 'block',
@@ -170,14 +215,7 @@ export default class Forums extends Component {
         const children = [];
         children.push(<Option value="Japan" label="Japan">Japan</Option>);
         children.push(<Option value="Thailand" label="Thailand">Thailand</Option>);
-
-        function onChange(value) {
-            console.log('onChange: ', value);
-        }
-          
-        function onAfterChange(value) {
-            console.log('onAfterChange: ', value);
-        }
+        children.push(<Option value="Taiwan" label="Thailand">Taiwan</Option>);
         
         return (
         <div>
@@ -233,10 +271,12 @@ export default class Forums extends Component {
                         </span>
                         }
                         >
-                            <Radio.Group onChange={this.onChange} value={this.state.value}>
-                                <Radio style={radioStyle} value={1}>Option A</Radio>
-                                <Radio style={radioStyle} value={2}>Option B</Radio>
-                                <Radio style={radioStyle} value={3}>Option C</Radio>
+                            <Radio.Group onChange={this.onChangeDuration} value={this.state.value}>
+                                <Radio style={radioStyle} value={1}>1 - 3 Days</Radio>
+                                <Radio style={radioStyle} value={2}>4 - 6 Days</Radio>
+                                <Radio style={radioStyle} value={3}>7 - 9 Days</Radio>
+                                <Radio style={radioStyle} value={4}>10 - 12 Days</Radio>
+                                <Radio style={radioStyle} value={5}>More than 12 Days</Radio>
                             </Radio.Group>
                         </SubMenu>
                         <ColoredShortLine color="rgba(130, 142, 180, 0.5)" />
@@ -250,17 +290,113 @@ export default class Forums extends Component {
                         </span>
                         }
                         >
-                            <Slider
-                            range
-                            min={1}
-                            max={100000}
-                            step={1}
-                            defaultValue={[20, 50]}
-                            onChange={onChange}
-                            onAfterChange={onAfterChange}
-                            style={{marginLeft: 22, marginRight: 22}}
-                            />
+                         <Slider
+                         range
+                         min={0}
+                         max={100000}
+                         style={{ marginLeft: 22, marginRight: 22 }}
+                         onChange={this.onChangeBudget}
+                         onAfterChange={this.onChangeBudgetMax}
+                         value={[inputMinValue,inputMaxValue]}
+                         defaultValue={[25000, 100000]}
+                         />
+                         <InputNumber
+                         min={0}
+                         max={100000}
+                         style={{ marginLeft: 22, marginRight: 15, width: 75 }}
+                         value={inputMinValue}
+                         onChange={this.onChangeBudget}
+                         />
+                         <InputNumber
+                         min={0}
+                         max={100000}
+                         style={{ marginLeft: 2, marginRight: 22, width: 75}}
+                         value={inputMaxValue}
+                         onChange={this.onChangeBudgetMax}
+                         />
+       
                         </SubMenu>
+                        <ColoredShortLine color="rgba(130, 142, 180, 0.5)" />
+                        
+                        <SubMenu
+                        key="sub4"
+                        title={
+                        <span>
+                            <Icon type="notification" />
+                            Month
+                        </span>
+                        }
+                        >
+                          <Select
+                          showSearch
+                          style={{ marginLeft: 22, marginRight: 22, width: 150 }}
+                          placeholder="Filter by Month"
+                          optionFilterProp="children"
+                          onChange={this.onChangeMonth}
+                          onFocus={this.onFocus}
+                          onBlur={this.onBlur}
+                          onSearch={this.onSearch}
+                          filterOption={(input, option) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }>
+                            <Option value="January">January</Option>
+                            <Option value="February">February</Option>
+                            <Option value="March">March</Option>
+                            <Option value="April">April</Option>
+                            <Option value="May">May</Option>
+                            <Option value="June">June</Option>
+                            <Option value="July">July</Option>
+                            <Option value="August">August</Option>
+                            <Option value="September">September</Option>
+                            <Option value="October">October</Option>
+                            <Option value="November">November</Option>
+                            <Option value="December">december </Option>
+                            </Select>
+                        </SubMenu>
+                        <ColoredShortLine color="rgba(130, 142, 180, 0.5)" />
+
+                        <SubMenu
+                        key="sub5"
+                        title={
+                        <span>
+                            <Icon type="notification" />
+                            Theme
+                        </span>
+                        }> 
+                        <Col>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15 }} value="Mountain" onChange={this.onChangeTheme}>Mountain</Checkbox>
+                          </Row>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Sea" onChange={this.onChangeTheme}>Sea</Checkbox>
+                          </Row>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Religion" onChange={this.onChangeTheme}>Religion</Checkbox>
+                          </Row>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15  }} value="Historical" onChange={this.onChangeTheme}>Historical</Checkbox>
+                          </Row>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Entertainment" onChange={this.onChangeTheme}>Entertainment</Checkbox>
+                          </Row>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Festival" onChange={this.onChangeTheme}>Festival</Checkbox>
+                          </Row>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15  }} value="Eating" onChange={this.onChangeTheme}>Eating</Checkbox>
+                          </Row>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="NightLifeStyle" onChange={this.onChangeTheme}>NightLifeStyle</Checkbox>
+                          </Row>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Photography" onChange={this.onChangeTheme}>Photography</Checkbox>
+                          </Row>
+                          <Row>
+                          <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15  }} value="Sightseeing" onChange={this.onChangeTheme}>Sightseeing</Checkbox>
+                          </Row>
+                          </Col>
+                        </SubMenu>
+                        <ColoredShortLine color="rgba(130, 142, 180, 0.5)" />
                     </Menu>
                 </Sider>
             <Layout style={{ padding: '24px 24px 24px' }}>
@@ -273,9 +409,10 @@ export default class Forums extends Component {
                 }}
                 >
                     Forum / 
-            {/* post1 */}
+            {/* Thread */}
             
             {this.CreatePost()}
+
           </Content>
         </Layout>
       </Layout>
