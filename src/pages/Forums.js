@@ -11,6 +11,7 @@ const { Option } = Select;
 const includesCountry = (a,b) =>  a.some(x => b.includes(x))
 const checkTheme = (a,b) =>  a.some(x => b.includes(x))
 const checkMonth = (a,b) =>  a.some(x => b.includes(x))
+const checkDuration = (a,b) =>  a.some(x => b.includes(x))
 
 export default class Forums extends Component {
     constructor(props) {
@@ -19,6 +20,7 @@ export default class Forums extends Component {
             threads: [],
             data: [],
             value: 1,
+            radio: 1,
             fullData: [],
             inputMinValue: 10000,
             inputMaxValue: 100000,
@@ -29,13 +31,25 @@ export default class Forums extends Component {
         console.log("click ", e);
     };
 
-    onChangeBudget = value => {
+    onChangeBudget = (value) => {
+      console.log("value: " + value);
+    };
+
+    onAfterChange = (value) => {
+      console.log('onAfterChange: ', value);
+      this.setState({
+        inputMinValue: value[0],
+        inputMaxValue: value[1],
+      });
+    }
+
+    onChangeMin = (value) => {
       this.setState({
         inputMinValue: value,
       });
     };
 
-    onChangeBudgetMax = value => {
+    onChangeMax = (value) => {
       this.setState({
         inputMaxValue: value,
       });
@@ -64,9 +78,14 @@ export default class Forums extends Component {
     
     onChangeTheme = (e) =>  {
       console.log("e.target.value: " + e.target.value);
+      console.log(e.target.checked)
       this.setState({ data: this.state.fullData.filter(d => {
-        console.log(d.theme)
-        return checkTheme(d.theme, e.target.value) }) 
+        
+        if(e.target.checked){
+          console.log(d.theme)
+          return checkTheme(d.theme, e.target.value) }
+        }) 
+      
       });    
     }
 
@@ -81,12 +100,14 @@ export default class Forums extends Component {
         });    
       }  
 
-      onChangeDuration = e => {
+      onChangeDuration = (e) => {
         console.log('radio checked', e.target.value);
         this.setState({
-          value: e.target.value,
+          radio: e.target.value,
         });
-    };
+      }
+
+    // value: e.target.value,
 
     componentDidMount() {
         axios
@@ -101,8 +122,8 @@ export default class Forums extends Component {
                 budget: "฿".repeat(datas[i].budget.toString().length),
                 thumbnail: datas[i].thumbnail,
                 vote: datas[i].totalVote,
-                popular: datas[i].popularity,
-                country: datas[i].countries.map(c => c.nameEnglish),
+                popular: parseInt(datas[i].popularity),
+                country: datas[i].countries.map(c => c.nameEnglish + " "),
                 typeday: datas[i].duration.days,
                 theme: datas[i].theme.map(c => c.theme),
                 month: datas[i].month
@@ -144,23 +165,24 @@ export default class Forums extends Component {
                   <Row style={{ paddingTop: 10 }}>
                     <Tag color="rgba(130, 142, 180, 0.5)">{d.day}</Tag>
                     <Tag color="rgba(130, 142, 180, 0.5)">{d.budget}</Tag>
+                    <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
                   </Row>
                   <Row style={{ paddingTop: 10 }}>
                     <div className="icons-list">
                       <Icon
                         type="plus"
-                        style={{ fontSize: "14px", color: "#828EB4", padding: 2 }}
+                        style={{ fontSize: "14px", color: "#828EB4", padding: 1 }}
                       />{" "}
                       {d.vote} upvoted
                       <Icon
                         type="fire"
                         theme="filled"
-                        style={{ fontSize: "14px", color: "#828EB4", padding: 2 }}
+                        style={{ fontSize: "14px", color: "#828EB4", padding: 1, marginLeft: 20 }}
                       />{" "}
-                      popular
+                      {d.popular} popular
                       <Icon
                         type="share-alt"
-                        style={{ fontSize: "14px", color: "#828EB4", padding: 2 }}
+                        style={{ fontSize: "14px", color: "#828EB4", padding: 1, marginLeft: 20 }}
                       />{" "}
                       shared
                     </div>
@@ -173,7 +195,7 @@ export default class Forums extends Component {
         });
       };
      
-   
+      
     render() {
 
       const { inputMinValue, inputMaxValue } = this.state;
@@ -213,9 +235,10 @@ export default class Forums extends Component {
         );
 
         const children = [];
-        children.push(<Option value="Japan" label="Japan">Japan</Option>);
-        children.push(<Option value="Thailand" label="Thailand">Thailand</Option>);
-        children.push(<Option value="Taiwan" label="Thailand">Taiwan</Option>);
+        children.push(<Option value="Japan " label="Japan">Japan</Option>);
+        children.push(<Option value="Thailand " label="Thailand">Thailand</Option>);
+        children.push(<Option value="Taiwan " label="Taiwan">Taiwan</Option>);
+        children.push(<Option value="Myanmar " label="Myanmar">Myanmar</Option>);
         
         return (
         <div>
@@ -271,7 +294,7 @@ export default class Forums extends Component {
                         </span>
                         }
                         >
-                            <Radio.Group onChange={this.onChangeDuration} value={this.state.value}>
+                            <Radio.Group onChange={this.onChangeDuration} value={this.state.radio}>
                                 <Radio style={radioStyle} value={1}>1 - 3 Days</Radio>
                                 <Radio style={radioStyle} value={2}>4 - 6 Days</Radio>
                                 <Radio style={radioStyle} value={3}>7 - 9 Days</Radio>
@@ -296,8 +319,7 @@ export default class Forums extends Component {
                          max={100000}
                          style={{ marginLeft: 22, marginRight: 22 }}
                          onChange={this.onChangeBudget}
-                         onAfterChange={this.onChangeBudgetMax}
-                         value={[inputMinValue,inputMaxValue]}
+                         onAfterChange={this.onAfterChange}
                          defaultValue={[25000, 100000]}
                          />
                          <InputNumber
@@ -305,14 +327,14 @@ export default class Forums extends Component {
                          max={100000}
                          style={{ marginLeft: 22, marginRight: 15, width: 75 }}
                          value={inputMinValue}
-                         onChange={this.onChangeBudget}
+                         onChange={this.onChangeMin}
                          />
                          <InputNumber
                          min={0}
                          max={100000}
                          style={{ marginLeft: 2, marginRight: 22, width: 75}}
                          value={inputMaxValue}
-                         onChange={this.onChangeBudgetMax}
+                         onChange={this.onChangeMax}
                          />
        
                         </SubMenu>
