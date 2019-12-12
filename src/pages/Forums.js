@@ -11,7 +11,7 @@ const { Option } = Select;
 const includesCountry = (a,b) =>  a.some(x => b.includes(x))
 const checkTheme = (a,b) =>  a.some(x => b.includes(x))
 const checkMonth = (a,b) =>  a.some(x => b.includes(x))
-const checkDuration = (a,b) =>  a.some(x => b.includes(x))
+const checkBudget = (a,b) =>  ( b <= a )
 
 export default class Forums extends Component {
     constructor(props) {
@@ -22,8 +22,8 @@ export default class Forums extends Component {
             value: 1,
             radio: 1,
             fullData: [],
-            inputMinValue: 10000,
-            inputMaxValue: 100000,
+            inputMinValue: 0,
+            inputMaxValue: 20000,
         };
     }
 
@@ -40,6 +40,9 @@ export default class Forums extends Component {
       this.setState({
         inputMinValue: value[0],
         inputMaxValue: value[1],
+        data: this.state.fullData.filter(d => 
+        checkBudget(d.budgetNum,value[1])
+        )
       });
     }
 
@@ -120,6 +123,7 @@ export default class Forums extends Component {
                 link: "https://pantip.com/topic/" + datas[i].topic_id,
                 day: datas[i].duration.label,
                 budget: "฿".repeat(datas[i].budget.toString().length),
+                budgetNum: datas[i].budget,
                 thumbnail: datas[i].thumbnail,
                 vote: datas[i].totalVote,
                 popular: parseInt(datas[i].popularity),
@@ -320,18 +324,18 @@ export default class Forums extends Component {
                          style={{ marginLeft: 22, marginRight: 22 }}
                          onChange={this.onChangeBudget}
                          onAfterChange={this.onAfterChange}
-                         defaultValue={[25000, 100000]}
+                         defaultValue={[0,20000]}
                          />
                          <InputNumber
                          min={0}
-                         max={100000}
+                         max={50000}
                          style={{ marginLeft: 22, marginRight: 15, width: 75 }}
                          value={inputMinValue}
                          onChange={this.onChangeMin}
                          />
                          <InputNumber
                          min={0}
-                         max={100000}
+                         max={50000}
                          style={{ marginLeft: 2, marginRight: 22, width: 75}}
                          value={inputMaxValue}
                          onChange={this.onChangeMax}
