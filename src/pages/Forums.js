@@ -1,31 +1,51 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import axios from 'axios';
+import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox} from 'antd';
 
+const CheckboxGroup = Checkbox.Group;
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
 
-const includesCountry = (a,b) =>  a.some(x => b.includes(x))
-const checkTheme = (a,b) =>  a.some(x => b.includes(x))
-const checkMonth = (a,b) =>  a.some(x => b.includes(x))
+// const includesCountry = (a,b) =>  a.some(x => b.includes(x))
+// const checkTheme = (a,b) =>  a.some(x => b.includes(x))
+// const checkMonth = (a,b) =>  a.some(x => b.includes(x))
 const checkBudget = (a,b) =>  ( b <= a )
 
-export default class Forums extends Component {
+// function a() {
+
+// }
+
+// const b = () => {
+//   console.log("bbbbb")
+// }
+
+class Forums extends Component {
     constructor(props) {
         super(props);
         this.state = {
             threads: [],
-            data: [],
+            threadPoperties: [],
             value: 1,
             radio: 1,
             fullData: [],
+            query: {},
             inputMinValue: 0,
             inputMaxValue: 20000,
         };
     }
+
+    handleSortBy = (value) => {
+      console.log(`selected ${value}`);
+      const query = this.state.query;
+      query.sortby = value;
+      this.setState({query: query});
+      this.getInformation(query);
+    };
 
     handleClick = e => {
         console.log("click ", e);
@@ -33,6 +53,12 @@ export default class Forums extends Component {
 
     onChangeBudget = (value) => {
       console.log("value: " + value);
+      const query = this.state.query;
+      query.budget_min = value[0];
+      query.budget_max = value[1];
+      this.setState({query: query, inputMinValue : value,});
+      this.getInformation(query);
+
     };
 
     onAfterChange = (value) => {
@@ -43,19 +69,30 @@ export default class Forums extends Component {
         data: this.state.fullData.filter(d => 
         checkBudget(d.budgetNum,value[1])
         )
+      }, () => {
+        console.log()
       });
     }
 
     onChangeMin = (value) => {
-      this.setState({
-        inputMinValue: value,
-      });
+      const query = this.state.query;
+      query.budget_min = value;
+      this.setState({query: query, inputMinValue : value,});
+      this.getInformation(query);
+
+      // this.setState({
+      //   inputMinValue: value,
+      // });
     };
 
     onChangeMax = (value) => {
-      this.setState({
-        inputMaxValue: value,
-      });
+      const query = this.state.query;
+      query.budget_max = value;
+      this.setState({query: query, inputMaxValue :  value,});
+      this.getInformation(query);
+      // this.setState({
+      //   inputMaxValue: value,
+      // });
     };
 
     onBlur() {
@@ -72,39 +109,54 @@ export default class Forums extends Component {
 
     handleChange = (value) => {
       console.log("data: "+this.state.data);
-      console.log("fulldata: "+this.state.fullData);
-      this.setState({ data: this.state.fullData.filter(d => 
-        includesCountry(d.country, value) 
-        )}
-      );   
+      const query = this.state.query;
+      query.countries = value;
+      this.setState({query: query});
+      this.getInformation(query);
+      // this.setState({ data: this.state.fullData.filter(d => 
+      //   includesCountry(d.country, value) 
+      //   )}
+      // );   
     };
     
     onChangeTheme = (e) =>  {
       console.log("e.target.value: " + e.target.value);
       console.log(e.target.checked)
-      this.setState({ data: this.state.fullData.filter(d => {
+      const query = this.state.query;
+      query.themes = e.target.value;
+      this.setState({query: query});
+      this.getInformation(query);
+      // this.setState({ data: this.state.fullData.filter(d => {
         
-        if(e.target.checked){
-          console.log(d.theme)
-          return checkTheme(d.theme, e.target.value) }
-        }) 
+      //   if(e.target.checked){
+      //     console.log(d.theme)
+      //     return checkTheme(d.theme, e.target.value) }
+      //   }) 
       
-      });    
+      // });    
     }
 
       onChangeMonth = (value) => {
         console.log(`selected ${value}`);
-        this.setState({ data: this.state.fullData.filter(d => {
-          console.log(d.month);
-          if(d.month != null) {
-            return checkMonth(d.month, value)
-          } 
-        }) 
-        });    
+        const query = this.state.query;
+        query.months = value;
+        this.setState({query: query});
+        this.getInformation(query);
+        // this.setState({ data: this.state.fullData.filter(d => {
+        //   console.log(d.month);
+        //   if(d.month != null) {
+        //     return checkMonth(d.month, value)
+        //   } 
+        // }) 
+        // });    
       }  
 
       onChangeDuration = (e) => {
         console.log('radio checked', e.target.value);
+        const query = this.state.query;
+        query.durations = e.target.value;
+        this.setState({query: query});
+        this.getInformation(query);
         this.setState({
           radio: e.target.value,
         });
@@ -112,46 +164,52 @@ export default class Forums extends Component {
 
     // value: e.target.value,
 
-    componentDidMount() {
-        axios
-          .get("http://localhost:3001/forums")
-          .then(res => {
-            const datas = res.data;
-            const data = [...Array(20).keys()].map(i => {
-              return {
-                title: datas[i].title,
-                link: "https://pantip.com/topic/" + datas[i].topic_id,
-                day: datas[i].duration.label,
-                budget: "฿".repeat(datas[i].budget.toString().length),
-                budgetNum: datas[i].budget,
-                thumbnail: datas[i].thumbnail,
-                vote: datas[i].totalVote,
-                popular: parseInt(datas[i].popularity),
-                country: datas[i].countries.map(c => c.nameEnglish + " "),
-                typeday: datas[i].duration.days,
-                theme: datas[i].theme.map(c => c.theme),
-                month: datas[i].month
-              };
-            });
-            this.setState(
-              {
-                threads: datas,
-                data: data,
-                fullData: data
-              },
-              () => {
-                console.log(this.state.data);
-                console.log(this.state.fullData);
-                console.log(data);
-              }
-            );
-          })
-          .catch(err => console.log(err));
+    async getInformation(query) {
+      let response = null;
+      const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
+      this.props.history.push(`/forums${q}`);
+      try {
+        response = await axios.get(`http://localhost:3001/forumList/filterQuery${q}`)
+      } catch (error) {
+        console.log(error);
       }
+      if (response) {
+        // Map data after get response
+        this.mapData(response);
+      }
+    }
+
+    mapData(response) {
+      const threadPoperties = response.data.map( item => {
+        return {
+          ...item,
+          link: "https://pantip.com/topic/" + item.topic_id,
+          day: item.duration.label,
+          budget: "฿".repeat(item.budget.toString().length),
+          popular: parseInt(item.popularity),
+          country: item.countries.map(c => c.country + " "),
+          vote: item.totalVote,
+          duration: item.duration.label,
+          typeday: item.duration.days,
+          theme: item.theme.map(c => c.theme),
+        };
+      });
+      this.setState({threadPoperties: threadPoperties});
+      console.log(this.state.threadPoperties);
+    }
+
+    getQueryParams(){
+      return qs.parse(this.props.location.search,{ignoreQueryPrefix: true})
+    }
+
+    componentDidMount() {
+      const q = this.getQueryParams();
+      this.setState({query: q})
+      this.getInformation(q);
+    }
     
       CreatePost = () => {
-        console.log("data"+this.state.data)
-        return this.state.data.map(d => {
+        return this.state.threadPoperties.map(d => {
           return (
             <div>
               <Row style={{ background: "#fff", paddingTop: 5, fontSize: "14px" }}>
@@ -239,10 +297,10 @@ export default class Forums extends Component {
         );
 
         const children = [];
-        children.push(<Option value="Japan " label="Japan">Japan</Option>);
-        children.push(<Option value="Thailand " label="Thailand">Thailand</Option>);
-        children.push(<Option value="Taiwan " label="Taiwan">Taiwan</Option>);
-        children.push(<Option value="Myanmar " label="Myanmar">Myanmar</Option>);
+        children.push(<Option value="JP">Japan </Option>);
+        children.push(<Option value="TH">Thailand </Option>);
+        children.push(<Option value="TW">Taiwan </Option>);
+        children.push(<Option value="MM">Myanmar </Option>);
         
         return (
         <div>
@@ -279,9 +337,9 @@ export default class Forums extends Component {
                         >
                             <Select
                             mode="multiple"
+                            value={this.state.query.countries}
                             style={{ width: '77%', marginLeft: 22, marginRight: 15 }}
                             placeholder="Please select"
-                          
                             onChange={this.handleChange}
                             >
                             {children}
@@ -298,12 +356,12 @@ export default class Forums extends Component {
                         </span>
                         }
                         >
-                            <Radio.Group onChange={this.onChangeDuration} value={this.state.radio}>
-                                <Radio style={radioStyle} value={1}>1 - 3 Days</Radio>
-                                <Radio style={radioStyle} value={2}>4 - 6 Days</Radio>
-                                <Radio style={radioStyle} value={3}>7 - 9 Days</Radio>
-                                <Radio style={radioStyle} value={4}>10 - 12 Days</Radio>
-                                <Radio style={radioStyle} value={5}>More than 12 Days</Radio>
+                            <Radio.Group onChange={this.onChangeDuration} value={this.state.query.durations ? this.state.query.durations : 1}>
+                                <Radio style={radioStyle} value={"1-3Days"}>1 - 3 Days</Radio>
+                                <Radio style={radioStyle} value={"4-6Days"}>4 - 6 Days</Radio>
+                                <Radio style={radioStyle} value={"7-9Days"}>7 - 9 Days</Radio>
+                                <Radio style={radioStyle} value={"10-12Days"}>10 - 12 Days</Radio>
+                                <Radio style={radioStyle} value={"Morethan12Days"}>More than 12 Days</Radio>
                             </Radio.Group>
                         </SubMenu>
                         <ColoredShortLine color="rgba(130, 142, 180, 0.5)" />
@@ -320,24 +378,27 @@ export default class Forums extends Component {
                          <Slider
                          range
                          min={0}
-                         max={100000}
+                         max={50000}
                          style={{ marginLeft: 22, marginRight: 22 }}
                          onChange={this.onChangeBudget}
                          onAfterChange={this.onAfterChange}
                          defaultValue={[0,20000]}
+                         value={[this.state.query.budget_min,this.state.query.budget_max]}
                          />
                          <InputNumber
                          min={0}
                          max={50000}
                          style={{ marginLeft: 22, marginRight: 15, width: 75 }}
-                         value={inputMinValue}
+                        //  value={inputMinValue}
+                        value={this.state.query.budget_min}
                          onChange={this.onChangeMin}
                          />
                          <InputNumber
                          min={0}
                          max={50000}
                          style={{ marginLeft: 2, marginRight: 22, width: 75}}
-                         value={inputMaxValue}
+                        //  value={inputMaxValue}
+                        value={this.state.query.budget_max}
                          onChange={this.onChangeMax}
                          />
        
@@ -358,6 +419,7 @@ export default class Forums extends Component {
                           style={{ marginLeft: 22, marginRight: 22, width: 150 }}
                           placeholder="Filter by Month"
                           optionFilterProp="children"
+                          value= {this.state.query.months}
                           onChange={this.onChangeMonth}
                           onFocus={this.onFocus}
                           onBlur={this.onBlur}
@@ -376,7 +438,7 @@ export default class Forums extends Component {
                             <Option value="September">September</Option>
                             <Option value="October">October</Option>
                             <Option value="November">November</Option>
-                            <Option value="December">december </Option>
+                            <Option value="December">December </Option>
                             </Select>
                         </SubMenu>
                         <ColoredShortLine color="rgba(130, 142, 180, 0.5)" />
@@ -421,6 +483,11 @@ export default class Forums extends Component {
                           <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15  }} value="Sightseeing" onChange={this.onChangeTheme}>Sightseeing</Checkbox>
                           </Row>
                           </Col>
+                          <CheckboxGroup
+         
+          value={this.state.query.durations}
+        
+        />
                         </SubMenu>
                         <ColoredShortLine color="rgba(130, 142, 180, 0.5)" />
                     </Menu>
@@ -433,8 +500,29 @@ export default class Forums extends Component {
                     margin: 0,
                     minHeight: 575,
                 }}
-                >
-                    Forum / 
+                ><div style={{backgroundColor: "rgba(130, 142, 180, 0.5)", paddingTop: 20}}>
+                  <Row>
+                    <span style={{marginLeft: 20}}>Forum / {this.state.query.countries}</span> 
+                    <Select defaultValue="popular" value={this.state.query.sortby} style={{ width: 150, marginLeft: 650, marginBottom: 20, borderColor: "rgba(130, 142, 180, 0.5)"}} onChange={this.handleSortBy}>
+                      <Option value="upvoted" style={{backgroundColor: "rgba(130, 142, 180, 0.5)"}}>
+                        <Icon type="plus" 
+                          style={{color: "#181741", padding: 3}}
+                        />Most Upvoted</Option>
+                      <Option value="popular">  
+                        <Icon
+                          type="fire"
+                          theme="filled"
+                          style={{color: "#181741", padding: 3}}
+                        />Most Popular</Option>
+                      <Option value="disabled" disabled>
+                        ________________
+                      </Option>
+                      <Option value="newest">Newest</Option>
+                      <Option value="oldest">Oldest</Option>
+                    </Select>
+                    </Row>
+                    </div>
+
             {/* Thread */}
             
             {this.CreatePost()}
@@ -447,3 +535,5 @@ export default class Forums extends Component {
         )
     }
 }
+
+export default withRouter(Forums);
