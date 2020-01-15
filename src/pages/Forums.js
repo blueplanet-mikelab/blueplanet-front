@@ -10,10 +10,8 @@ const CheckboxGroup = Checkbox.Group;
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
+var checkTheme = [];
 
-// const includesCountry = (a,b) =>  a.some(x => b.includes(x))
-// const checkTheme = (a,b) =>  a.some(x => b.includes(x))
-// const checkMonth = (a,b) =>  a.some(x => b.includes(x))
 const checkBudget = (a,b) =>  ( b <= a )
 
 // function a() {
@@ -111,6 +109,7 @@ class Forums extends Component {
       console.log("data: "+this.state.data);
       const query = this.state.query;
       query.countries = value;
+      console.log("value: "+ value);
       this.setState({query: query});
       this.getInformation(query);
       // this.setState({ data: this.state.fullData.filter(d => 
@@ -121,9 +120,20 @@ class Forums extends Component {
     
     onChangeTheme = (e) =>  {
       console.log("e.target.value: " + e.target.value);
-      console.log(e.target.checked)
+      console.log(e.target.checked);
+      const theme = e.target.value;
+      console.log("theme: " + theme);
+      if (theme != null) {
+        if ( e.target.checked === false) {
+          checkTheme.splice( checkTheme.indexOf(theme), 1 );
+        } else {
+          checkTheme.push(theme);
+        }
+      }
       const query = this.state.query;
-      query.themes = e.target.value;
+      // query.themes = e.target.value;
+      console.log("checktheme: " + checkTheme);
+      query.themes = checkTheme;
       this.setState({query: query});
       this.getInformation(query);
       // this.setState({ data: this.state.fullData.filter(d => {
@@ -169,7 +179,7 @@ class Forums extends Component {
       const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
       this.props.history.push(`/forums${q}`);
       try {
-        response = await axios.get(`http://localhost:3001/forumList/filterQuery${q}`)
+        response = await axios.get(`http://localhost:3001/forums/filterQuery${q}`)
       } catch (error) {
         console.log(error);
       }
