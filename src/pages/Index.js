@@ -40,7 +40,7 @@ const App = () => {
     );
 }
 
-const rootElement = document.getElementById("root");
+// const rootElement = document.getElementById("root");
 //   ReactDOM.render(<App />, rootElement);
 
 class Index extends Component {
@@ -53,13 +53,26 @@ class Index extends Component {
         // this.getInformation(query);
     }
 
+
+    onBlur() {
+        console.log('blur');
+    }
+
+    onFocus() {
+        console.log('focus');
+    }
+
+    onSearch(val) {
+        console.log('search:', val);
+    }
+
     render() {
         return (
             <div>
                 <HeaderPage />
                 <div className="country-search">
-                    <h1>Which Country would you like to visit?</h1>
-                    <div>Type the name of Country or select on our map below. </div>
+                    <h2 style={{margin: '5px'}}>Which Country would you like to visit?</h2>
+                    <h6 style={{margin: '10px'}}>Type the name of Country or select on our map below. </h6>
                     <Select
                         showSearch
                         style={{ marginLeft: 22, marginRight: 22, width: 200 }}
@@ -75,10 +88,16 @@ class Index extends Component {
                         }>
                         <Option value="January">January</Option>
                     </Select>
-                    <Button icon="search">Search</Button>
+                    <Button style={{
+                        color: '#FFFFFF',
+                        background: 'linear-gradient(270deg, #181741 -127.74%, #828EB4 100%)',
+                        borderRadius: '5px'
+                    }}>Search</Button>
+                    <App />
+                    <h2>Don’t know where to go yet? Let us help you!</h2>
+                    <h6>We’re selecting the best of threads based on your conditions.</h6>
                 </div>
-                <App />
-            </div>)
+            </div >)
     }
 
 }

@@ -274,17 +274,6 @@ class Forums extends Component {
       marginRight: 10,
     };
 
-    const ColoredLine = ({ color }) => (
-      <hr
-        style={{
-          color: color,
-          backgroundColor: color,
-          height: 1,
-          border: "0.5px"
-        }}
-      />
-    );
-
     const ColoredShortLine = ({ color }) => (
       <hr
         style={{
