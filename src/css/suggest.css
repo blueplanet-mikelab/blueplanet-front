@@ -1,0 +1,24 @@
+.ant-carousel .slick-slide {
+    text-align: center;
+    height: 160px;
+    line-height: 160px;
+    background: rgba(130, 142, 180, 0.15);
+    overflow: hidden;
+}
+
+.ant-carousel .slick-slide h3 {
+    color: #fff;
+}
+
+h3 {
+    text-align: center;
+}
+
+button.ant-btn {
+    font-size: 14px;
+    line-height: 24px;
+}
+
+div {
+    font-size: 14px;
+}
