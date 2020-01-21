@@ -15,7 +15,7 @@ class SuggestThreads extends Component {
         this.state = {
             threads: [],
             threadSuggest: [],
-            threadPoperties: [],
+            threadProperties: [],
             list: [],
             value: 1,
             radio: 1,
@@ -55,7 +55,7 @@ class SuggestThreads extends Component {
     }
 
     mapData(response) {
-        const threadPoperties = response.data.map(item => {
+        const threadProperties = response.data.map(item => {
             return {
                 ...item,
                 // link: "https://pantip.com/topic/" + item.topic_id,
@@ -65,9 +65,9 @@ class SuggestThreads extends Component {
             };
         });
         this.setState({
-            threadPoperties: threadPoperties,
+            threadProperties: threadProperties,
         });
-        console.log("knk" + this.state.threadPoperties[0].title);
+        console.log("knk" + this.state.threadProperties[0].title);
     }
 
     getQueryParams() {
@@ -80,16 +80,18 @@ class SuggestThreads extends Component {
         this.getInformation(q);
     }
 
-    CreateSuggest() {
-        // var list = [];
-        // for (var i = 0; i < 3; i++) {
-        //     var list = this.state.threadSuggest.push(this.state.threadPoperties[i]);
-        //     console.log("list" + list)
-        // }
-        // this.setState({ threadSuggest: list });
+    CreateSuggest(startIndex) {
+        if (this.state.threadProperties < 1) {
+            return 'e win e kwai'
+        }
 
-        // console.log("thread" + this.state.threadSuggest)
-        return this.state.threadPoperties.map(d => {
+        const list = [
+            this.state.threadProperties[startIndex],
+            this.state.threadProperties[startIndex + 1],
+            this.state.threadProperties[startIndex + 2]
+        ]
+
+        return list.map(d => {
             return (
                 <Col>
                     <Col span={2}>
@@ -132,16 +134,16 @@ class SuggestThreads extends Component {
                 <Carousel afterChange={this.onChange()} style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px", width: "1100px" }}>
 
                     <div>
-                        {this.CreateSuggest()}
+                        {this.CreateSuggest(0)}
                     </div>
                     <div>
-                        <h3>2</h3>
+                        {this.CreateSuggest(3)}
                     </div>
                     <div>
-                        <h3>3</h3>
+                        {this.CreateSuggest(6)}
                     </div>
                     <div>
-                        <h3>4</h3>
+                        {this.CreateSuggest(9)}
                     </div>
 
                 </Carousel>
