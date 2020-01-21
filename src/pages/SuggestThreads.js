@@ -8,24 +8,35 @@ import { Button, Radio, Carousel, Icon, Divider, Row, Col, Tag } from 'antd';
 import "../css/suggest.css";
 
 const checkBudget = (a, b) => (b <= a)
-
+// var threadSuggest = [];
 class SuggestThreads extends Component {
     constructor(props) {
         super(props);
         this.state = {
             threads: [],
+            threadSuggest: [],
             threadPoperties: [],
+            list: [],
             value: 1,
             radio: 1,
             fullData: [],
             query: {},
-            inputMinValue: 0,
-            inputMaxValue: 20000,
         };
     }
 
     onChange(a, b, c) {
         console.log(a, b, c);
+    }
+
+    onChangeDuration = (e) => {
+        console.log('radio checked', e.target.value);
+        const query = this.state.query;
+        query.duration = e.target.value;
+        this.setState({ query: query });
+        this.getInformation(query);
+        this.setState({
+            radio: e.target.value,
+        });
     }
 
     async getInformation(query) {
@@ -53,8 +64,10 @@ class SuggestThreads extends Component {
                 // typeday: item.duration.days,
             };
         });
-        this.setState({ threadPoperties: threadPoperties });
-        console.log(this.state.threadPoperties);
+        this.setState({
+            threadPoperties: threadPoperties,
+        });
+        console.log("knk" + this.state.threadPoperties[0].title);
     }
 
     getQueryParams() {
@@ -68,6 +81,14 @@ class SuggestThreads extends Component {
     }
 
     CreateSuggest() {
+        // var list = [];
+        // for (var i = 0; i < 3; i++) {
+        //     var list = this.state.threadSuggest.push(this.state.threadPoperties[i]);
+        //     console.log("list" + list)
+        // }
+        // this.setState({ threadSuggest: list });
+
+        // console.log("thread" + this.state.threadSuggest)
         return this.state.threadPoperties.map(d => {
             return (
                 <Col>
@@ -82,9 +103,6 @@ class SuggestThreads extends Component {
                         <a href={d.link} style={{ color: "#181741" }}>
                             {d.title}
                         </a>
-                        <Row>
-                            <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
-                        </Row>
                     </Col>
                 </Col>
             );
@@ -93,17 +111,16 @@ class SuggestThreads extends Component {
 
     render() {
 
-
         return (
             <div>
                 <Row>
-                    <Button size="default" style={{borderRadius: 0}}>Within Thailand</Button>
-                    <Button size="default" style={{borderRadius: 0}}>International Countries</Button>
+                    <Button size="default" style={{ borderRadius: 0 }}>Within Thailand</Button>
+                    <Button size="default" style={{ borderRadius: 0 }}>International Countries</Button>
                 </Row>
 
-                <div style={{ marginTop: "20px"}}>Popular threads based on your Duration</div>
-                <div style = {{backgroundColor: "rgba(130, 142, 180, 0.15)", width: "1100px", marginLeft: "50px", marginRight: "40px", marginTop: "20px"}}>
-                    <Radio.Group name="radiogroup" defaultValue={1}>
+                <div style={{ marginTop: "20px" }}>Popular threads based on your Duration</div>
+                <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", width: "1100px", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
+                    <Radio.Group name="radiogroup" style={{ padding: "10px" }} onChange={this.onChangeDuration} value={this.state.query.duration ? this.state.query.duration : 1}>
                         <Radio value={"1-3Days"}>1 - 3 Days</Radio>
                         <Radio value={"4-6Days"}>4 - 6 Days</Radio>
                         <Radio value={"7-9Days"}>7 - 9 Days</Radio>
