@@ -23,6 +23,9 @@ div {
     font-size: 14px;
 }
 
+.ant-carousel .slick-dots li button {
+    background: #181741;
+}
 /* span.ant-radio-inner {
-
+    
 } */

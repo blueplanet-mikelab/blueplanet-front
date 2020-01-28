@@ -4,10 +4,13 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Button, Radio, Carousel, Row, Col, Tag, Select } from 'antd';
+import { Carousel, Col, Select } from 'antd';
 import "../css/suggest.css";
 
-class SuggestThreads extends Component {
+const checkBudget = (a, b) => (b <= a)
+const { Option } = Select;
+
+class SuggestMonth extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,20 +22,7 @@ class SuggestThreads extends Component {
             radio: 1,
             fullData: [],
             query: {},
-            checkRoute: 1,
         };
-    }
-
-    onChangeDuration = (e) => {
-        console.log('radio checked', e.target.value);
-        const query = this.state.query;
-        query.duration = e.target.value;
-        this.setState({ query: query });
-        this.getInformation(query);
-        this.setState({
-            radio: e.target.value,
-            checkRoute: 1,
-        });
     }
 
     onBlur() {
@@ -47,29 +37,22 @@ class SuggestThreads extends Component {
         console.log('search:', val);
     }
 
-    inCountry = (e) => {
+    onChangeMonth = (value) => {
+        console.log("checkRoute" + this.state.checkRoute)
+        console.log(`selected ${value}`);
         const query = this.state.query;
-        query.within_th = 0;
-        console.log('in thai' + query.within_th);
+        query.month = value;
         this.setState({ query: query });
         this.getInformation(query);
-
     }
 
-    outCountry = (e) => {
-        const query = this.state.query;
-        query.within_th = 1;
-        console.log('out thai' + query.within_th);
-        this.setState({ query: query });
-        this.getInformation(query);
-    };
 
     async getInformation(query) {
         let response = null;
         const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
         this.props.history.push(`/${q}`);
         try {
-            response = await axios.get(`http://localhost:30010/home/durationQuery${q}`)
+            response = await axios.get(`http://localhost:30010/home/monthQuery${q}`)
         } catch (error) {
             console.log(error);
         }
@@ -139,19 +122,36 @@ class SuggestThreads extends Component {
 
         return (
             <div>
-                 <Row>
-                    <Button size="default" style={{ borderRadius: 0 }} onClick={this.inCountry} value={this.state.query.within_th}>Within Thailand</Button>
-                    <Button size="default" style={{ borderRadius: 0 }} onClick={this.outCountry} value={this.state.query.within_th}>International Countries</Button>
-                </Row>
-                <div style={{ marginTop: "20px" }}>Popular threads based on your Duration</div>
+                {/* month */}
+
+                <div style={{ marginTop: "20px" }}>Popular threads based on your Month</div>
                 <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", width: "1100px", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
-                    <Radio.Group name="radiogroup" style={{ padding: "10px" }} onChange={this.onChangeDuration} value={this.state.query.duration ? this.state.query.duration : 1}>
-                        <Radio value={"1-3Days"}>1 - 3 Days</Radio>
-                        <Radio value={"4-6Days"}>4 - 6 Days</Radio>
-                        <Radio value={"7-9Days"}>7 - 9 Days</Radio>
-                        <Radio value={"10-12Days"}>10 - 12 Days</Radio>
-                        <Radio value={"Morethan12Days"}>More than 12 Days</Radio>
-                    </Radio.Group>
+                    <Select
+                        showSearch
+                        style={{ marginLeft: 22, marginRight: 22, width: 150 }}
+                        placeholder="Filter by Month"
+                        optionFilterProp="children"
+                        value={this.state.query.month}
+                        onChange={this.onChangeMonth}
+                        onFocus={this.onFocus}
+                        onBlur={this.onBlur}
+                        onSearch={this.onSearch}
+                        filterOption={(input, option) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }>
+                        <Option value="January">January</Option>
+                        <Option value="February">February</Option>
+                        <Option value="March">March</Option>
+                        <Option value="April">April</Option>
+                        <Option value="May">May</Option>
+                        <Option value="June">June</Option>
+                        <Option value="July">July</Option>
+                        <Option value="August">August</Option>
+                        <Option value="September">September</Option>
+                        <Option value="October">October</Option>
+                        <Option value="November">November</Option>
+                        <Option value="December">December </Option>
+                    </Select>
                 </div>
 
                 <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px", width: "1100px" }}>
@@ -170,10 +170,13 @@ class SuggestThreads extends Component {
                     </div>
 
                 </Carousel>
+
+
+
             </div>
 
         )
     }
 }
 
-export default withRouter(SuggestThreads);
+export default withRouter(SuggestMonth);

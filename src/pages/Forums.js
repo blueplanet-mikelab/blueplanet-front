@@ -201,7 +201,6 @@ class Forums extends Component {
       };
     });
     this.setState({ threadPoperties: threadPoperties });
-    console.log(this.state.threadPoperties);
   }
 
   getQueryParams() {

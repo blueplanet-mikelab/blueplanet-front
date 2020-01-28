@@ -7,6 +7,7 @@ import "../css/styles.css";
 import HeaderPage from "./HeaderPage";
 import MapChart from "./MapChart";
 import SuggestThreads from "./SuggestThreads";
+import SuggestMonth from "./SuggestMonth";
 
 import { Select, Button } from 'antd';
 
@@ -134,7 +135,6 @@ class Index extends Component {
                             option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }>
                             {this.CreateSelection()}
-                        {/* <Option value="January">January</Option> */}
                     </Select>
                     <Button style={{
                         color: '#FFFFFF',
@@ -146,6 +146,8 @@ class Index extends Component {
                     <h6>We’re selecting the best of threads based on your conditions.</h6>
 
                     <SuggestThreads />
+                    <SuggestMonth />
+                    
                 </div>
             </div >)
     }

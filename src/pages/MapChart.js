@@ -57,7 +57,7 @@ class MapChart extends Component {
     render() {
 
         return (
-            <ComposableMap data-tip="" style={{ width: '1142px', height: '450px' }}>
+            <ComposableMap data-tip="" style={{ marginTop:"-75px", marginLeft: "-20px", width: '1060px',  }}>
                 <ZoomableGroup>
                     <Geographies geography={geoUrl}>
                         {({ geographies }) =>
