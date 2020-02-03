@@ -3,15 +3,17 @@ import { withRouter } from 'react-router';
 import ReactTooltip from "react-tooltip";
 import axios from 'axios';
 import "../css/styles.css";
+import { ScrollTo, ScrollArea } from "react-scroll-to";
 
 import HeaderPage from "./HeaderPage";
 import MapChart from "./MapChart";
 import SuggestThreads from "./SuggestThreads";
 import SuggestMonth from "./SuggestMonth";
 
-import { Select, Button } from 'antd';
+import { Select, Button, Row } from 'antd';
 
 const { Option } = Select;
+var con = "non";
 
 // const a = () => {
 //     console.log('a')
@@ -50,18 +52,22 @@ class Index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          threads: [],
-          threadPoperties: [],
-          value: 1,
-          radio: 1,
-          query: {},
-          inputMinValue: 0,
-          inputMaxValue: 20000,
+            threads: [],
+            threadPoperties: [],
+            value: 1,
+            radio: 1,
+            query: {},
+            inputMinValue: 0,
+            inputMaxValue: 20000,
         };
-      }
+    }
 
     onChangeCountry = (value) => {
         console.log(`selected ${value}`);
+        this.setState({
+            link: "/forums?country=" + value
+        })
+
         // const query = this.state.query;
         // query.months = value;
         // this.setState({ query: query });
@@ -88,7 +94,7 @@ class Index extends Component {
                 const threadPoperties = res.data.map(item => {
                     return {
                         ...item,
-                        country: item.nameEnglish,
+                        // country: item.nameEnglish,
                     };
                 });
                 this.setState(
@@ -108,11 +114,19 @@ class Index extends Component {
     CreateSelection = () => {
         return this.state.threadPoperties.map(d => {
             return (
-                <Option value={d.country}>{d.country}</Option>
+                <Option value={d.country}>{d.nameEnglish}</Option>
             );
         });
     };
 
+    scrolltoSuggest = () => {
+        var element = document.getElementById("suggest");
+        element.scrollIntoView();
+    }
+
+    goForumPage = () => {
+        window.location.href = this.state.link
+    }
 
     render() {
         return (
@@ -120,7 +134,7 @@ class Index extends Component {
                 <HeaderPage />
                 <div className="country-search">
                     <h2 style={{ margin: '5px' }}>Which Country would you like to visit?</h2>
-                    <h6 style={{ margin: '10px' }}>Type the name of Country or select on our map below. </h6>
+                    <h6 style={{ margin: '5px' }}>Type the name of Country or select on our map below. </h6>
                     <Select
                         showSearch
                         style={{ marginLeft: 22, marginRight: 22, width: 200 }}
@@ -134,20 +148,38 @@ class Index extends Component {
                         filterOption={(input, option) =>
                             option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }>
-                            {this.CreateSelection()}
+                        {this.CreateSelection()}
                     </Select>
-                    <Button style={{
+                    <Button onClick={this.goForumPage} style={{
                         color: '#FFFFFF',
-                        background: 'linear-gradient(270deg, #181741 -127.74%, #828EB4 100%)',
+                        background: 'linear-gradient(90deg, #FB3640 0%, #F97300 100%)',
                         borderRadius: '5px'
-                    }}>Search</Button>
+                    }} >Search</Button>
                     <App />
-                    <h2>Don’t know where to go yet? Let us help you!</h2>
-                    <h6>We’re selecting the best of threads based on your conditions.</h6>
+                    <div style={{ marginTop: "-250px" }}>
+                        <h2>Don’t know where to go yet? Let us help you!</h2>
+                        <h6>We’re selecting the best of threads based on your conditions.</h6>
+                    </div>
+                    <Button style={{
+                        marginBottom: "50px",
+                        width: "50px",
+                        height: "50px"
+                    }}
+                        shape="circle"
+                        icon="down"
+                        onClick={this.scrolltoSuggest}>
+                    </Button>
 
-                    <SuggestThreads />
-                    <SuggestMonth />
-                    
+                    <div id="suggest" style={{
+                        height: "1000px",
+                        width: "1200px",
+                    }}>
+                        <div style={{ backgroundColor: "#F8F5E4", borderRadius: "3px" }}>
+                            <SuggestThreads />
+                            <SuggestMonth />
+                            <SuggestMonth />
+                        </div>
+                    </div>
                 </div>
             </div >)
     }

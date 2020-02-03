@@ -6,6 +6,7 @@ import qs from 'qs';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Button, Radio, Carousel, Row, Col, Tag, Select } from 'antd';
 import "../css/suggest.css";
+import SuggestMonth from "./SuggestMonth";
 
 class SuggestThreads extends Component {
     constructor(props) {
@@ -49,7 +50,7 @@ class SuggestThreads extends Component {
 
     inCountry = (e) => {
         const query = this.state.query;
-        query.within_th = 0;
+        query.within_th = 1;
         console.log('in thai' + query.within_th);
         this.setState({ query: query });
         this.getInformation(query);
@@ -58,7 +59,7 @@ class SuggestThreads extends Component {
 
     outCountry = (e) => {
         const query = this.state.query;
-        query.within_th = 1;
+        query.within_th = 0;
         console.log('out thai' + query.within_th);
         this.setState({ query: query });
         this.getInformation(query);
@@ -83,12 +84,12 @@ class SuggestThreads extends Component {
         const threadProperties = response.data.map(item => {
             return {
                 ...item,
+                link: "https://pantip.com/topic/" + item.topic_id,
             };
         });
         this.setState({
             threadProperties: threadProperties,
         });
-        console.log("thread[0]-month" + this.state.threadProperties[0].month);
         console.log("thread[0]-day" + this.state.threadProperties[0].duration.label);
     }
 
@@ -120,13 +121,13 @@ class SuggestThreads extends Component {
                 <Col>
                     <Col span={2}>
                         <img
-                            style={{ width: 100, height: 100 }}
+                            style={{ width: 100, height: 100, margin: "20px" }}
                             alt="example"
                             src={d.thumbnail}
                         />
                     </Col>
                     <Col span={6}>
-                        <a href={d.link} style={{ color: "#181741" }}>
+                        <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
                             {d.title}
                         </a>
                     </Col>
@@ -136,12 +137,11 @@ class SuggestThreads extends Component {
     };
 
     render() {
-
         return (
             <div>
-                 <Row>
-                    <Button size="default" style={{ borderRadius: 0 }} onClick={this.inCountry} value={this.state.query.within_th}>Within Thailand</Button>
-                    <Button size="default" style={{ borderRadius: 0 }} onClick={this.outCountry} value={this.state.query.within_th}>International Countries</Button>
+                <Row>
+                    <Button size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.inCountry} value={this.state.query.within_th}>Within Thailand</Button>
+                    <Button size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.outCountry} value={this.state.query.within_th}>International Countries</Button>
                 </Row>
                 <div style={{ marginTop: "20px" }}>Popular threads based on your Duration</div>
                 <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", width: "1100px", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
@@ -170,6 +170,8 @@ class SuggestThreads extends Component {
                     </div>
 
                 </Carousel>
+
+                <SuggestMonth within={this.state.query.within_th} />
             </div>
 
         )

@@ -4,7 +4,8 @@ import {
     ZoomableGroup,
     ComposableMap,
     Geographies,
-    Geography
+    Geography,
+    Marker
 } from "react-simple-maps";
 // calculate number of people
 
@@ -42,22 +43,50 @@ class MapChart extends Component {
                 });
                 this.setState(
                     {
-                        threadPoperties: threadPoperties,
+                        threadPoperties
                     },
                     () => {
                         console.log(this.state)
                         console.log(this.state.threadPoperties);
-                        console.log("con:" + this.state.threadPoperties[0].country);
+                        console.log("con:" + threadPoperties[0].country);
+                        console.log("long"+ threadPoperties[0].longitude)
                     }
                 );
             })
             .catch(err => console.log(err));
     }
 
+    createMarks() {
+        if (this.state.threadPoperties < 1) {
+            return 'Loading'
+        }
+        const markers = [
+            { markerOffset: -15, name: "1", coordinates: [this.state.threadPoperties[0].longitude, this.state.threadPoperties[0].latitude] },
+            { markerOffset: 25, name: "2", coordinates: [this.state.threadPoperties[1].longitude, this.state.threadPoperties[1].latitude]  },
+            { markerOffset: -15, name: "3", coordinates: [this.state.threadPoperties[2].longitude, this.state.threadPoperties[2].latitude]  }
+        ];
+
+        return markers.map( d => {
+            return (
+                <Marker key={d.name} coordinates={d.coordinates}>
+                    <circle r={5} fill="#F00" stroke="#fff" strokeWidth={1} />
+                    <text
+                        textAnchor="middle"
+                        y={d.markerOffset}
+                        style={{ fontFamily: "system-ui", fill: "#5D5A6D" }}
+                    >
+                        {d.name}
+                    </text>
+                </Marker>
+            );
+        });
+    };
+
+
     render() {
 
         return (
-            <ComposableMap data-tip="" style={{ marginTop:"-75px", marginLeft: "-20px", width: '1060px',  }}>
+            <ComposableMap data-tip="" style={{ marginTop: "-80px", marginLeft: "-70px", width: '1050px', }}>
                 <ZoomableGroup>
                     <Geographies geography={geoUrl}>
                         {({ geographies }) =>
@@ -92,6 +121,7 @@ class MapChart extends Component {
                             ))
                         }
                     </Geographies>
+                    {this.createMarks()}
                 </ZoomableGroup>
             </ComposableMap>
         )

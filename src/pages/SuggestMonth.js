@@ -38,13 +38,22 @@ class SuggestMonth extends Component {
     }
 
     onChangeMonth = (value) => {
-        console.log("checkRoute" + this.state.checkRoute)
+        this.onWithin()
         console.log(`selected ${value}`);
         const query = this.state.query;
         query.month = value;
         this.setState({ query: query });
         this.getInformation(query);
     }
+
+    onWithin = () => {
+        const query = this.state.query;
+        query.within_th = this.props.within;
+        console.log("checkwithin:" + query.within_th)
+        this.setState({ query: query });
+        this.getInformation(query);
+    }
+
 
 
     async getInformation(query) {
@@ -75,12 +84,13 @@ class SuggestMonth extends Component {
         console.log("thread[0]-day" + this.state.threadProperties[0].duration.label);
     }
 
-    getQueryParams() {
-        return qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
+    getQueryParams(value) {
+        return qs.parse(value, { ignoreQueryPrefix: true })
     }
 
     componentDidMount() {
-        const q = this.getQueryParams();
+        this.onWithin()
+        const q = this.getQueryParams(this.props.location.search);
         this.setState({
             query: q
         })
@@ -103,13 +113,13 @@ class SuggestMonth extends Component {
                 <Col>
                     <Col span={2}>
                         <img
-                            style={{ width: 100, height: 100 }}
+                            style={{ width: 100, height: 100, margin: "20px" }}
                             alt="example"
                             src={d.thumbnail}
                         />
                     </Col>
                     <Col span={6}>
-                        <a href={d.link} style={{ color: "#181741" }}>
+                        <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
                             {d.title}
                         </a>
                     </Col>
@@ -119,11 +129,8 @@ class SuggestMonth extends Component {
     };
 
     render() {
-
         return (
             <div>
-                {/* month */}
-
                 <div style={{ marginTop: "20px" }}>Popular threads based on your Month</div>
                 <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", width: "1100px", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
                     <Select
@@ -153,27 +160,24 @@ class SuggestMonth extends Component {
                         <Option value="December">December </Option>
                     </Select>
                 </div>
+              
+                    <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px", width: "1100px"}}>
 
-                <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px", width: "1100px" }}>
+                        <div>
+                            {this.CreateSuggest(0)}
+                        </div>
+                        <div>
+                            {this.CreateSuggest(3)}
+                        </div>
+                        <div>
+                            {this.CreateSuggest(6)}
+                        </div>
+                        <div>
+                            {this.CreateSuggest(9)}
+                        </div>
 
-                    <div>
-                        {this.CreateSuggest(0)}
-                    </div>
-                    <div>
-                        {this.CreateSuggest(3)}
-                    </div>
-                    <div>
-                        {this.CreateSuggest(6)}
-                    </div>
-                    <div>
-                        {this.CreateSuggest(9)}
-                    </div>
-
-                </Carousel>
-
-
-
-            </div>
+                    </Carousel>
+                </div>
 
         )
     }

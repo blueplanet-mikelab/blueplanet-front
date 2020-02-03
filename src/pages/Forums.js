@@ -8,7 +8,7 @@ import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber,
 
 import HeaderPage from "./HeaderPage";
 
-const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:3001'
+const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 const CheckboxGroup = Checkbox.Group;
 const { SubMenu } = Menu;
@@ -108,10 +108,6 @@ class Forums extends Component {
     console.log("value: " + value);
     this.setState({ query: query });
     this.getInformation(query);
-    // this.setState({ data: this.state.fullData.filter(d => 
-    //   includesCountry(d.country, value) 
-    //   )}
-    // );   
   };
 
   onChangeTheme = (e) => {
@@ -226,7 +222,7 @@ class Forums extends Component {
               />
             </Col>
             <Col span={20}>
-              <a href={d.link} style={{ color: "#181741" }}>
+              <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
                 {d.title}
               </a>
               <Row style={{ paddingTop: 10 }}>
@@ -247,11 +243,6 @@ class Forums extends Component {
                     style={{ fontSize: "14px", color: "#828EB4", padding: 1, marginLeft: 20 }}
                   />{" "}
                   {d.popular} popular
-                      <Icon
-                    type="share-alt"
-                    style={{ fontSize: "14px", color: "#828EB4", padding: 1, marginLeft: 20 }}
-                  />{" "}
-                  shared
                     </div>
               </Row>
             </Col>
