@@ -119,17 +119,23 @@ class SuggestThreads extends Component {
         return list.map(d => {
             return (
                 <Col>
-                    <Col span={2}>
+                    <Col span={3}>
                         <img
-                            style={{ width: 100, height: 100, margin: "20px" }}
+                            style={{ width: 100, height: 100, marginLeft: "15px" }}
                             alt="example"
                             src={d.thumbnail}
                         />
                     </Col>
-                    <Col span={6}>
-                        <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
-                            {d.title}
-                        </a>
+
+                    <Col span={5} style={{ lineHeight: 'normal', marginTop: '20px' }}>
+                        <Row>
+                            <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
+                                {d.title}
+                            </a>
+                        </Row>
+                        <Row>
+                            <Tag color="rgba(130, 142, 180, 0.5)">Tag</Tag>
+                        </Row>
                     </Col>
                 </Col>
             );
@@ -143,8 +149,8 @@ class SuggestThreads extends Component {
                     <Button size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.inCountry} value={this.state.query.within_th}>Within Thailand</Button>
                     <Button size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.outCountry} value={this.state.query.within_th}>International Countries</Button>
                 </Row>
-                <div style={{ marginTop: "20px" }}>Popular threads based on your Duration</div>
-                <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", width: "1100px", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
+                <div style={{ marginTop: "20px", textAlign: "center" }}>Popular threads based on your Duration</div>
+                <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
                     <Radio.Group name="radiogroup" style={{ padding: "10px" }} onChange={this.onChangeDuration} value={this.state.query.duration ? this.state.query.duration : 1}>
                         <Radio value={"1-3Days"}>1 - 3 Days</Radio>
                         <Radio value={"4-6Days"}>4 - 6 Days</Radio>
@@ -154,7 +160,7 @@ class SuggestThreads extends Component {
                     </Radio.Group>
                 </div>
 
-                <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px", width: "1100px" }}>
+                <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
 
                     <div>
                         {this.CreateSuggest(0)}
@@ -172,6 +178,7 @@ class SuggestThreads extends Component {
                 </Carousel>
 
                 <SuggestMonth within={this.state.query.within_th} />
+                <SuggestMonth />
             </div>
 
         )

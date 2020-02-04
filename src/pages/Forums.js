@@ -289,7 +289,7 @@ class Forums extends Component {
       <div>
         <Layout>
           <Header className="header" style={{ background: '#fff' }}>
-            <HeaderPage />
+            <HeaderPage page="3"/>
           </Header>
           <Layout>
             <Sider width={220} style={{ background: '#fff' }}>

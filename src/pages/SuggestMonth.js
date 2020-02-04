@@ -4,7 +4,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Carousel, Col, Select } from 'antd';
+import { Carousel, Col, Select, Row, Tag } from 'antd';
 import "../css/suggest.css";
 
 const checkBudget = (a, b) => (b <= a)
@@ -111,17 +111,22 @@ class SuggestMonth extends Component {
         return list.map(d => {
             return (
                 <Col>
-                    <Col span={2}>
+                    <Col span={3}>
                         <img
-                            style={{ width: 100, height: 100, margin: "20px" }}
+                            style={{ width: 100, height: 100, margin: "15px" }}
                             alt="example"
                             src={d.thumbnail}
                         />
                     </Col>
-                    <Col span={6}>
-                        <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
-                            {d.title}
-                        </a>
+                    <Col span={5} style={{ lineHeight: 'normal', marginTop: '20px' }}>
+                        <Row>
+                            <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
+                                {d.title}
+                            </a>
+                        </Row>
+                        <Row>
+                            <Tag color="rgba(130, 142, 180, 0.5)">Tag</Tag>
+                        </Row>
                     </Col>
                 </Col>
             );
@@ -132,7 +137,7 @@ class SuggestMonth extends Component {
         return (
             <div>
                 <div style={{ marginTop: "20px" }}>Popular threads based on your Month</div>
-                <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", width: "1100px", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
+                <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
                     <Select
                         showSearch
                         style={{ marginLeft: 22, marginRight: 22, width: 150 }}
@@ -160,24 +165,24 @@ class SuggestMonth extends Component {
                         <Option value="December">December </Option>
                     </Select>
                 </div>
-              
-                    <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px", width: "1100px"}}>
 
-                        <div>
-                            {this.CreateSuggest(0)}
-                        </div>
-                        <div>
-                            {this.CreateSuggest(3)}
-                        </div>
-                        <div>
-                            {this.CreateSuggest(6)}
-                        </div>
-                        <div>
-                            {this.CreateSuggest(9)}
-                        </div>
+                <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
 
-                    </Carousel>
-                </div>
+                    <div>
+                        {this.CreateSuggest(0)}
+                    </div>
+                    <div>
+                        {this.CreateSuggest(3)}
+                    </div>
+                    <div>
+                        {this.CreateSuggest(6)}
+                    </div>
+                    <div>
+                        {this.CreateSuggest(9)}
+                    </div>
+
+                </Carousel>
+            </div>
 
         )
     }

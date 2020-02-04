@@ -1,0 +1,12 @@
+
+@media only screen and (min-width: 600px) {
+    /* For tablets: */
+    /* #home.ant-menu-item {
+        
+    } */
+    .ant-menu.ant-menu-light.ant-menu-root.ant-menu-horizontal {
+        margin-left: 755px;
+    }
+    
+  }
+

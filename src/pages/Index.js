@@ -3,8 +3,6 @@ import { withRouter } from 'react-router';
 import ReactTooltip from "react-tooltip";
 import axios from 'axios';
 import "../css/styles.css";
-import { ScrollTo, ScrollArea } from "react-scroll-to";
-
 import HeaderPage from "./HeaderPage";
 import MapChart from "./MapChart";
 import SuggestThreads from "./SuggestThreads";
@@ -131,7 +129,7 @@ class Index extends Component {
     render() {
         return (
             <div>
-                <HeaderPage />
+                <HeaderPage page="1"/>
                 <div className="country-search">
                     <h2 style={{ margin: '5px' }}>Which Country would you like to visit?</h2>
                     <h6 style={{ margin: '5px' }}>Type the name of Country or select on our map below. </h6>
@@ -171,13 +169,10 @@ class Index extends Component {
                     </Button>
 
                     <div id="suggest" style={{
-                        height: "1000px",
-                        width: "1200px",
+                        
                     }}>
                         <div style={{ backgroundColor: "#F8F5E4", borderRadius: "3px" }}>
                             <SuggestThreads />
-                            <SuggestMonth />
-                            <SuggestMonth />
                         </div>
                     </div>
                 </div>
