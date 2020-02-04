@@ -75,6 +75,7 @@ class SuggestMonth extends Component {
         const threadProperties = response.data.map(item => {
             return {
                 ...item,
+                country: item.countries.map(c => c.nameEnglish + " "),
             };
         });
         this.setState({
@@ -125,7 +126,7 @@ class SuggestMonth extends Component {
                             </a>
                         </Row>
                         <Row>
-                            <Tag color="rgba(130, 142, 180, 0.5)">Tag</Tag>
+                            <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
                         </Row>
                     </Col>
                 </Col>

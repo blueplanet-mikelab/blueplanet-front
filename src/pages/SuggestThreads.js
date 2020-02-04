@@ -85,6 +85,7 @@ class SuggestThreads extends Component {
             return {
                 ...item,
                 link: "https://pantip.com/topic/" + item.topic_id,
+                con:  item.countries.map(c => c.nameEnglish + " "),
             };
         });
         this.setState({
@@ -134,7 +135,7 @@ class SuggestThreads extends Component {
                             </a>
                         </Row>
                         <Row>
-                            <Tag color="rgba(130, 142, 180, 0.5)">Tag</Tag>
+                            <Tag color="rgba(130, 142, 180, 0.5)">{d.con}</Tag>
                         </Row>
                     </Col>
                 </Col>
