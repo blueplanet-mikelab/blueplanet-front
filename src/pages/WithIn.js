@@ -7,6 +7,8 @@ import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Button, Row } from 'antd';
 import "../css/suggest.css";
 
+const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
+
 class WithIn extends Component {
     constructor(props) {
         super(props);
@@ -45,7 +47,7 @@ class WithIn extends Component {
         const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
         this.props.history.push(`/${q}`);
         try {
-            response = await axios.get(`http://localhost:30010/home/durationQuery${q}`)
+            response = await axios.get(`http://${backend_url}/home/durationQuery${q}`)
         } catch (error) {
             console.log(error);
         }

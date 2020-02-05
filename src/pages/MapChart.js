@@ -12,13 +12,15 @@ import {
 
 const rounded = num => {
     if (num > 1000000000) {
-        return Math.round(num / 1000000000) / 10 + "Bn";
+        return Math.round(num / 1000000000) / 10 + "K";
     } else if (num > 1000000) {
-        return Math.round(num / 1000000) / 10 + "M";
+        return Math.round(num / 1000000) / 10 + "K";
     } else {
         return Math.round(num / 1000) / 10 + "K";
     }
 };
+
+const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 
 const geoUrl =
@@ -49,7 +51,7 @@ class MapChart extends Component {
 
     componentDidMount() {
         axios
-            .get("http://localhost:30010/home/mapCountries")
+            .get(`http://${backend_url}/home/mapCountries`)
             .then(res => {
                 const threadPoperties = res.data.map(item => {
                     return {

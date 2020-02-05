@@ -4,9 +4,10 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Button, Radio, Carousel, Row, Col, Tag, Select } from 'antd';
+import { Button, Radio, Carousel, Row, Col, Tag } from 'antd';
 import "../css/suggest.css";
 import SuggestMonth from "./SuggestMonth";
+const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 class SuggestThreads extends Component {
     constructor(props) {
@@ -70,7 +71,7 @@ class SuggestThreads extends Component {
         const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
         this.props.history.push(`/${q}`);
         try {
-            response = await axios.get(`http://localhost:30010/home/durationQuery${q}`)
+            response = await axios.get(`http://${backend_url}/home/durationQuery${q}`)
         } catch (error) {
             console.log(error);
         }
@@ -85,7 +86,7 @@ class SuggestThreads extends Component {
             return {
                 ...item,
                 link: "https://pantip.com/topic/" + item.topic_id,
-                con:  item.countries.map(c => c.nameEnglish + " "),
+                con: item.countries.map(c => c.nameEnglish + " "),
             };
         });
         this.setState({

@@ -10,6 +10,8 @@ import "../css/suggest.css";
 const checkBudget = (a, b) => (b <= a)
 const { Option } = Select;
 
+const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
+
 class SuggestMonth extends Component {
     constructor(props) {
         super(props);
@@ -61,7 +63,7 @@ class SuggestMonth extends Component {
         const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
         this.props.history.push(`/${q}`);
         try {
-            response = await axios.get(`http://localhost:30010/home/monthQuery${q}`)
+            response = await axios.get(`http://${backend_url}/home/monthQuery${q}`)
         } catch (error) {
             console.log(error);
         }

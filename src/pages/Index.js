@@ -12,6 +12,7 @@ import { Select, Button, Row } from 'antd';
 
 const { Option } = Select;
 var con = "non";
+const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 // const a = () => {
 //     console.log('a')
@@ -43,9 +44,6 @@ const App = () => {
     );
 }
 
-// const rootElement = document.getElementById("root");
-//   ReactDOM.render(<App />, rootElement);
-
 class Index extends Component {
     constructor(props) {
         super(props);
@@ -65,11 +63,6 @@ class Index extends Component {
         this.setState({
             link: "/forums?country=" + value
         })
-
-        // const query = this.state.query;
-        // query.months = value;
-        // this.setState({ query: query });
-        // this.getInformation(query);
     }
 
 
@@ -87,7 +80,7 @@ class Index extends Component {
 
     componentDidMount() {
         axios
-            .get("http://localhost:30010/home/mapCountries")
+            .get(`http://${backend_url}/home/mapCountries`)
             .then(res => {
                 const threadPoperties = res.data.map(item => {
                     return {
