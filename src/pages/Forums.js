@@ -289,7 +289,7 @@ class Forums extends Component {
       <div>
         <Layout>
           <Header className="header" style={{ background: '#fff' }}>
-            <HeaderPage page="3"/>
+            <HeaderPage page="3" />
           </Header>
           <Layout>
             <Sider width={220} style={{ background: '#fff' }}>
@@ -483,28 +483,28 @@ class Forums extends Component {
                   margin: 0,
                   minHeight: 575,
                 }}
-              ><div style={{ backgroundColor: "rgba(130, 142, 180, 0.5)", paddingTop: 20 }}>
+              ><div style={{ backgroundColor: "rgba(130, 142, 180, 0.5)", paddingTop: 20, paddingBottom: 20 }}>
                   <Row>
                     <span style={{ marginLeft: 20 }}>Forum / {this.state.query.countries}</span>
-                    <Select defaultValue="popular" value={this.state.query.sortby} style={{ width: 150, marginLeft: 650, marginBottom: 20, borderColor: "rgba(130, 142, 180, 0.5)" }} onChange={this.handleSortBy}>
-                      <Option value="upvoted" style={{ backgroundColor: "rgba(130, 142, 180, 0.5)" }}>
-                        <Icon type="plus"
-                          style={{ color: "#181741", padding: 3 }}
-                        />Most Upvoted</Option>
-                      <Option value="popular">
-                        <Icon
-                          type="fire"
-                          theme="filled"
-                          style={{ color: "#181741", padding: 3 }}
-                        />Most Popular</Option>
-                      <Option value="disabled" disabled>
-                        ________________
-                      </Option>
-                      <Option value="newest">Newest</Option>
-                      <Option value="oldest">Oldest</Option>
-                    </Select>
                   </Row>
                 </div>
+                <Select defaultValue="popular" value={this.state.query.sortby} style={{ width: 150, marginBottom: 20, borderColor: "rgba(130, 142, 180, 0.5)" }} onChange={this.handleSortBy}>
+                  <Option value="upvoted" style={{ backgroundColor: "rgba(130, 142, 180, 0.5)" }}>
+                    <Icon type="plus"
+                      style={{ color: "#181741", padding: 3 }}
+                    />Most Upvoted</Option>
+                  <Option value="popular">
+                    <Icon
+                      type="fire"
+                      theme="filled"
+                      style={{ color: "#181741", padding: 3 }}
+                    />Most Popular</Option>
+                  <Option value="disabled" disabled>
+                    ________________
+                      </Option>
+                  <Option value="newest">Newest</Option>
+                  <Option value="oldest">Oldest</Option>
+                </Select>
 
                 {/* Thread */}
 
