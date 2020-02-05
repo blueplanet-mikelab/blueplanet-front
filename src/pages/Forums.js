@@ -4,9 +4,10 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox } from 'antd';
+import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button } from 'antd';
 
 import HeaderPage from "./HeaderPage";
+import "../css/forum.css";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
@@ -32,14 +33,6 @@ class Forums extends Component {
       inputMaxValue: 20000,
     };
   }
-
-  handleSortBy = (value) => {
-    console.log(`selected ${value}`);
-    const query = this.state.query;
-    query.sortby = value;
-    this.setState({ query: query });
-    this.getInformation(query);
-  };
 
   handleClick = e => {
     console.log("click ", e);
@@ -164,6 +157,64 @@ class Forums extends Component {
     });
   }
 
+  haveBudget(money) {
+    console.log('budget:', money);
+    if (money != "฿฿") {
+      return <Tag color="rgba(130, 142, 180, 0.5)">{money}</Tag>
+    }
+  };
+
+  reviewType = (e) => {
+    const query = this.state.query;
+    query.type = "review";
+    console.log('Review' + query.type);
+    this.setState({ query: query });
+    this.getInformation(query);
+  }
+
+  suggestType = (e) => {
+    const query = this.state.query;
+    query.type = "suggest";
+    console.log('Suggest' + query.type);
+    this.setState({ query: query });
+    this.getInformation(query);
+  }
+
+  haveDuration(duration) {
+    console.log('duration:', duration);
+    if (duration != "Not Define") {
+      return <Tag color="rgba(130, 142, 180, 0.5)">{duration}</Tag>
+    }
+  }
+
+  handleSortByPopular = () => {
+    const query = this.state.query;
+    query.sortby = "popular";
+    this.setState({ query: query });
+    this.getInformation(query);
+  };
+
+  handleSortByUpvoted = () => {
+    const query = this.state.query;
+    query.sortby = "upvoted";
+    this.setState({ query: query });
+    this.getInformation(query);
+  };
+
+  handleSortByNewest = () => {
+    const query = this.state.query;
+    query.sortby = "newest";
+    this.setState({ query: query });
+    this.getInformation(query);
+  };
+
+  handleSortByOldest = () => {
+    const query = this.state.query;
+    query.sortby = "oldest";
+    this.setState({ query: query });
+    this.getInformation(query);
+  };
+
   // value: e.target.value,
 
   async getInformation(query) {
@@ -213,10 +264,10 @@ class Forums extends Component {
     return this.state.threadPoperties.map(d => {
       return (
         <div>
-          <Row style={{ background: "#fff", paddingTop: 5, fontSize: "14px" }}>
+          <Row style={{ background: "#fff", paddingLeft: "4%", fontSize: "14px" }}>
             <Col span={4}>
               <img
-                style={{ width: 90, height: 90 }}
+                style={{ width: 90, height: 90, marginBottom: "12%" }}
                 alt="example"
                 src={d.thumbnail}
               />
@@ -226,8 +277,8 @@ class Forums extends Component {
                 {d.title}
               </a>
               <Row style={{ paddingTop: 10 }}>
-                <Tag color="rgba(130, 142, 180, 0.5)">{d.day}</Tag>
-                <Tag color="rgba(130, 142, 180, 0.5)">{d.budget}</Tag>
+                {this.haveDuration(d.day)}
+                {this.haveBudget(d.budget)}
                 <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
               </Row>
               <Row style={{ paddingTop: 10 }}>
@@ -374,11 +425,13 @@ class Forums extends Component {
                     style={{ marginLeft: 22, marginRight: 15, width: 75 }}
                     //  value={inputMinValue}
                     value={this.state.query.budget_min}
+                    defaultValue={0}
                     onChange={this.onChangeMin}
                   />
                   <InputNumber
                     min={0}
                     max={50000}
+                    defaultValue={50000}
                     style={{ marginLeft: 2, marginRight: 22, width: 75 }}
                     //  value={inputMaxValue}
                     value={this.state.query.budget_max}
@@ -478,34 +531,70 @@ class Forums extends Component {
             <Layout style={{ padding: '24px 24px 24px' }}>
               <Content
                 style={{
-                  background: '#fff',
+                  background: '#F8F5E4',
                   padding: 20,
                   margin: 0,
                   minHeight: 575,
                 }}
-              ><div style={{ backgroundColor: "rgba(130, 142, 180, 0.5)", paddingTop: 20, paddingBottom: 20 }}>
+              ><div style={{ backgroundColor: "#F8F5E4", paddingTop: 20, paddingBottom: 5 }}>
                   <Row>
-                    <span style={{ marginLeft: 20 }}>Forum / {this.state.query.countries}</span>
+                    <span style={{ marginLeft: 20, fontSize: "30px", fontWeight: "bold", color: "#0E3047" }}>{this.state.query.countries}</span>
                   </Row>
                 </div>
-                <Select defaultValue="popular" value={this.state.query.sortby} style={{ width: 150, marginBottom: 20, borderColor: "rgba(130, 142, 180, 0.5)" }} onChange={this.handleSortBy}>
-                  <Option value="upvoted" style={{ backgroundColor: "rgba(130, 142, 180, 0.5)" }}>
-                    <Icon type="plus"
-                      style={{ color: "#181741", padding: 3 }}
-                    />Most Upvoted</Option>
-                  <Option value="popular">
-                    <Icon
-                      type="fire"
-                      theme="filled"
-                      style={{ color: "#181741", padding: 3 }}
-                    />Most Popular</Option>
-                  <Option value="disabled" disabled>
-                    ________________
-                      </Option>
-                  <Option value="newest">Newest</Option>
-                  <Option value="oldest">Oldest</Option>
-                </Select>
-
+                <div style={{ marginBottom: "3%" }}>
+                  <Row>
+                    <Col span={12}>
+                      <Button
+                        id="type"
+                        size="large"
+                        onClick={this.reviewType}
+                        value={this.state.query.type}>Review Trip</Button>
+                    </Col>
+                    <Col span={12}>
+                      <Button
+                        id="type"
+                        size="large"
+                        onClick={this.suggestType}
+                        value={this.state.query.type}>Places or Events Suggestion</Button>
+                    </Col>
+                  </Row>
+                  <Row style={{ background: "rgba(255, 224, 198, 0.5)" }}>
+                    <Col span={6}>
+                      <Button
+                        id="sort"
+                        size="large"
+                        onClick={this.handleSortByPopular}
+                        value={this.state.query.sortby}><Icon
+                          type="fire"
+                          theme="filled"
+                          style={{ color: "#181741", paddingRight: 3 }}
+                        />Most Popular</Button>
+                    </Col>
+                    <Col span={6}>
+                      <Button
+                        id="sort"
+                        size="large"
+                        onClick={this.handleSortByUpvoted}
+                        value={this.state.query.sortby}><Icon type="plus"
+                          style={{ color: "#181741", paddingRight: 3 }}
+                        />Most Upvoted</Button>
+                    </Col>
+                    <Col span={6}>
+                      <Button
+                        id="sort"
+                        size="large"
+                        onClick={this.handleSortByNewest}
+                        value={this.state.query.sortby}>Newest</Button>
+                    </Col>
+                    <Col span={6}>
+                      <Button
+                        id="sort"
+                        size="large"
+                        onClick={this.handleSortByOldest}
+                        value={this.state.query.sortby}>Oldest</Button>
+                    </Col>
+                  </Row>
+                </div>
                 {/* Thread */}
 
                 {this.CreatePost()}

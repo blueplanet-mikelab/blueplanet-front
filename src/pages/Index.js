@@ -61,7 +61,7 @@ class Index extends Component {
     onChangeCountry = (value) => {
         console.log(`selected ${value}`);
         this.setState({
-            link: "/forums?country=" + value
+            link: "/forums?countries=" + value
         })
     }
 

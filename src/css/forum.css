@@ -1,0 +1,29 @@
+span.ant-tag.ant-tag-has-color {
+    background: linear-gradient(90deg, #0E3047 0%, #10828C 100%);
+}
+
+#type.ant-btn.ant-btn-lg {
+    width: 100%;
+    border-radius: 0;
+    padding-left: 100px; 
+    padding-right: 100px;
+    margin-top: 25px;
+     
+}
+
+#type.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
+    background: linear-gradient(90deg, #FB3640 0%, #F97300 100%);
+    color: white;
+}
+
+#sort.ant-btn.ant-btn-lg {
+    width: 100%;
+    border-radius: 0;
+    background: rgba(255, 224, 198, 0.5);
+    border: rgba(255, 224, 198, 0.5);
+}
+
+#sort.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
+    background: white;
+    color: #F97300;
+}
