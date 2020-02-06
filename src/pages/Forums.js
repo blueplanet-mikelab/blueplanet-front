@@ -4,7 +4,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button } from 'antd';
+import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown } from 'antd';
 
 import HeaderPage from "./HeaderPage";
 import "../css/forum.css";
@@ -261,6 +261,16 @@ class Forums extends Component {
   }
 
   CreatePost = () => {
+    const menu = (
+      <Menu>
+        <SubMenu title="Add to My Triplist">
+          <Menu.Item>New Triplist</Menu.Item>
+          <Menu.Item>Japan Trip</Menu.Item>
+        </SubMenu>
+        <Menu.Item>Save to My Favorite</Menu.Item>
+        <Menu.Item>Share</Menu.Item>
+      </Menu>
+    );
     return this.state.threadPoperties.map(d => {
       return (
         <div>
@@ -277,9 +287,29 @@ class Forums extends Component {
                 {d.title}
               </a>
               <Row style={{ paddingTop: 10 }}>
-                {this.haveDuration(d.day)}
-                {this.haveBudget(d.budget)}
-                <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
+                <Col span={20}>
+                  {this.haveDuration(d.day)}
+                  {this.haveBudget(d.budget)}
+                  <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
+                </Col>
+                <Col>
+                  <Row>
+                    <Button
+                      id="fav"
+                      size="small"
+                      onClick={this.handleSortByUpvoted}
+                      value={this.state.query.sortby}
+                      style={{ borderColor: "transparent" }}><Icon size='10em' theme="filled" type="heart"
+                        style={{ color: "#FB3640", fontSize: "20px" }}
+                      /></Button>
+                    <Dropdown overlay={menu}>
+                      <a className="ant-dropdown-link" href="#">
+                        <Icon type="more" style={{ color: "#10828C" }} />
+                      </a>
+                    </Dropdown>
+                  </Row>
+                </Col>
+
               </Row>
               <Row style={{ paddingTop: 10 }}>
                 <div className="icons-list">
@@ -536,7 +566,7 @@ class Forums extends Component {
                   margin: 0,
                   minHeight: 575,
                 }}
-              ><div style={{ backgroundColor: "#F8F5E4", paddingTop: 20, paddingBottom: 5 }}>
+              ><div style={{ backgroundColor: "#F8F5E4" }}>
                   <Row>
                     <span style={{ marginLeft: 20, fontSize: "30px", fontWeight: "bold", color: "#0E3047" }}>{this.state.query.countries}</span>
                   </Row>
