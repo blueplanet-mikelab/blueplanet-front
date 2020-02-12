@@ -4,9 +4,28 @@
     /* #home.ant-menu-item {
         
     } */
-    .ant-menu.ant-menu-light.ant-menu-root.ant-menu-horizontal {
-        margin-left: 755px;
-    }
+    /* .ant-menu.ant-menu-light.ant-menu-root.ant-menu-horizontal {
+    
+    } */
     
   }
 
+  .header-container {
+      text-align: right;
+      /* display: flex;
+      justify-content: space-between; */
+      background: linear-gradient(90deg, #0E3047 0%, #10828C 100%);
+
+  }
+  ul.ant-menu.ant-menu-light.ant-menu-root.ant-menu-horizontal {
+      font-style: normal;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 30px;  
+      color: #FFFFFF;
+      background: transparent;
+
+  }
+
+
+ 

@@ -61,7 +61,7 @@ class Index extends Component {
     onChangeCountry = (value) => {
         console.log(`selected ${value}`);
         this.setState({
-            link: "/forums?countries=" + value
+            link: "/forums?=" + value
         })
     }
 
@@ -122,7 +122,6 @@ class Index extends Component {
     render() {
         return (
             <div>
-                <HeaderPage page="1"/>
                 <div className="country-search">
                     <h2 style={{ margin: '5px' }}>Which Country would you like to visit?</h2>
                     <h6 style={{ margin: '5px' }}>Type the name of Country or select on our map below. </h6>

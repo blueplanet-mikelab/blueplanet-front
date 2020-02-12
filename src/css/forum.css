@@ -1,3 +1,10 @@
+/* theme check */
+label.ant-checkbox-wrapper {
+    margin-left: 22px; 
+    margin-right: 15px;
+    margin-top: 15px;
+
+}
 span.ant-tag.ant-tag-has-color {
     background: linear-gradient(90deg, #0E3047 0%, #10828C 100%);
 }
@@ -27,6 +34,13 @@ span.ant-tag.ant-tag-has-color {
 }
 
 #sort.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
+    background: white;
+    color: #F97300;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+
+#fav.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
     background: white;
     color: #F97300;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);

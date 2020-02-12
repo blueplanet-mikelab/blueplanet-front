@@ -4,7 +4,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown } from 'antd';
+import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
 
 import HeaderPage from "./HeaderPage";
 import "../css/forum.css";
@@ -31,8 +31,17 @@ class Forums extends Component {
       query: {},
       inputMinValue: 0,
       inputMaxValue: 20000,
+      currentPage: 1,
+      sortBy: 'popular',
     };
   }
+
+  onChangePage = page => {
+    console.log(page);
+    this.setState({
+      currentPage: page,
+    });
+  };
 
   handleClick = e => {
     console.log("click ", e);
@@ -370,7 +379,7 @@ class Forums extends Component {
       <div>
         <Layout>
           <Header className="header" style={{ background: '#fff' }}>
-            <HeaderPage page="3" />
+    
           </Header>
           <Layout>
             <Sider width={220} style={{ background: '#fff' }}>
@@ -519,34 +528,34 @@ class Forums extends Component {
                   }>
                   <Col>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15 }} value="Mountain" onChange={this.onChangeTheme}>Mountain</Checkbox>
+                      <Checkbox id="first-theme" value="Mountain" onChange={this.onChangeTheme}>Mountain</Checkbox>
                     </Row>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Sea" onChange={this.onChangeTheme}>Sea</Checkbox>
+                      <Checkbox value="Sea" onChange={this.onChangeTheme}>Sea</Checkbox>
                     </Row>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Religion" onChange={this.onChangeTheme}>Religion</Checkbox>
+                      <Checkbox value="Religion" onChange={this.onChangeTheme}>Religion</Checkbox>
                     </Row>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Historical" onChange={this.onChangeTheme}>Historical</Checkbox>
+                      <Checkbox value="Historical" onChange={this.onChangeTheme}>Historical</Checkbox>
                     </Row>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Entertainment" onChange={this.onChangeTheme}>Entertainment</Checkbox>
+                      <Checkbox value="Entertainment" onChange={this.onChangeTheme}>Entertainment</Checkbox>
                     </Row>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Festival" onChange={this.onChangeTheme}>Festival</Checkbox>
+                      <Checkbox value="Festival" onChange={this.onChangeTheme}>Festival</Checkbox>
                     </Row>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Eating" onChange={this.onChangeTheme}>Eating</Checkbox>
+                      <Checkbox value="Eating" onChange={this.onChangeTheme}>Eating</Checkbox>
                     </Row>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="NightLifeStyle" onChange={this.onChangeTheme}>NightLifeStyle</Checkbox>
+                      <Checkbox value="NightLifeStyle" onChange={this.onChangeTheme}>Nightlife Style</Checkbox>
                     </Row>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Photography" onChange={this.onChangeTheme}>Photography</Checkbox>
+                      <Checkbox value="Photography" onChange={this.onChangeTheme}>Photography</Checkbox>
                     </Row>
                     <Row>
-                      <Checkbox style={{ marginLeft: 22, marginRight: 15, marginTop: 15 }} value="Sightseeing" onChange={this.onChangeTheme}>Sightseeing</Checkbox>
+                      <Checkbox value="Sightseeing" onChange={this.onChangeTheme}>Sightseeing</Checkbox>
                     </Row>
                   </Col>
                   <CheckboxGroup
@@ -628,6 +637,7 @@ class Forums extends Component {
                 {/* Thread */}
 
                 {this.CreatePost()}
+                <Pagination current={this.state.currentPage} onChange={this.onChangePage} total={500} />
 
               </Content>
             </Layout>
