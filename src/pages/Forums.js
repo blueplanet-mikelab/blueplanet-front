@@ -5,8 +5,6 @@ import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
-
-import HeaderPage from "./HeaderPage";
 import "../css/forum.css";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
@@ -18,6 +16,7 @@ const { Option } = Select;
 var checkTheme = [];
 
 const checkBudget = (a, b) => (b <= a)
+const numEachPage = 10   // Use a constant here to keep track of number of threads per page
 
 class Forums extends Component {
   constructor(props) {
@@ -33,6 +32,8 @@ class Forums extends Component {
       inputMaxValue: 20000,
       currentPage: 1,
       sortBy: 'popular',
+      minValue: 0,
+      maxValue: numEachPage,
     };
   }
 
@@ -40,6 +41,13 @@ class Forums extends Component {
     console.log(page);
     this.setState({
       currentPage: page,
+    });
+  };
+
+  handleChangePage = value => {
+    this.setState({
+      minValue: (value - 1) * numEachPage,
+      maxValue: value * numEachPage
     });
   };
 
@@ -375,11 +383,22 @@ class Forums extends Component {
     children.push(<Option value="TW">Taiwan </Option>);
     children.push(<Option value="MM">Myanmar </Option>);
 
+    const menu = (
+      <Menu>
+        <SubMenu title="Add to My Triplist">
+          <Menu.Item>New Triplist</Menu.Item>
+          <Menu.Item>Japan Trip</Menu.Item>
+        </SubMenu>
+        <Menu.Item>Save to My Favorite</Menu.Item>
+        <Menu.Item>Share</Menu.Item>
+      </Menu>
+    );
+
     return (
       <div>
         <Layout>
           <Header className="header" style={{ background: '#fff' }}>
-    
+
           </Header>
           <Layout>
             <Sider width={220} style={{ background: '#fff' }}>
@@ -581,6 +600,7 @@ class Forums extends Component {
                   </Row>
                 </div>
                 <div style={{ marginBottom: "3%" }}>
+
                   <Row>
                     <Col span={12}>
                       <Button
@@ -597,6 +617,7 @@ class Forums extends Component {
                         value={this.state.query.type}>Places or Events Suggestion</Button>
                     </Col>
                   </Row>
+
                   <Row style={{ background: "rgba(255, 224, 198, 0.5)" }}>
                     <Col span={6}>
                       <Button
@@ -636,8 +657,76 @@ class Forums extends Component {
                 </div>
                 {/* Thread */}
 
-                {this.CreatePost()}
-                <Pagination current={this.state.currentPage} onChange={this.onChangePage} total={500} />
+                {/* {this.CreatePost()} */}
+                {/* <Pagination current={this.state.currentPage} onChange={this.onChangePage} total={500} /> */}
+
+                {this.state.threadPoperties &&
+                  this.state.threadPoperties.length > 0 &&
+                  this.state.threadPoperties.slice(this.state.minValue, this.state.maxValue).map(d => (
+                    <div>
+                      <Row style={{ background: "#fff", paddingLeft: "4%", fontSize: "14px" }}>
+                        <Col span={4}>
+                          <img
+                            style={{ width: 90, height: 90, marginBottom: "12%" }}
+                            alt="example"
+                            src={d.thumbnail}
+                          />
+                        </Col>
+                        <Col span={20}>
+                          <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
+                            {d.title}
+                          </a>
+                          <Row style={{ paddingTop: 10 }}>
+                            <Col span={20}>
+                              {this.haveDuration(d.day)}
+                              {this.haveBudget(d.budget)}
+                              <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
+                            </Col>
+                            <Col>
+                              <Row>
+                                <Button
+                                  id="fav"
+                                  size="small"
+                                  onClick={this.handleSortByUpvoted}
+                                  value={this.state.query.sortby}
+                                  style={{ borderColor: "transparent" }}><Icon size='10em' theme="filled" type="heart"
+                                    style={{ color: "#FB3640", fontSize: "20px" }}
+                                  /></Button>
+                                <Dropdown overlay={menu}>
+                                  <a className="ant-dropdown-link" href="#">
+                                    <Icon type="more" style={{ color: "#10828C" }} />
+                                  </a>
+                                </Dropdown>
+                              </Row>
+                            </Col>
+
+                          </Row>
+                          <Row style={{ paddingTop: 10 }}>
+                            <div className="icons-list">
+                              <Icon
+                                type="plus"
+                                style={{ fontSize: "14px", color: "#828EB4", padding: 1 }}
+                              />{" "}
+                              {d.vote} upvoted
+                                <Icon
+                                type="fire"
+                                theme="filled"
+                                style={{ fontSize: "14px", color: "#828EB4", padding: 1, marginLeft: 20 }}
+                              />{" "}
+                              {d.popular} popular
+                              </div>
+                          </Row>
+                        </Col>
+                        <Divider />
+                      </Row>
+                    </div>
+                  ))}
+                <Pagination
+                  defaultCurrent={1}
+                  defaultPageSize={numEachPage} //default size of page
+                  onChange={this.handleChangePage}
+                  total={50} //total number of card data available
+                />
 
               </Content>
             </Layout>

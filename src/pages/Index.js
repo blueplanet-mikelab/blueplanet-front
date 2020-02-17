@@ -3,12 +3,10 @@ import { withRouter } from 'react-router';
 import ReactTooltip from "react-tooltip";
 import axios from 'axios';
 import "../css/styles.css";
-import HeaderPage from "./HeaderPage";
 import MapChart from "./MapChart";
 import SuggestThreads from "./SuggestThreads";
-import SuggestMonth from "./SuggestMonth";
 
-import { Select, Button, Row } from 'antd';
+import { Select, Button } from 'antd';
 
 const { Option } = Select;
 var con = "non";
@@ -95,7 +93,7 @@ class Index extends Component {
                     () => {
                         console.log(this.state)
                         console.log(this.state.threadPoperties);
-                        console.log("con:" + this.state.threadPoperties[0].country);
+                        // console.log("con:" + this.state.threadPoperties[0].country);
                     }
                 );
             })
@@ -161,7 +159,7 @@ class Index extends Component {
                     </Button>
 
                     <div id="suggest" style={{
-                        
+
                     }}>
                         <div style={{ backgroundColor: "#F8F5E4", borderRadius: "3px" }}>
                             <SuggestThreads />
