@@ -95,7 +95,7 @@ class Index extends Component {
                     () => {
                         console.log(this.state)
                         console.log(this.state.threadPoperties);
-                        console.log("con:" + this.state.threadPoperties[0].country);
+                        // console.log("con:" + this.state.threadPoperties[0].country);
                     }
                 );
             })
