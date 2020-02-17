@@ -34,8 +34,8 @@ span.ant-tag.ant-tag-has-color {
 }
 
 #sort.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
-    background: white;
-    color: #F97300;
+    background: white !important;
+    color: #F97300 !important;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
     border-radius: 5px;
 }
