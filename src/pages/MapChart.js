@@ -66,8 +66,8 @@ class MapChart extends Component {
                     () => {
                         console.log(this.state)
                         console.log(this.state.threadPoperties);
-                        console.log("con:" + threadPoperties[0].country);
-                        console.log("long" + threadPoperties[0].longitude)
+                        // console.log("con:" + threadPoperties[0].country);
+                        // console.log("long" + threadPoperties[0].longitude)
                     }
                 );
             })
