@@ -6,6 +6,7 @@ import 'antd/dist/antd.css';
 import Forums from './pages/Forums';
 import Index from './pages/Index';
 import Header from './pages/HeaderPage';
+import UserProfile from './pages/UserProfile';
 
 class App extends Component {
   render() {
@@ -19,6 +20,7 @@ class App extends Component {
         <div style={{ marginTop: '6.5%' }}>
           <Route exact path='/' component={Index} />
           <Route path='/forums' component={Forums} />
+          <Route path='/userprofile' component={UserProfile} />
         </div>
       </Router>
     );
