@@ -12,12 +12,12 @@ class App extends Component {
   render() {
     return (
       <Router>
-         <Switch>
-           <div style={{backgroundColor:"#000000"}}>
-            <Route path="/" component={Header}/>
-            </div>
-          </Switch>
-        <div>
+        <Switch>
+          <div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: "#000000", marginLeft: '-2.5%', zIndex: '100' }}>
+            <Route path="/" component={Header} />
+          </div>
+        </Switch>
+        <div style={{ marginTop: '6.5%' }}>
           <Route exact path='/' component={Index} />
           <Route path='/forums' component={Forums} />
           <Route path='/userprofile' component={UserProfile} />

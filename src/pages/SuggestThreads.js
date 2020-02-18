@@ -28,7 +28,7 @@ class SuggestThreads extends Component {
     onChangeDuration = (e) => {
         console.log('radio checked', e.target.value);
         const query = this.state.query;
-        query.duration = e.target.value;
+        query.duration_type = e.target.value;
         this.setState({ query: query });
         this.getInformation(query);
         this.setState({
@@ -92,7 +92,7 @@ class SuggestThreads extends Component {
         this.setState({
             threadProperties: threadProperties,
         });
-        console.log("thread[0]-day" + this.state.threadProperties[0].duration.label);
+        console.log("thread[0]-day" + this.state.threadProperties[0].duration_type);
     }
 
     getQueryParams() {
@@ -153,12 +153,12 @@ class SuggestThreads extends Component {
                 </Row>
                 <div style={{ marginTop: "20px", textAlign: "center" }}>Popular threads based on your Duration</div>
                 <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
-                    <Radio.Group name="radiogroup" style={{ padding: "10px" }} onChange={this.onChangeDuration} value={this.state.query.duration ? this.state.query.duration : 1}>
-                        <Radio value={"1-3Days"}>1 - 3 Days</Radio>
-                        <Radio value={"4-6Days"}>4 - 6 Days</Radio>
-                        <Radio value={"7-9Days"}>7 - 9 Days</Radio>
-                        <Radio value={"10-12Days"}>10 - 12 Days</Radio>
-                        <Radio value={"Morethan12Days"}>More than 12 Days</Radio>
+                    <Radio.Group name="radiogroup" style={{ padding: "10px" }} onChange={this.onChangeDuration} value={this.state.query.duration_type ? this.state.query.duration_type : 1}>
+                        <Radio value={"1"}>1 - 3 Days</Radio>
+                        <Radio value={"2"}>4 - 6 Days</Radio>
+                        <Radio value={"3"}>7 - 9 Days</Radio>
+                        <Radio value={"4"}>10 - 12 Days</Radio>
+                        <Radio value={"5"}>More than 12 Days</Radio>
                     </Radio.Group>
                 </div>
 
