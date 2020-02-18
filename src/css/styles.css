@@ -1,6 +1,6 @@
 html {
-  font-family: system-ui, sans-serif;
-  font-size: 1.25rem;
+    font-family: system-ui, sans-serif;
+    font-size: 1.25rem;
 }
 
 body {
@@ -8,16 +8,15 @@ body {
 }
 
 svg {
-  display: inline-block;
-  vertical-align: middle;
-
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .country-search {
-	text-align: center;
+    text-align: center;
 }
 
 .App {
-  font-family: sans-serif;
-  text-align: center;
+    font-family: sans-serif;
+    text-align: center;
 }
