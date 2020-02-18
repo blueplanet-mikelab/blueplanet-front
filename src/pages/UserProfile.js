@@ -50,57 +50,57 @@ const triplist = [
 
 const favoritelist = [
     {
-        thumbnail: 'https://www.jrailpass.com/blog/wp-content/uploads/2018/07/autumn-daigo-ji-1280x720.jpg',
+        thumbnail: 'https://f.ptcdn.info/140/068/000/q5qfe490o57QqCfwa0Z-o.jpg',
         title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
         desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
         upvote: 32,
         popular: 87.5
     },
     {
-        thumbnail: 'https://www.jrailpass.com/blog/wp-content/uploads/2018/07/autumn-daigo-ji-1280x720.jpg',
+        thumbnail: 'https://f.ptcdn.info/138/068/000/q5qawymxnU8ws8BrsG2-o.jpg',
         title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
         desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
         upvote: 32,
         popular: 87.5
     }, {
-        thumbnail: 'https://www.jrailpass.com/blog/wp-content/uploads/2018/07/autumn-daigo-ji-1280x720.jpg',
+        thumbnail: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
         title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
         desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
         upvote: 32,
         popular: 87.5
     }, {
-        thumbnail: 'https://www.jrailpass.com/blog/wp-content/uploads/2018/07/autumn-daigo-ji-1280x720.jpg',
+        thumbnail: 'https://f.ptcdn.info/152/068/000/q5s5qm2f2L8KXD0mmPY-o.jpg',
         title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
         desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
         upvote: 32,
         popular: 87.5
     },
     {
-        thumbnail: 'https://www.jrailpass.com/blog/wp-content/uploads/2018/07/autumn-daigo-ji-1280x720.jpg',
+        thumbnail: 'https://f.ptcdn.info/105/068/000/q5li8h638sXxWKv0Bvyw-o.jpg',
         title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
         desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
         upvote: 32,
         popular: 87.5
     }, {
-        thumbnail: 'https://www.jrailpass.com/blog/wp-content/uploads/2018/07/autumn-daigo-ji-1280x720.jpg',
+        thumbnail: 'https://f.ptcdn.info/139/068/000/q5qei46rdeSKm0sAy1Z-o.jpg',
         title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
         desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
         upvote: 32,
         popular: 87.5
     }, {
-        thumbnail: 'https://www.jrailpass.com/blog/wp-content/uploads/2018/07/autumn-daigo-ji-1280x720.jpg',
+        thumbnail: 'https://f.ptcdn.info/035/068/000/q5bqxlum2rEpdCp5I63-o.jpg',
         title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
         desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
         upvote: 32,
         popular: 87.5
     }, {
-        thumbnail: 'https://www.jrailpass.com/blog/wp-content/uploads/2018/07/autumn-daigo-ji-1280x720.jpg',
+        thumbnail: 'https://f.ptcdn.info/174/068/000/q5ulkg1gu8wBg6zIJj5-o.jpg',
         title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
         desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
         upvote: 32,
         popular: 87.5
     }, {
-        thumbnail: 'https://www.jrailpass.com/blog/wp-content/uploads/2018/07/autumn-daigo-ji-1280x720.jpg',
+        thumbnail: 'https://f.ptcdn.info/173/068/000/q5uhlponu9Ajn6YCrcm-o.jpg',
         title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
         desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
         upvote: 32,
@@ -152,15 +152,15 @@ const recentlylist = [
     },
 ]
 
-
-
-export default class Aom extends Component {
+export default class UserProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
             heartTheme: "outlined",
             heartFavorites: favoritelist.map(() => "outlined"),
-            heartRecentlyViews: recentlylist.map(() => "outlined")
+            heartRecentlyViews: recentlylist.map(() => "outlined"),
+            sortType: 2,
+            favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
         }
     }
 
@@ -184,6 +184,31 @@ export default class Aom extends Component {
         })
     }
 
+    imgHandleSize = ({ target: img }, item) => {
+        // console.log(img.width, img.height)
+        console.log(img.naturalWidth, img.naturalHeight)
+        console.log(item.thumbnail)
+        console.log('width:', img.naturalWidth > img.naturalHeight ? '' : `100%`)
+        console.log('height:', img.naturalWidth > img.naturalHeight ? `100%` : '')
+        const { favor_imgs } = this.state
+        favor_imgs.forEach(e => {
+            if (e.thumbnail === item.thumbnail) {
+                e.style = {
+                    width: img.naturalWidth > img.naturalHeight ? '' : `100%`,
+                    height: img.naturalWidth > img.naturalHeight ? `100%` : '',
+                }
+            }
+        })
+
+        this.setState({ favor_imgs })
+        // this.setState({
+        //     favor_img: {
+        //         width: img.naturalWidth > img.naturalHeight ? '' : `100%`,
+        //         height: img.naturalWidth > img.naturalHeight ? `100%` : '',
+        //     }
+        // })
+    }
+
     render() {
         const sorter = (
             <div id="subtab"> {/* !!!!FIXME create component */}
@@ -195,19 +220,22 @@ export default class Aom extends Component {
                     />
                 </div>
                 <Button type="link"
-                    className="subtab-btn"
+                    className={`subtab-btn ${this.state.sortType === 1 ? 'active' : ''}`}
+                    onClick={() => this.setState({ sortType: 1 })}
                     icon="fire"
                     size="large"
                     style={{ width: `19%`, margin: `auto 0 auto 5%` }}
                 >Most Popular</Button>
                 <Button type="link"
-                    className="subtab-btn"
+                    className={`subtab-btn ${this.state.sortType === 2 ? 'active' : ''}`}
+                    onClick={() => this.setState({ sortType: 2 })}
                     icon="plus"
                     size="large"
                     style={{ width: `19%`, margin: 'auto' }}
                 >Most Upvoted</Button>
                 <Button type="link"
-                    className="subtab-btn"
+                    className={`subtab-btn ${this.state.sortType === 3 ? 'active' : ''}`}
+                    onClick={() => this.setState({ sortType: 3 })}
                     size="large"
                     style={{ width: `19%`, margin: 'auto' }}
                 >Recently Added</Button>
@@ -219,6 +247,7 @@ export default class Aom extends Component {
                     height: '550px',
                     backgroundImage: 'url("https://s1.1zoom.me/big7/333/Mountains_Lake_Men_Back_view_Sitting_571299_1920x1212.jpg")',
                     backgroundPositionY: '-300px',
+                    backgroundSize: 'cover',
                     width: `100%`
                 }} />
                 <div style={{ padding: '0 10%', marginTop: '-200px' }}>
@@ -268,10 +297,17 @@ export default class Aom extends Component {
                                 <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
                                     {favoritelist.map((item, i) => {
                                         return (
-                                            <div id="threadtable" className="thread-hori">
-                                                <img src={item.thumbnail}
-                                                    alt=""
-                                                    style={{ width: `15%`, height: '100px' }} />
+                                            <div className="thread-hori">
+                                                <div className="img-frame">
+                                                    <img src={item.thumbnail}
+                                                        alt="favorite-img"
+                                                        onLoad={target => this.imgHandleSize(target, item)}
+                                                        style={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail).style}
+                                                    />
+                                                    {/* width={this.state.favor_width}
+                                                        height={this.state.favor_height} */}
+
+                                                </div>
                                                 <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: `2%`, width: `80%`, margin: 'auto 0' }}>
                                                     <h3 style={{ color: '#0E3047' }}>{item.title}</h3>
                                                     <p style={{ color: '#C4C4C4' }}>{item.desc}</p>
