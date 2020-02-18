@@ -9,7 +9,6 @@ For tablets:
  
 } */
 
-
 .header-container {
     /* text-align: right; */
     display: flex;
@@ -34,4 +33,16 @@ ul.ant-menu.ant-menu-light.ant-menu-root.ant-menu-horizontal {
     line-height: 30px;
     color: #FFFFFF;
     background: transparent;
+}
+
+.ant-menu-horizontal .ant-menu-item:hover,
+.ant-menu-horizontal .ant-menu-submenu:hover,
+.ant-menu-horizontal .ant-menu-item-active,
+.ant-menu-horizontal .ant-menu-submenu-active,
+.ant-menu-horizontal .ant-menu-item-open,
+.ant-menu-horizontal .ant-menu-submenu-open,
+.ant-menu-horizontal .ant-menu-item-selected,
+.ant-menu-horizontal .ant-menu-submenu-selected {
+    color: #F97300 !important;
+    border-color: #F97300;
 }
