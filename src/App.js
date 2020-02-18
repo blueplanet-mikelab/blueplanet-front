@@ -18,7 +18,7 @@ class App extends Component {
           </div>
         </Switch>
         <div>
-          <div style={{ marginTop: '6.5%' }}>
+          <div style={{ marginTop: '4%' }}>
             <Route exact path='/' component={Index} />
           </div>
           <div style={{ marginTop: '-5%' }}>

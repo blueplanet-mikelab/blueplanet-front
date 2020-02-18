@@ -39,7 +39,9 @@ class Forums extends Component {
       countryList: [],
       countryList_short: [],
       children: [],
-      countries_search: ""
+      countries_search: "",
+      typeThread: 1,
+      sortThread: 1,
     };
   }
 
@@ -122,9 +124,8 @@ class Forums extends Component {
     const query = this.state.query;
     query.countries = value;
     console.log("value: " + value);
-    this.setState({ 
-      query: query, 
-      // countries_search: value.id
+    this.setState({
+      query: query,
     });
     this.getInformation(query);
   };
@@ -193,7 +194,10 @@ class Forums extends Component {
     const query = this.state.query;
     query.type = "review";
     console.log('Review' + query.type);
-    this.setState({ query: query });
+    this.setState({
+      query: query,
+      typeThread: 1
+    });
     this.getInformation(query);
   }
 
@@ -201,7 +205,10 @@ class Forums extends Component {
     const query = this.state.query;
     query.type = "suggest";
     console.log('Suggest' + query.type);
-    this.setState({ query: query });
+    this.setState({
+      query: query,
+      typeThread: 2
+    });
     this.getInformation(query);
   }
 
@@ -215,28 +222,40 @@ class Forums extends Component {
   handleSortByPopular = () => {
     const query = this.state.query;
     query.sortby = "popular";
-    this.setState({ query: query });
+    this.setState({
+      query: query,
+      sortThread: 1
+    });
     this.getInformation(query);
   };
 
   handleSortByUpvoted = () => {
     const query = this.state.query;
     query.sortby = "upvoted";
-    this.setState({ query: query });
+    this.setState({
+      query: query,
+      sortThread: 2
+    });
     this.getInformation(query);
   };
 
   handleSortByNewest = () => {
     const query = this.state.query;
     query.sortby = "newest";
-    this.setState({ query: query });
+    this.setState({
+      query: query,
+      sortThread: 3
+    });
     this.getInformation(query);
   };
 
   handleSortByOldest = () => {
     const query = this.state.query;
     query.sortby = "oldest";
-    this.setState({ query: query });
+    this.setState({
+      query: query,
+      sortThread: 4
+    });
     this.getInformation(query);
   };
 
@@ -294,7 +313,8 @@ class Forums extends Component {
         day: item.duration.label,
         budget: "฿".repeat(parseInt(item.budget).toString().length),
         popular: parseInt(item.popular),
-        country: item.countries.map(c => c.nameEnglish + " "),
+        country: item.countries.map(c => c.nameEnglish),
+
         country_short: item.countries.map(c => c.country),
         vote: item.vote,
         duration: item.duration.label,
@@ -303,7 +323,7 @@ class Forums extends Component {
       };
     });
     this.listCountriesAndSetThreadProperties(threadPoperties)
-    console.log(threadPoperties[0].thumbnail)
+    // console.log(threadPoperties[0].thumbnail)
     // this.handleSortByPopular()
   }
 
@@ -358,7 +378,7 @@ class Forums extends Component {
 
     // Add countries in selection
     for (var i = 0; i <= this.state.countryList_short.length; i++) {
-      children.push(<Option id={this.state.countryList[i]} value={this.state.countryList_short[i]}>{this.state.countryList[i]}</Option>);
+      children.push(<Option value={this.state.countryList[i]}>{this.state.countryList[i]}</Option>);
     }
 
     const menu = (
@@ -584,14 +604,18 @@ class Forums extends Component {
                         id="type"
                         size="large"
                         onClick={this.reviewType}
-                        value={this.state.query.type}>Review Trip</Button>
+                        className={`type-btn ${this.state.typeThread === 1 ? 'active' : ''}`}
+                        value={this.state.query.type}
+                        style={{ lineHeight: '3', width: `100%`, margin: 'auto' }}>Review Trip</Button>
                     </Col>
                     <Col span={12}>
                       <Button
                         id="type"
                         size="large"
                         onClick={this.suggestType}
-                        value={this.state.query.type}>Places or Events Suggestion</Button>
+                        className={`type-btn ${this.state.typeThread === 2 ? 'active' : ''}`}
+                        value={this.state.query.type}
+                        style={{ lineHeight: '3', width: `100%`, margin: 'auto' }}>Places or Events Suggestion</Button>
                     </Col>
                   </Row>
 
@@ -601,6 +625,7 @@ class Forums extends Component {
                         id="sort"
                         size="large"
                         onClick={this.handleSortByPopular}
+                        className={`sort-btn ${this.state.sortThread === 1 ? 'active' : ''}`}
                         value={this.state.query.sortby}><Icon
                           type="fire"
                           theme="filled"
@@ -612,6 +637,7 @@ class Forums extends Component {
                         id="sort"
                         size="large"
                         onClick={this.handleSortByUpvoted}
+                        className={`sort-btn ${this.state.sortThread === 2 ? 'active' : ''}`}
                         value={this.state.query.sortby}><Icon type="plus"
                           style={{ color: "#181741", paddingRight: 3 }}
                         />Most Upvoted</Button>
@@ -621,6 +647,7 @@ class Forums extends Component {
                         id="sort"
                         size="large"
                         onClick={this.handleSortByNewest}
+                        className={`sort-btn ${this.state.sortThread === 3 ? 'active' : ''}`}
                         value={this.state.query.sortby}>Newest</Button>
                     </Col>
                     <Col span={6}>
@@ -628,6 +655,7 @@ class Forums extends Component {
                         id="sort"
                         size="large"
                         onClick={this.handleSortByOldest}
+                        className={`sort-btn ${this.state.sortThread === 4 ? 'active' : ''}`}
                         value={this.state.query.sortby}>Oldest</Button>
                     </Col>
                   </Row>
@@ -693,6 +721,7 @@ class Forums extends Component {
                     </div>
                   ))}
                 <Pagination
+                  style={{ backgroundColor: "#FFF", textAlign: 'center' }}
                   defaultCurrent={1}
                   defaultPageSize={num_of_threads_each_page} //default size of page
                   onChange={this.handleChangePage}

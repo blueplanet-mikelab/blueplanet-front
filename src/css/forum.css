@@ -18,12 +18,40 @@ span.ant-tag.ant-tag-has-color {
      
 }
 
-#type.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
+/* #type.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
     background: linear-gradient(90deg, #FB3640 0%, #F97300 100%) !important;
     color: white !important;
     border: 1px solid #C4C4C4;
     box-sizing: border-box;
     border-radius: 0px 5px 5px 0px;
+} */
+
+.type-btn.ant-btn:hover,
+.type-btn.ant-btn:focus,
+.type-btn.ant-btn:active,
+.type-btn.ant-btn.active {
+    width: 100%;
+    background: linear-gradient(90deg, #FB3640 0%, #F97300 100%) !important;
+    color: white !important;
+    border: 1px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 0px 5px 5px 0px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+}
+
+.sort-btn.ant-btn:hover,
+.sort-btn.ant-btn:focus,
+.sort-btn.ant-btn:active,
+.sort-btn.ant-btn.active {
+    width: 100%;
+   
+    border: 1px solid #C4C4C4;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+
+    background: white !important;
+    color: #F97300 !important;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
 }
 
 #sort.ant-btn.ant-btn-lg {
@@ -33,12 +61,12 @@ span.ant-tag.ant-tag-has-color {
     border: rgba(255, 224, 198, 0.5);
 }
 
-#sort.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
+/* #sort.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
     background: white !important;
     color: #F97300 !important;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
     border-radius: 5px;
-}
+} */
 
 #fav.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
     background: white;
