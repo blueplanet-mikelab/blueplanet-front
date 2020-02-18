@@ -622,6 +622,7 @@ class Forums extends Component {
                   <Row style={{ background: "rgba(255, 224, 198, 0.5)" }}>
                     <Col span={6}>
                       <Button
+                        style={{ color: "#181741", paddingRight: 3, width: `100%`, margin: 'auto' }}
                         id="sort"
                         size="large"
                         onClick={this.handleSortByPopular}
@@ -629,17 +630,16 @@ class Forums extends Component {
                         value={this.state.query.sortby}><Icon
                           type="fire"
                           theme="filled"
-                          style={{ color: "#181741", paddingRight: 3 }}
                         />Most Popular</Button>
                     </Col>
                     <Col span={6}>
                       <Button
                         id="sort"
                         size="large"
+                        style={{ color: "#181741", paddingRight: 3, width: `100%`, margin: 'auto' }}
                         onClick={this.handleSortByUpvoted}
                         className={`sort-btn ${this.state.sortThread === 2 ? 'active' : ''}`}
                         value={this.state.query.sortby}><Icon type="plus"
-                          style={{ color: "#181741", paddingRight: 3 }}
                         />Most Upvoted</Button>
                     </Col>
                     <Col span={6}>
@@ -648,7 +648,8 @@ class Forums extends Component {
                         size="large"
                         onClick={this.handleSortByNewest}
                         className={`sort-btn ${this.state.sortThread === 3 ? 'active' : ''}`}
-                        value={this.state.query.sortby}>Newest</Button>
+                        value={this.state.query.sortby}
+                        style={{ color: "#181741", paddingRight: 3, width: `100%`, margin: 'auto' }}>Newest</Button>
                     </Col>
                     <Col span={6}>
                       <Button
@@ -656,7 +657,8 @@ class Forums extends Component {
                         size="large"
                         onClick={this.handleSortByOldest}
                         className={`sort-btn ${this.state.sortThread === 4 ? 'active' : ''}`}
-                        value={this.state.query.sortby}>Oldest</Button>
+                        value={this.state.query.sortby}
+                        style={{ color: "#181741", paddingRight: 3, width: `100%`, margin: 'auto' }}>Oldest</Button>
                     </Col>
                   </Row>
                 </div>
