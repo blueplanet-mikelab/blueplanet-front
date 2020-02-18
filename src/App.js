@@ -13,13 +13,17 @@ class App extends Component {
     return (
       <Router>
         <Switch>
-          <div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: "#000000", marginLeft: '-2.5%', zIndex: '100' }}>
+          <div style={{ position: 'fixed', top: '0', width: '100%', backgroundColor: "#000000", zIndex: '100' }}>
             <Route path="/" component={Header} />
           </div>
         </Switch>
-        <div style={{ marginTop: '6.5%' }}>
-          <Route exact path='/' component={Index} />
-          <Route path='/forums' component={Forums} />
+        <div>
+          <div style={{ marginTop: '6.5%' }}>
+            <Route exact path='/' component={Index} />
+          </div>
+          <div style={{ marginTop: '-5%' }}>
+            <Route path='/forums' component={Forums} />
+          </div>
           <Route path='/userprofile' component={UserProfile} />
         </div>
       </Router>

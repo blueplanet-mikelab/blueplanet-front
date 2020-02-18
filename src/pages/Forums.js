@@ -16,7 +16,7 @@ const { Option } = Select;
 var checkTheme = [];
 
 const checkBudget = (a, b) => (b <= a)
-const numEachPage = 10   // Use a constant here to keep track of number of threads per page
+const num_of_threads_each_page = 10;   // Use a constant here to keep track of number of threads per page
 
 class Forums extends Component {
   constructor(props) {
@@ -24,16 +24,22 @@ class Forums extends Component {
     this.state = {
       threads: [],
       threadPoperties: [],
-      value: 1,
-      radio: 1,
       fullData: [],
       query: {},
+      value: 1,
+      radio: 1,
       inputMinValue: 0,
       inputMaxValue: 20000,
       currentPage: 1,
       sortBy: 'popular',
       minValue: 0,
-      maxValue: numEachPage,
+      maxValue: num_of_threads_each_page,
+      heartTheme: "outlined",
+      heartFavorites: "outlined",
+      countryList: [],
+      countryList_short: [],
+      children: [],
+      countries_search: ""
     };
   }
 
@@ -46,8 +52,8 @@ class Forums extends Component {
 
   handleChangePage = value => {
     this.setState({
-      minValue: (value - 1) * numEachPage,
-      maxValue: value * numEachPage
+      minValue: (value - 1) * num_of_threads_each_page,
+      maxValue: value * num_of_threads_each_page
     });
   };
 
@@ -116,7 +122,10 @@ class Forums extends Component {
     const query = this.state.query;
     query.countries = value;
     console.log("value: " + value);
-    this.setState({ query: query });
+    this.setState({ 
+      query: query, 
+      // countries_search: value.id
+    });
     this.getInformation(query);
   };
 
@@ -139,7 +148,6 @@ class Forums extends Component {
     this.setState({ query: query });
     this.getInformation(query);
     // this.setState({ data: this.state.fullData.filter(d => {
-
     //   if(e.target.checked){
     //     console.log(d.theme)
     //     return checkTheme(d.theme, e.target.value) }
@@ -175,7 +183,7 @@ class Forums extends Component {
   }
 
   haveBudget(money) {
-    console.log('budget:', money);
+    // console.log('budget:', money);
     if (money != "฿฿") {
       return <Tag color="rgba(130, 142, 180, 0.5)">{money}</Tag>
     }
@@ -234,6 +242,35 @@ class Forums extends Component {
 
   // value: e.target.value,
 
+  listCountriesAndSetThreadProperties = (threadPoperties) => {
+    const countryList = []
+    const countryList_short = []
+    threadPoperties.forEach(element => {
+      element.country.forEach(c => {
+        if (!countryList.includes(c)) {
+          countryList.push(c)
+        }
+      })
+
+      element.country_short.forEach(c => {
+        if (!countryList_short.includes(c)) {
+          countryList_short.push(c)
+        }
+      })
+      console.log(countryList);
+      console.log(countryList_short);
+
+    })
+
+    this.setState({
+      threadPoperties: threadPoperties,
+      countryList: countryList,
+      countryList_short: countryList_short
+    })
+  };
+
+
+
   async getInformation(query) {
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
@@ -255,16 +292,19 @@ class Forums extends Component {
         ...item,
         link: "https://pantip.com/topic/" + item.topic_id,
         day: item.duration.label,
-        budget: "฿".repeat(item.budget.toString().length),
-        popular: parseInt(item.popularity),
+        budget: "฿".repeat(parseInt(item.budget).toString().length),
+        popular: parseInt(item.popular),
         country: item.countries.map(c => c.nameEnglish + " "),
-        vote: item.totalVote,
+        country_short: item.countries.map(c => c.country),
+        vote: item.vote,
         duration: item.duration.label,
         typeday: item.duration.days,
         theme: item.theme.map(c => c.theme),
       };
     });
-    this.setState({ threadPoperties: threadPoperties });
+    this.listCountriesAndSetThreadProperties(threadPoperties)
+    console.log(threadPoperties[0].thumbnail)
+    // this.handleSortByPopular()
   }
 
   getQueryParams() {
@@ -277,83 +317,20 @@ class Forums extends Component {
     this.getInformation(q);
   }
 
-  CreatePost = () => {
-    const menu = (
-      <Menu>
-        <SubMenu title="Add to My Triplist">
-          <Menu.Item>New Triplist</Menu.Item>
-          <Menu.Item>Japan Trip</Menu.Item>
-        </SubMenu>
-        <Menu.Item>Save to My Favorite</Menu.Item>
-        <Menu.Item>Share</Menu.Item>
-      </Menu>
-    );
-    return this.state.threadPoperties.map(d => {
-      return (
-        <div>
-          <Row style={{ background: "#fff", paddingLeft: "4%", fontSize: "14px" }}>
-            <Col span={4}>
-              <img
-                style={{ width: 90, height: 90, marginBottom: "12%" }}
-                alt="example"
-                src={d.thumbnail}
-              />
-            </Col>
-            <Col span={20}>
-              <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
-                {d.title}
-              </a>
-              <Row style={{ paddingTop: 10 }}>
-                <Col span={20}>
-                  {this.haveDuration(d.day)}
-                  {this.haveBudget(d.budget)}
-                  <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
-                </Col>
-                <Col>
-                  <Row>
-                    <Button
-                      id="fav"
-                      size="small"
-                      onClick={this.handleSortByUpvoted}
-                      value={this.state.query.sortby}
-                      style={{ borderColor: "transparent" }}><Icon size='10em' theme="filled" type="heart"
-                        style={{ color: "#FB3640", fontSize: "20px" }}
-                      /></Button>
-                    <Dropdown overlay={menu}>
-                      <a className="ant-dropdown-link" href="#">
-                        <Icon type="more" style={{ color: "#10828C" }} />
-                      </a>
-                    </Dropdown>
-                  </Row>
-                </Col>
+  onHeartFavoriteClick = () => {
+    if (this.state.heartFavorites == "filled") {
+      this.setState({
+        heartFavorites: "outlined"
+      })
+    } else {
+      this.setState({
+        heartFavorites: "filled"
+      })
 
-              </Row>
-              <Row style={{ paddingTop: 10 }}>
-                <div className="icons-list">
-                  <Icon
-                    type="plus"
-                    style={{ fontSize: "14px", color: "#828EB4", padding: 1 }}
-                  />{" "}
-                  {d.vote} upvoted
-                      <Icon
-                    type="fire"
-                    theme="filled"
-                    style={{ fontSize: "14px", color: "#828EB4", padding: 1, marginLeft: 20 }}
-                  />{" "}
-                  {d.popular} popular
-                    </div>
-              </Row>
-            </Col>
-            <Divider />
-          </Row>
-        </div>
-      );
-    });
-  };
-
+    }
+  }
 
   render() {
-
     const radioStyle = {
       display: 'block',
       height: '30px',
@@ -378,10 +355,11 @@ class Forums extends Component {
     );
 
     const children = [];
-    children.push(<Option value="JP">Japan </Option>);
-    children.push(<Option value="TH">Thailand </Option>);
-    children.push(<Option value="TW">Taiwan </Option>);
-    children.push(<Option value="MM">Myanmar </Option>);
+
+    // Add countries in selection
+    for (var i = 0; i <= this.state.countryList_short.length; i++) {
+      children.push(<Option id={this.state.countryList[i]} value={this.state.countryList_short[i]}>{this.state.countryList[i]}</Option>);
+    }
 
     const menu = (
       <Menu>
@@ -393,7 +371,6 @@ class Forums extends Component {
         <Menu.Item>Share</Menu.Item>
       </Menu>
     );
-
     return (
       <div>
         <Layout>
@@ -411,7 +388,7 @@ class Forums extends Component {
 
                 <div style={{ marginLeft: 22, marginRight: 15, marginBottom: 20, marginTop: 20 }}>
                   Filter
-                            <a href={""} style={{ color: "#828EB4", marginLeft: 62, marginRight: 15 }}>
+                            <a href="/forums" style={{ color: "#828EB4", marginLeft: 62, marginRight: 15 }}>
                     Reset Filter
                             </a>
                 </div>
@@ -657,9 +634,6 @@ class Forums extends Component {
                 </div>
                 {/* Thread */}
 
-                {/* {this.CreatePost()} */}
-                {/* <Pagination current={this.state.currentPage} onChange={this.onChangePage} total={500} /> */}
-
                 {this.state.threadPoperties &&
                   this.state.threadPoperties.length > 0 &&
                   this.state.threadPoperties.slice(this.state.minValue, this.state.maxValue).map(d => (
@@ -684,17 +658,14 @@ class Forums extends Component {
                             </Col>
                             <Col>
                               <Row>
-                                <Button
-                                  id="fav"
-                                  size="small"
-                                  onClick={this.handleSortByUpvoted}
-                                  value={this.state.query.sortby}
-                                  style={{ borderColor: "transparent" }}><Icon size='10em' theme="filled" type="heart"
-                                    style={{ color: "#FB3640", fontSize: "20px" }}
-                                  /></Button>
+                                <Icon type="heart"
+                                  theme={this.state.heartFavorites}
+                                  onClick={this.onHeartFavoriteClick}
+                                  style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
+                                {/* <Icon type="more" style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} /> */}
                                 <Dropdown overlay={menu}>
                                   <a className="ant-dropdown-link" href="#">
-                                    <Icon type="more" style={{ color: "#10828C" }} />
+                                    <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
                                   </a>
                                 </Dropdown>
                               </Row>
@@ -723,7 +694,7 @@ class Forums extends Component {
                   ))}
                 <Pagination
                   defaultCurrent={1}
-                  defaultPageSize={numEachPage} //default size of page
+                  defaultPageSize={num_of_threads_each_page} //default size of page
                   onChange={this.handleChangePage}
                   total={50} //total number of card data available
                 />

@@ -14,6 +14,10 @@ class HeaderPage extends Component {
         window.location.href = "/forums"
     }
 
+    goUserProfile = () => {
+        window.location.href = "/userprofile"
+    }
+
     render() {
         return (
             <div className='header-container'>
@@ -21,20 +25,21 @@ class HeaderPage extends Component {
                     <img alt="example" src={logo} style={{ width: '4%', height: '4%' }} />
                     BluePlanet
                 </div>
-                <Menu
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={[this.props.page]}
-                    style={{ lineHeight: '50px' }}
-                >
-                    <Menu.Item key="1" onClick={this.goHomePage}>Home</Menu.Item>
-                    <Menu.Item key="2">About us</Menu.Item>
-                    <Menu.Item key="3" onClick={this.goForumPage}>Forum</Menu.Item>
-                    <Menu.Item key="4" id='home' >My Triplist</Menu.Item>
-                    <Menu.Item key="5" id='lang' >EN/TH</Menu.Item>
+                <div>
+                    <Menu
+                        theme="light"
+                        mode="horizontal"
+                        defaultSelectedKeys={[this.props.page]}
+                        style={{ lineHeight: '50px' }}
+                    >
+                        <Menu.Item key="1" onClick={this.goHomePage}>Home</Menu.Item>
+                        <Menu.Item key="2" onClick={this.goForumPage}>Forum</Menu.Item>
+                        <Menu.Item key="3" id='home' onClick={this.goUserProfile} >My Triplist</Menu.Item>
+                        <Menu.Item key="4" id='lang' >EN/TH</Menu.Item>
 
 
-                </Menu>
+                    </Menu>
+                </div>
 
 
             </div>)
