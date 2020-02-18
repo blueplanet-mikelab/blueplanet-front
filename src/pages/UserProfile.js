@@ -159,13 +159,13 @@ export default class UserProfile extends Component {
             heartTheme: "outlined",
             heartFavorites: favoritelist.map(() => "outlined"),
             heartRecentlyViews: recentlylist.map(() => "outlined"),
-            sortType: 2,
+            tripListSortType:1,
+            subtabSortType: 1,
             favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
         }
     }
 
     onHeartFavoriteClick = (i) => {
-        // alert("clicked!");
         // console.log(this.state.heartTheme ? "outlined" : "filled")
         const newThemes = this.state.heartFavorites
         newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
@@ -175,8 +175,6 @@ export default class UserProfile extends Component {
     }
 
     onHeartRecentlyViewClick = (i) => {
-        // alert("clicked!");
-        // console.log(this.state.heartTheme ? "outlined" : "filled")
         const newThemes = this.state.heartRecentlyViews
         newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
         this.setState({
@@ -185,11 +183,6 @@ export default class UserProfile extends Component {
     }
 
     imgHandleSize = ({ target: img }, item) => {
-        // console.log(img.width, img.height)
-        console.log(img.naturalWidth, img.naturalHeight)
-        console.log(item.thumbnail)
-        console.log('width:', img.naturalWidth > img.naturalHeight ? '' : `100%`)
-        console.log('height:', img.naturalWidth > img.naturalHeight ? `100%` : '')
         const { favor_imgs } = this.state
         favor_imgs.forEach(e => {
             if (e.thumbnail === item.thumbnail) {
@@ -201,11 +194,14 @@ export default class UserProfile extends Component {
         })
 
         this.setState({ favor_imgs })
+    }
+
+    goToTripDetail = (i) => {
+        console.log("trip:",i)
+        // const newThemes = this.state.heartRecentlyViews
+        // newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
         // this.setState({
-        //     favor_img: {
-        //         width: img.naturalWidth > img.naturalHeight ? '' : `100%`,
-        //         height: img.naturalWidth > img.naturalHeight ? `100%` : '',
-        //     }
+        //     heartRecentlyViews: newThemes
         // })
     }
 
@@ -220,41 +216,42 @@ export default class UserProfile extends Component {
                     />
                 </div>
                 <Button type="link"
-                    className={`subtab-btn ${this.state.sortType === 1 ? 'active' : ''}`}
-                    onClick={() => this.setState({ sortType: 1 })}
+                    className={`subtab-btn ${this.state.subtabSortType === 1 ? 'active' : ''}`}
+                    onClick={() => this.setState({ subtabSortType: 1 })}
                     icon="fire"
                     size="large"
                     style={{ width: `19%`, margin: `auto 0 auto 5%` }}
                 >Most Popular</Button>
                 <Button type="link"
-                    className={`subtab-btn ${this.state.sortType === 2 ? 'active' : ''}`}
-                    onClick={() => this.setState({ sortType: 2 })}
+                    className={`subtab-btn ${this.state.subtabSortType === 2 ? 'active' : ''}`}
+                    onClick={() => this.setState({ subtabSortType: 2 })}
                     icon="plus"
                     size="large"
                     style={{ width: `19%`, margin: 'auto' }}
                 >Most Upvoted</Button>
                 <Button type="link"
-                    className={`subtab-btn ${this.state.sortType === 3 ? 'active' : ''}`}
-                    onClick={() => this.setState({ sortType: 3 })}
+                    className={`subtab-btn ${this.state.subtabSortType === 3 ? 'active' : ''}`}
+                    onClick={() => this.setState({ subtabSortType: 3 })}
                     size="large"
                     style={{ width: `19%`, margin: 'auto' }}
                 >Recently Added</Button>
             </div>
         )
+
         return (
             <div style={{ background: '#f8f5e4' }}>
                 <div style={{
-                    height: '550px',
+                    height: '500px',
                     backgroundImage: 'url("https://s1.1zoom.me/big7/333/Mountains_Lake_Men_Back_view_Sitting_571299_1920x1212.jpg")',
                     backgroundPositionY: '-300px',
                     backgroundSize: 'cover',
                     width: `100%`
                 }} />
-                <div style={{ padding: '0 10%', marginTop: '-200px' }}>
-                    <h1 style={{ color: 'white' }}>Somchai Paimaichaun</h1>
-                    <h4 style={{ color: 'white', marginBottom: '20px' }}>somchai.pai@gmail.com</h4>
+                <div style={{ padding: '0 10%', marginTop: '-250px' }}>
+                    <h1 style={{ color: 'white' }}>Somchai Paimaichaun <Icon type="edit"/></h1>
+                    <h4 style={{ color: 'white', marginBottom: '20px' }}>somchai.pai@gmail.com <Icon type="edit"/></h4>
                     <div id="userprofile-tabs" style={{ background: 'white', padding: '20px' }}>
-                        <Tabs defaultActiveKey="2" tabBarStyle={{ color: 'black' }}>
+                        <Tabs defaultActiveKey="1" tabBarStyle={{ color: 'black' }}>
                             <TabPane tab="My Triplist" key="1">
                                 <div id="subtab">
                                     <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>
@@ -265,24 +262,32 @@ export default class UserProfile extends Component {
                                         />
                                     </div>
                                     <Button type="link"
-                                        className="subtab-btn"
+                                        className={`subtab-btn ${this.state.tripListSortType === 1 ? 'active' : ''}`}
+                                        onClick={() => this.setState({ tripListSortType: 1 })}
                                         size="large"
                                         style={{ width: `24%`, margin: `auto 0 auto 15%` }}
                                     >Recently Added</Button>
                                     <Button type="link"
-                                        className="subtab-btn"
+                                        className={`subtab-btn ${this.state.tripListSortType === 2 ? 'active' : ''}`}
+                                        onClick={() => this.setState({ tripListSortType: 2 })}
                                         size="large"
                                         style={{ width: `24%`, margin: 'auto' }}
                                     >Most Threads</Button>
                                 </div>
                                 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                                    {triplist.map(item => {
+                                    {triplist.map((item,i) => {
                                         return (
-                                            <div style={{ width: '300px', margin: '10px' }}>
-                                                <img src={item.image} alt="" style={{ width: '100%', height: 'auto' }} />
+                                            <div style={{ width: '200px', margin: '10px' }} 
+                                                >
+                                                <div style={{width:'200px', height:'200px'}}>
+                                                    <img src={item.image} 
+                                                    alt="" 
+                                                    onClick={() => this.goToTripDetail(i)}
+                                                    style={{ width: `100%`, height: `100%`, cursor:'pointer' }} />
+                                                </div>
                                                 <div style={{ display: 'flex' }}>
                                                     <div>
-                                                        <h2>{item.name}</h2>
+                                                        <h2 onClick={() => this.goToTripDetail(i)} style={{cursor:'pointer'}}>{item.name}</h2>
                                                         <p>{item.n}</p>
                                                     </div>
                                                     <Icon type="more" style={{ margin: '20px 0 0 80px' }} />
@@ -304,9 +309,6 @@ export default class UserProfile extends Component {
                                                         onLoad={target => this.imgHandleSize(target, item)}
                                                         style={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail).style}
                                                     />
-                                                    {/* width={this.state.favor_width}
-                                                        height={this.state.favor_height} */}
-
                                                 </div>
                                                 <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: `2%`, width: `80%`, margin: 'auto 0' }}>
                                                     <h3 style={{ color: '#0E3047' }}>{item.title}</h3>
