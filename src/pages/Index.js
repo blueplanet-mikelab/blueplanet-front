@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import ReactTooltip from "react-tooltip";
 import axios from 'axios';
 import "../css/styles.css";
+import "../css/index.css";
 import MapChart from "./MapChart";
 import SuggestThreads from "./SuggestThreads";
 
@@ -148,11 +149,13 @@ class Index extends Component {
                         <h2>Don’t know where to go yet? Let us help you!</h2>
                         <h6>We’re selecting the best of threads based on your conditions.</h6>
                     </div>
-                    <Button style={{
-                        marginBottom: "50px",
-                        width: "50px",
-                        height: "50px"
-                    }}
+                    <Button
+                        className="scrolldown-btn"
+                        style={{
+                            marginBottom: "50px",
+                            width: "50px",
+                            height: "50px"
+                        }}
                         shape="circle"
                         icon="down"
                         onClick={this.scrolltoSuggest}>

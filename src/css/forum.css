@@ -52,12 +52,12 @@ span.ant-tag.ant-tag-has-color {
     border-radius: 5px;
 }
 
-/* #sort.ant-btn.ant-btn-lg {
+#sort.ant-btn.ant-btn-lg {
     width: 100%;
     border-radius: 0;
     background: rgba(255, 224, 198, 0.5);
     border: rgba(255, 224, 198, 0.5);
-} */
+}
 
 /* #sort.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
     background: white !important;

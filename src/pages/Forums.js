@@ -186,7 +186,7 @@ class Forums extends Component {
   haveBudget(money) {
     // console.log('budget:', money);
     if (money != "฿฿") {
-      return <Tag color="rgba(130, 142, 180, 0.5)">{money}</Tag>
+      return <Tag style={{ padding: '1%' }} color="rgba(130, 142, 180, 0.5)">{money}</Tag>
     }
   };
 
@@ -215,7 +215,7 @@ class Forums extends Component {
   haveDuration(duration) {
     console.log('duration:', duration);
     if (duration != "Not Define") {
-      return <Tag color="rgba(130, 142, 180, 0.5)">{duration}</Tag>
+      return <Tag style={{ padding: '1%' }} color="rgba(130, 142, 180, 0.5)">{duration}</Tag>
     }
   }
 
@@ -312,7 +312,7 @@ class Forums extends Component {
         link: "https://pantip.com/topic/" + item.topic_id,
         day: item.duration.label,
         budget: "฿".repeat(parseInt(item.budget).toString().length),
-        popular: parseInt(item.popular),
+        popular: parseInt(item.popularity),
         country: item.countries.map(c => c.nameEnglish),
 
         country_short: item.countries.map(c => c.country),
@@ -667,7 +667,7 @@ class Forums extends Component {
                 {this.state.threadPoperties &&
                   this.state.threadPoperties.length > 0 &&
                   this.state.threadPoperties.slice(this.state.minValue, this.state.maxValue).map(d => (
-                    <div>
+                    <div style={{ backgroundColor: '#FFF', paddingTop: '20px', borderBottom: ' 0.5px solid rgba(130, 142, 180, 0.5)' }}>
                       <Row style={{ background: "#fff", paddingLeft: "4%", fontSize: "14px" }}>
                         <Col span={4}>
                           <img
@@ -684,7 +684,7 @@ class Forums extends Component {
                             <Col span={20}>
                               {this.haveDuration(d.day)}
                               {this.haveBudget(d.budget)}
-                              <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
+                              <Tag style={{ padding: '1%' }} color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
                             </Col>
                             <Col>
                               <Row>
@@ -718,7 +718,7 @@ class Forums extends Component {
                               </div>
                           </Row>
                         </Col>
-                        <Divider />
+                        {/* <Divider /> */}
                       </Row>
                     </div>
                   ))}
