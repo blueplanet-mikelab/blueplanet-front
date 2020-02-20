@@ -3,6 +3,7 @@ import { Tabs, Input, Icon, Button } from 'antd'
 import "../css/userprofile.css"
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 
+
 const { TabPane } = Tabs
 const { Search } = Input;
 
@@ -340,9 +341,17 @@ export default class UserProfile extends Component {
         this.setState({ favor_imgs })
     }
 
-    render() {
+    handleTriplistSelection = (index) => {
+        this.setState({ 
+            selectedTripList: index
+        })
+    }
 
-        console.log(">>>>", this.state.selectedTripList)
+    onMoreIcon = () => {
+        alert("click more")
+    }
+
+    render() {
 
         const sorter = (
             <div id="subtab">
@@ -405,7 +414,7 @@ export default class UserProfile extends Component {
                                 alt="trip image cover"
                                 style={{ width: `200px`, height: `200px`, marginRight: '20px' }} />
                             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <h1>{triplist[selectedIndex].name} <Icon type="more" /> </h1>
+                                <h1>{triplist[selectedIndex].name} <Icon type="more" onClick={() => this.onMoreIcon()} /> </h1>
                                 <span>{triplist[selectedIndex].n} Threads</span>
                                 <p></p>
                                 <p>{triplist[selectedIndex].description}</p>
@@ -454,7 +463,9 @@ export default class UserProfile extends Component {
                                                 <h2 onClick={() => this.setState({ selectedTripList: i })} style={{ cursor: 'pointer' }}>{item.name}</h2>
                                                 <p>{item.n}</p>
                                             </div>
-                                            <Icon type="more" style={{ margin: '20px 0 0 80px' }} />
+                                            <Icon type="more" 
+                                                onClick={() => this.onMoreIcon()} 
+                                                style={{ margin: '20px 0 0 80px' }} />
                                         </div>
                                     </div>
                                 )
@@ -498,29 +509,14 @@ export default class UserProfile extends Component {
                                                     theme={this.state.heartRecentlyViews[i]}
                                                     onClick={() => this.onHeartRecentlyViewClick(i)}
                                                     style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
-                                                <Icon type="more" style={{ width: `5%`, margin: 'auto', fontSize: '23px', color: '#10828C' }} />
+                                                <Icon type="more"
+                                                    onClick={() => this.onMoreIcon()}
+                                                    style={{ width: `5%`, margin: 'auto', fontSize: '23px', color: '#10828C' }} />
                                             </div>
                                         )
                                     })}
                                 </div>
                             </TabPane>
-
-                            {/* <TabPane tab="Test TripDetail" key="4">
-                                {sorter}
-                                <p><a href="">My Triplist</a> / {triplist[0].name}</p>
-                                <div style={{ display: 'flex', marginTop: '20px' }}>
-                                    <img src={triplist[0].image}
-                                        alt="trip image cover"
-                                        style={{ width: `200px`, height: `200px`, marginRight: '20px' }} />
-                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <h1>{triplist[0].name} <Icon type="more" /> </h1>
-                                        <span>{triplist[0].n} Threads</span>
-                                        <p></p>
-                                        <p>{triplist[0].description}</p>
-                                    </div>
-                                </div>
-                                {threadHorizontal(favoritelist)}
-                            </TabPane> */}
                         </Tabs>
                     </div>
                 </div>
