@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Tabs, Input, Icon, Button } from 'antd'
 import "../css/userprofile.css"
+import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 
 const { TabPane } = Tabs
 const { Search } = Input;
@@ -8,44 +9,188 @@ const { Search } = Input;
 const triplist = [
     {
         image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-        name: 'Japan Trip',
-        n: '5 Threads'
+        name: 'Japan Trip1',
+        n: 1,
+        description: "1 Osaka 2020",
+        threads: [
+            {
+                thumbnail: 'https://f.ptcdn.info/140/068/000/q5qfe490o57QqCfwa0Z-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            },
+        ]
+    },
+    {
+        image: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
+        name: 'Japan Trip2',
+        n: 2,
+        description: "2 Osaka 2020",
+        threads: [
+            {
+                thumbnail: 'https://f.ptcdn.info/138/068/000/q5qawymxnU8ws8BrsG2-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            },
+        ]
+    },
+    {
+        image: 'https://f.ptcdn.info/152/068/000/q5s5qm2f2L8KXD0mmPY-o.jpg',
+        name: 'Japan Trip3',
+        n: 3,
+        description: "3 Osaka 2020",
+        threads: [
+            {
+                thumbnail: 'https://f.ptcdn.info/152/068/000/q5s5qm2f2L8KXD0mmPY-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            },
+            {
+                thumbnail: 'https://f.ptcdn.info/105/068/000/q5li8h638sXxWKv0Bvyw-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/139/068/000/q5qei46rdeSKm0sAy1Z-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            },
+        ]
     },
     {
         image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-        name: 'Japan Trip',
-        n: '5 Threads'
+        name: 'Japan Trip4',
+        n: 4,
+        description: "4 Osaka 2020",
+        threads: [
+            {
+                thumbnail: 'https://f.ptcdn.info/035/068/000/q5bqxlum2rEpdCp5I63-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/174/068/000/q5ulkg1gu8wBg6zIJj5-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/173/068/000/q5uhlponu9Ajn6YCrcm-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/140/068/000/q5qfe490o57QqCfwa0Z-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            },
+        ]
     },
     {
         image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-        name: 'Japan Trip',
-        n: '5 Threads'
+        name: 'Japan Trip5',
+        n: 5,
+        description: "5 Osaka 2020",
+        threads: [
+            {
+                thumbnail: 'https://f.ptcdn.info/138/068/000/q5qawymxnU8ws8BrsG2-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/152/068/000/q5s5qm2f2L8KXD0mmPY-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            },
+            {
+                thumbnail: 'https://f.ptcdn.info/105/068/000/q5li8h638sXxWKv0Bvyw-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/139/068/000/q5qei46rdeSKm0sAy1Z-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            },
+        ]
     },
     {
         image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-        name: 'Japan Trip',
-        n: '5 Threads'
-    },
-    {
-        image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-        name: 'Japan Trip',
-        n: '5 Threads'
-    },
-    {
-        image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-        name: 'Japan Trip',
-        n: '5 Threads'
-    },
-    {
-        image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-        name: 'Japan Trip',
-        n: '5 Threads'
-    },
-    {
-        image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-        name: 'Japan Trip',
-        n: '5 Threads'
-    },
+        name: 'Japan Trip6',
+        n: 6,
+        description: "6 Osaka 2020",
+        threads: [
+            {
+                thumbnail: 'https://f.ptcdn.info/035/068/000/q5bqxlum2rEpdCp5I63-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/174/068/000/q5ulkg1gu8wBg6zIJj5-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/173/068/000/q5uhlponu9Ajn6YCrcm-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/140/068/000/q5qfe490o57QqCfwa0Z-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            },
+            {
+                thumbnail: 'https://f.ptcdn.info/138/068/000/q5qawymxnU8ws8BrsG2-o.jpg',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            }, {
+                thumbnail: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
+                title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
+                desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
+                upvote: 32,
+                popular: 87.5
+            },
+        ]
+    }
+
 ]
 
 const favoritelist = [
@@ -156,17 +301,16 @@ export default class UserProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            heartTheme: "outlined",
             heartFavorites: favoritelist.map(() => "outlined"),
             heartRecentlyViews: recentlylist.map(() => "outlined"),
-            tripListSortType:1,
+            tripListSortType: 1,
             subtabSortType: 1,
             favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
+            selectedTripList: null
         }
     }
 
     onHeartFavoriteClick = (i) => {
-        // console.log(this.state.heartTheme ? "outlined" : "filled")
         const newThemes = this.state.heartFavorites
         newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
         this.setState({
@@ -196,18 +340,12 @@ export default class UserProfile extends Component {
         this.setState({ favor_imgs })
     }
 
-    goToTripDetail = (i) => {
-        console.log("trip:",i)
-        // const newThemes = this.state.heartRecentlyViews
-        // newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
-        // this.setState({
-        //     heartRecentlyViews: newThemes
-        // })
-    }
-
     render() {
+
+        console.log(">>>>", this.state.selectedTripList)
+
         const sorter = (
-            <div id="subtab"> {/* !!!!FIXME create component */}
+            <div id="subtab">
                 <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>
                     <Search
                         placeholder="Search"
@@ -238,6 +376,96 @@ export default class UserProfile extends Component {
             </div>
         )
 
+        const threadHorizontal = (threadlist) => (
+            <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
+                {threadlist.map((item, i) => {
+                    return (
+                        <ThreadHorizontalItem item={item}
+                            i={i}
+                            imgStyle={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail).style}
+                            imgHandleSize={this.imgHandleSize}
+                            heartState={this.state.heartFavorites[i]}
+                            onHeartFavoriteClick={this.onHeartFavoriteClick}
+                        />
+                    )
+                })}
+            </div>
+        )
+
+        const tripListTap = () => {
+
+            const selectedIndex = this.state.selectedTripList
+            if (selectedIndex != null) {
+                return (
+                    <>
+                        {sorter}
+                        <p><span style={{ textDecoration:'underline', color:'blue', cursor: 'pointer' }} onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {triplist[selectedIndex].name}</p>
+                        <div style={{ display: 'flex', marginTop: '20px' }}>
+                            <img src={triplist[selectedIndex].image}
+                                alt="trip image cover"
+                                style={{ width: `200px`, height: `200px`, marginRight: '20px' }} />
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <h1>{triplist[selectedIndex].name} <Icon type="more" /> </h1>
+                                <span>{triplist[selectedIndex].n} Threads</span>
+                                <p></p>
+                                <p>{triplist[selectedIndex].description}</p>
+                            </div>
+                        </div>
+                        {threadHorizontal(triplist[selectedIndex].threads)}
+                    </>
+                )
+            } else {
+                return (
+                    <>
+                        <div id="subtab">
+                            <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>
+                                <Search
+                                    placeholder="Search"
+                                    onSearch={value => console.log(value)}
+                                    style={{ width: `100%`, height: '40px' }}
+                                />
+                            </div>
+                            <Button type="link"
+                                className={`subtab-btn ${this.state.tripListSortType === 1 ? 'active' : ''}`}
+                                onClick={() => this.setState({ tripListSortType: 1 })}
+                                size="large"
+                                style={{ width: `24%`, margin: `auto 0 auto 15%` }}
+                            >Recently Added</Button>
+                            <Button type="link"
+                                className={`subtab-btn ${this.state.tripListSortType === 2 ? 'active' : ''}`}
+                                onClick={() => this.setState({ tripListSortType: 2 })}
+                                size="large"
+                                style={{ width: `24%`, margin: 'auto' }}
+                            >Most Threads</Button>
+                        </div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                            {triplist.map((item, i) => {
+                                return (
+                                    <div style={{ width: '200px', margin: '10px' }}
+                                    >
+                                        <div style={{ width: '200px', height: '200px' }}>
+                                            <img src={item.image}
+                                                alt=""
+                                                onClick={() => {this.setState({ selectedTripList: i })}}
+                                                style={{ width: `100%`, height: `100%`, cursor: 'pointer' }} />
+                                        </div>
+                                        <div style={{ display: 'flex' }}>
+                                            <div>
+                                                <h2 onClick={() => this.setState({ selectedTripList: i })} style={{ cursor: 'pointer' }}>{item.name}</h2>
+                                                <p>{item.n}</p>
+                                            </div>
+                                            <Icon type="more" style={{ margin: '20px 0 0 80px' }} />
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </>
+                )
+            }
+
+        }
+
         return (
             <div style={{ background: '#f8f5e4' }}>
                 <div style={{
@@ -248,85 +476,16 @@ export default class UserProfile extends Component {
                     width: `100%`
                 }} />
                 <div style={{ padding: '0 10%', marginTop: '-250px' }}>
-                    <h1 style={{ color: 'white' }}>Somchai Paimaichaun <Icon type="edit"/></h1>
-                    <h4 style={{ color: 'white', marginBottom: '20px' }}>somchai.pai@gmail.com <Icon type="edit"/></h4>
+                    <h1 style={{ color: 'white' }}>Somchai Paimaichaun <Icon type="edit" /></h1>
+                    <h4 style={{ color: 'white', marginBottom: '20px' }}>somchai.pai@gmail.com <Icon type="edit" /></h4>
                     <div id="userprofile-tabs" style={{ background: 'white', padding: '20px' }}>
                         <Tabs defaultActiveKey="1" tabBarStyle={{ color: 'black' }}>
                             <TabPane tab="My Triplist" key="1">
-                                <div id="subtab">
-                                    <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>
-                                        <Search
-                                            placeholder="Search"
-                                            onSearch={value => console.log(value)}
-                                            style={{ width: `100%`, height: '40px' }}
-                                        />
-                                    </div>
-                                    <Button type="link"
-                                        className={`subtab-btn ${this.state.tripListSortType === 1 ? 'active' : ''}`}
-                                        onClick={() => this.setState({ tripListSortType: 1 })}
-                                        size="large"
-                                        style={{ width: `24%`, margin: `auto 0 auto 15%` }}
-                                    >Recently Added</Button>
-                                    <Button type="link"
-                                        className={`subtab-btn ${this.state.tripListSortType === 2 ? 'active' : ''}`}
-                                        onClick={() => this.setState({ tripListSortType: 2 })}
-                                        size="large"
-                                        style={{ width: `24%`, margin: 'auto' }}
-                                    >Most Threads</Button>
-                                </div>
-                                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                                    {triplist.map((item,i) => {
-                                        return (
-                                            <div style={{ width: '200px', margin: '10px' }} 
-                                                >
-                                                <div style={{width:'200px', height:'200px'}}>
-                                                    <img src={item.image} 
-                                                    alt="" 
-                                                    onClick={() => this.goToTripDetail(i)}
-                                                    style={{ width: `100%`, height: `100%`, cursor:'pointer' }} />
-                                                </div>
-                                                <div style={{ display: 'flex' }}>
-                                                    <div>
-                                                        <h2 onClick={() => this.goToTripDetail(i)} style={{cursor:'pointer'}}>{item.name}</h2>
-                                                        <p>{item.n}</p>
-                                                    </div>
-                                                    <Icon type="more" style={{ margin: '20px 0 0 80px' }} />
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
+                                {tripListTap()}
                             </TabPane>
                             <TabPane tab="My Favorite" key="2">
                                 {sorter}
-                                <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
-                                    {favoritelist.map((item, i) => {
-                                        return (
-                                            <div className="thread-hori">
-                                                <div className="img-frame">
-                                                    <img src={item.thumbnail}
-                                                        alt="favorite-img"
-                                                        onLoad={target => this.imgHandleSize(target, item)}
-                                                        style={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail).style}
-                                                    />
-                                                </div>
-                                                <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: `2%`, width: `80%`, margin: 'auto 0' }}>
-                                                    <h3 style={{ color: '#0E3047' }}>{item.title}</h3>
-                                                    <p style={{ color: '#C4C4C4' }}>{item.desc}</p>
-                                                    <div style={{ color: "#10828C" }}>
-                                                        <span> <Icon type="plus" /> 32 Upvoted </span>
-                                                        <span style={{ marginLeft: '20px' }}> <Icon type="fire" /> 48.5 Popular</span>
-                                                    </div>
-                                                </div>
-                                                <Icon type="heart"
-                                                    theme={this.state.heartFavorites[i]}
-                                                    onClick={() => this.onHeartFavoriteClick(i)}
-                                                    style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
-                                                <Icon type="more" style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} />
-                                            </div>
-                                        )
-                                    })}
-                                </div>
+                                {threadHorizontal(favoritelist)}
                             </TabPane>
                             <TabPane tab="Recently Viewed" key="3">
                                 {sorter}
@@ -345,6 +504,23 @@ export default class UserProfile extends Component {
                                     })}
                                 </div>
                             </TabPane>
+
+                            {/* <TabPane tab="Test TripDetail" key="4">
+                                {sorter}
+                                <p><a href="">My Triplist</a> / {triplist[0].name}</p>
+                                <div style={{ display: 'flex', marginTop: '20px' }}>
+                                    <img src={triplist[0].image}
+                                        alt="trip image cover"
+                                        style={{ width: `200px`, height: `200px`, marginRight: '20px' }} />
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <h1>{triplist[0].name} <Icon type="more" /> </h1>
+                                        <span>{triplist[0].n} Threads</span>
+                                        <p></p>
+                                        <p>{triplist[0].description}</p>
+                                    </div>
+                                </div>
+                                {threadHorizontal(favoritelist)}
+                            </TabPane> */}
                         </Tabs>
                     </div>
                 </div>
