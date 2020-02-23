@@ -4,8 +4,8 @@ import ReactTooltip from "react-tooltip";
 import axios from 'axios';
 import "../css/styles.css";
 import "../css/index.css";
-import MapChart from "./MapChart";
-import SuggestThreads from "./SuggestThreads";
+import MapChart from "../components/MapChart";
+import SuggestThreads from "../components/SuggestThreads";
 
 import { Select, Button } from 'antd';
 

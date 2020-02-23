@@ -4,7 +4,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Layout, Menu, Icon, Divider, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
+import { Layout, Menu, Icon, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
 import "../css/forum.css";
 
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
@@ -22,9 +22,7 @@ class Forums extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      threads: [],
       threadPoperties: [],
-      fullData: [],
       query: {},
       value: 1,
       radio: 1,
@@ -91,10 +89,6 @@ class Forums extends Component {
     query.budget_min = value;
     this.setState({ query: query, inputMinValue: value, });
     this.getInformation(query);
-
-    // this.setState({
-    //   inputMinValue: value,
-    // });
   };
 
   onChangeMax = (value) => {
@@ -102,9 +96,6 @@ class Forums extends Component {
     query.budget_max = value;
     this.setState({ query: query, inputMaxValue: value, });
     this.getInformation(query);
-    // this.setState({
-    //   inputMaxValue: value,
-    // });
   };
 
   onBlur() {
@@ -163,13 +154,6 @@ class Forums extends Component {
     query.months = value;
     this.setState({ query: query });
     this.getInformation(query);
-    // this.setState({ data: this.state.fullData.filter(d => {
-    //   console.log(d.month);
-    //   if(d.month != null) {
-    //     return checkMonth(d.month, value)
-    //   } 
-    // }) 
-    // });    
   }
 
   onChangeDuration = (e) => {
@@ -190,28 +174,6 @@ class Forums extends Component {
     }
   };
 
-  reviewType = (e) => {
-    const query = this.state.query;
-    query.type = "review";
-    console.log('Review' + query.type);
-    this.setState({
-      query: query,
-      typeThread: 1
-    });
-    this.getInformation(query);
-  }
-
-  suggestType = (e) => {
-    const query = this.state.query;
-    query.type = "suggest";
-    console.log('Suggest' + query.type);
-    this.setState({
-      query: query,
-      typeThread: 2
-    });
-    this.getInformation(query);
-  }
-
   haveDuration(duration) {
     console.log('duration:', duration);
     if (duration != "Not Define") {
@@ -219,45 +181,27 @@ class Forums extends Component {
     }
   }
 
-  handleSortByPopular = () => {
+  handleType = (type, typeThread) => {
     const query = this.state.query;
-    query.sortby = "popular";
+    query.type = type
     this.setState({
       query: query,
-      sortThread: 1
+      typeThread
     });
     this.getInformation(query);
-  };
+  }
 
-  handleSortByUpvoted = () => {
+  handleSortBy = (sortBy, sortThread) => {
     const query = this.state.query;
-    query.sortby = "upvoted";
+    query.sortby = sortBy
+    console.log("check query.sortby: " + query.sortby)
+    console.log("check sortBy: " + sortBy)
     this.setState({
       query: query,
-      sortThread: 2
+      sortThread
     });
     this.getInformation(query);
-  };
-
-  handleSortByNewest = () => {
-    const query = this.state.query;
-    query.sortby = "newest";
-    this.setState({
-      query: query,
-      sortThread: 3
-    });
-    this.getInformation(query);
-  };
-
-  handleSortByOldest = () => {
-    const query = this.state.query;
-    query.sortby = "oldest";
-    this.setState({
-      query: query,
-      sortThread: 4
-    });
-    this.getInformation(query);
-  };
+  }
 
   // value: e.target.value,
 
@@ -270,14 +214,13 @@ class Forums extends Component {
           countryList.push(c)
         }
       })
-
       element.country_short.forEach(c => {
         if (!countryList_short.includes(c)) {
           countryList_short.push(c)
         }
       })
-      console.log(countryList);
-      console.log(countryList_short);
+      // console.log(countryList);
+      // console.log(countryList_short);
 
     })
 
@@ -312,7 +255,7 @@ class Forums extends Component {
         link: "https://pantip.com/topic/" + item.topic_id,
         day: item.duration.label,
         budget: "฿".repeat(parseInt(item.budget).toString().length),
-        popular: parseInt(item.popularity),
+        popular: item.popularity,
         country: item.countries.map(c => c.nameEnglish),
 
         country_short: item.countries.map(c => c.country),
@@ -323,6 +266,7 @@ class Forums extends Component {
       };
     });
     this.listCountriesAndSetThreadProperties(threadPoperties)
+    console.log(threadPoperties)
     // console.log(threadPoperties[0].thumbnail)
     // this.handleSortByPopular()
   }
@@ -368,8 +312,6 @@ class Forums extends Component {
           border: "0.5px",
           marginLeft: 22,
           marginRight: 22,
-
-
         }}
       />
     );
@@ -405,7 +347,6 @@ class Forums extends Component {
                 defaultOpenKeys={['sub1']}
                 style={{ height: '100%', borderRight: 0 }}
               >
-
                 <div style={{ marginLeft: 22, marginRight: 15, marginBottom: 20, marginTop: 20 }}>
                   Filter
                             <a href="/forums" style={{ color: "#828EB4", marginLeft: 62, marginRight: 15 }}>
@@ -413,8 +354,6 @@ class Forums extends Component {
                             </a>
                 </div>
                 <ColoredShortLine color="rgba(130, 142, 180, 0.5)" />
-
-
                 <SubMenu
                   key="sub1"
                   title={
@@ -603,7 +542,7 @@ class Forums extends Component {
                       <Button
                         id="type"
                         size="large"
-                        onClick={this.reviewType}
+                        onClick={() => this.handleType('review', 1)}
                         className={`type-btn ${this.state.typeThread === 1 ? 'active' : ''}`}
                         value={this.state.query.type}
                         style={{ lineHeight: '3', width: `100%`, margin: 'auto' }}>Review Trip</Button>
@@ -612,7 +551,7 @@ class Forums extends Component {
                       <Button
                         id="type"
                         size="large"
-                        onClick={this.suggestType}
+                        onClick={() => this.handleType('suggest', 2)}
                         className={`type-btn ${this.state.typeThread === 2 ? 'active' : ''}`}
                         value={this.state.query.type}
                         style={{ lineHeight: '3', width: `100%`, margin: 'auto' }}>Places or Events Suggestion</Button>
@@ -625,7 +564,7 @@ class Forums extends Component {
                         style={{ color: "#181741", paddingRight: 3, width: `100%`, margin: 'auto' }}
                         id="sort"
                         size="large"
-                        onClick={this.handleSortByPopular}
+                        onClick={() => this.handleSortBy('popular', 1)}
                         className={`sort-btn ${this.state.sortThread === 1 ? 'active' : ''}`}
                         value={this.state.query.sortby}><Icon
                           type="fire"
@@ -637,7 +576,7 @@ class Forums extends Component {
                         id="sort"
                         size="large"
                         style={{ color: "#181741", paddingRight: 3, width: `100%`, margin: 'auto' }}
-                        onClick={this.handleSortByUpvoted}
+                        onClick={() => this.handleSortBy('upvoted', 2)}
                         className={`sort-btn ${this.state.sortThread === 2 ? 'active' : ''}`}
                         value={this.state.query.sortby}><Icon type="plus"
                         />Most Upvoted</Button>
@@ -646,7 +585,7 @@ class Forums extends Component {
                       <Button
                         id="sort"
                         size="large"
-                        onClick={this.handleSortByNewest}
+                        onClick={() => this.handleSortBy('newest', 3)}
                         className={`sort-btn ${this.state.sortThread === 3 ? 'active' : ''}`}
                         value={this.state.query.sortby}
                         style={{ color: "#181741", paddingRight: 3, width: `100%`, margin: 'auto' }}>Newest</Button>
@@ -655,7 +594,7 @@ class Forums extends Component {
                       <Button
                         id="sort"
                         size="large"
-                        onClick={this.handleSortByOldest}
+                        onClick={() => this.handleSortBy('oldest', 4)}
                         className={`sort-btn ${this.state.sortThread === 4 ? 'active' : ''}`}
                         value={this.state.query.sortby}
                         style={{ color: "#181741", paddingRight: 3, width: `100%`, margin: 'auto' }}>Oldest</Button>
@@ -729,7 +668,6 @@ class Forums extends Component {
                   onChange={this.handleChangePage}
                   total={50} //total number of card data available
                 />
-
               </Content>
             </Layout>
           </Layout>
