@@ -12,6 +12,7 @@
     height: 80%;
     border-radius: 10;
     color: black;
+    border: 0;
 }
 
 .subtab-btn.ant-btn:hover,
