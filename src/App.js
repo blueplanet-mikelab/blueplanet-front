@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 
 import Forums from './pages/Forums';
 import Index from './pages/Index';
-import Header from './pages/HeaderPage';
+import Header from './components/HeaderPage';
 import UserProfile from './pages/UserProfile';
 
 class App extends Component {

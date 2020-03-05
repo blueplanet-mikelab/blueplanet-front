@@ -1,0 +1,13 @@
+.scrolldown-btn.ant-btn:hover,
+.scrolldown-btn.ant-btn:focus,
+.scrolldown-btn.ant-btn:active,
+.scrolldown-btn.ant-btn.active {
+    width: 100%;
+    background: linear-gradient(90deg, #FB3640 0%, #F97300 100%) !important;
+    color: white !important;
+    border-radius: 50%;
+    /* border: 1px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 0px 5px 5px 0px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15); */
+}
