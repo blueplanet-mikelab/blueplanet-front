@@ -408,13 +408,13 @@ export default class UserProfile extends Component {
                 return (
                     <>
                         {sorter}
-                        <p><span style={{ textDecoration:'underline', color:'blue', cursor: 'pointer' }} onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {triplist[selectedIndex].name}</p>
-                        <div style={{ display: 'flex', marginTop: '20px' }}>
+                        <p style={{margin: '30px 0 0 0'}}><span style={{ color:'#10828C', cursor: 'pointer', fontWeight:'bold' }} onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {triplist[selectedIndex].name}</p>
+                        <div style={{ display: 'flex', paddingBottom:'40px' ,margin: '20px 20px 0 0', borderBottom: '0.5px solid rgba(130, 142, 180, 0.5)' }}>
                             <img src={triplist[selectedIndex].image}
                                 alt="trip image cover"
-                                style={{ width: `200px`, height: `200px`, marginRight: '20px' }} />
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <h1>{triplist[selectedIndex].name} <Icon type="more" onClick={() => this.onMoreIcon()} /> </h1>
+                                style={{ width: `175px`, height: `175px`, marginRight: '40px' }} />
+                            <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto 0' }}>
+                                <h1>{triplist[selectedIndex].name} <Icon className="triplist-more" type="more" onClick={() => this.onMoreIcon()} /> </h1>
                                 <span>{triplist[selectedIndex].n} Threads</span>
                                 <p></p>
                                 <p>{triplist[selectedIndex].description}</p>
@@ -489,7 +489,7 @@ export default class UserProfile extends Component {
                 <div style={{ padding: '0 10%', marginTop: '-250px' }}>
                     <h1 style={{ color: 'white' }}>Somchai Paimaichaun <Icon type="edit" /></h1>
                     <h4 style={{ color: 'white', marginBottom: '20px' }}>somchai.pai@gmail.com <Icon type="edit" /></h4>
-                    <div id="userprofile-tabs" style={{ background: 'white', padding: '20px' }}>
+                    <div id="userprofile-tabs" style={{ background: 'white', padding: '15px 30px' }}>
                         <Tabs defaultActiveKey="1" tabBarStyle={{ color: 'black' }}>
                             <TabPane tab="My Triplist" key="1">
                                 {tripListTap()}
