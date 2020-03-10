@@ -5,7 +5,10 @@ import axios from 'axios';
 import "../css/styles.css";
 import "../css/index.css";
 import MapChart from "../components/MapChart";
+import SuggestDuration from "../components/SuggestDuration";
+import SuggestMonth from "../components/SuggestMonth";
 import SuggestThreads from "../components/SuggestThreads";
+import SuggestTheme from "../components/Theme";
 
 import { Select, Button } from 'antd';
 

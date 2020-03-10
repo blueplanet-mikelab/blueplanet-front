@@ -231,6 +231,14 @@ class Forums extends Component {
     })
   };
 
+  // havePost() {
+  //   if (this.threadPoperties.length <= 0) {
+  //     return "Null"
+  //   } else {
+      
+  //   }
+  // }
+
 
 
   async getInformation(query) {
@@ -657,7 +665,6 @@ class Forums extends Component {
                               </div>
                           </Row>
                         </Col>
-                        {/* <Divider /> */}
                       </Row>
                     </div>
                   ))}

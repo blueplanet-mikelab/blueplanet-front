@@ -4,9 +4,15 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Button, Radio, Carousel, Row, Col, Tag } from 'antd';
+import { Carousel, Col, Select, Row, Tag, Button } from 'antd';
 import "../css/suggest.css";
-import SuggestMonth from "./SuggestMonth";
+
+import SuggestDuration from "../components/SuggestDuration";
+import SuggestMonth from "../components/SuggestMonth";
+import SuggestTheme from "../components/Theme";
+
+const { Option } = Select;
+
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 class SuggestThreads extends Component {
@@ -21,20 +27,8 @@ class SuggestThreads extends Component {
             radio: 1,
             fullData: [],
             query: {},
-            checkRoute: 1,
+            withThread: 2
         };
-    }
-
-    onChangeDuration = (e) => {
-        console.log('radio checked', e.target.value);
-        const query = this.state.query;
-        query.duration_type = e.target.value;
-        this.setState({ query: query });
-        this.getInformation(query);
-        this.setState({
-            radio: e.target.value,
-            checkRoute: 1,
-        });
     }
 
     onBlur() {
@@ -49,29 +43,41 @@ class SuggestThreads extends Component {
         console.log('search:', val);
     }
 
-    inCountry = (e) => {
-        const query = this.state.query;
-        query.within_th = 1;
-        console.log('in thai' + query.within_th);
-        this.setState({ query: query });
-        this.getInformation(query);
+    // inCountry = (e) => {
+    //     const query = this.state.query;
+    //     query.within_th = 1;
+    //     console.log('in thai' + query.within_th);
+    //     this.setState({ query: query });
+    //     this.getInformation(query);
 
+    // }
+
+    // outCountry = (e) => {
+    //     const query = this.state.query;
+    //     query.within_th = 0;
+    //     console.log('out thai' + query.within_th);
+    //     this.setState({ query: query });
+    //     this.getInformation(query);
+    // };
+
+    handleCountry = (withType, withThread) => {
+        const query = this.state.query;
+        query.within_th = withType
+        console.log("check query.within_th: " + query.within_th)
+        console.log("check withType: " + withType)
+        this.setState({
+            query: query,
+            withThread
+        });
+        this.getInformation(query);
     }
-
-    outCountry = (e) => {
-        const query = this.state.query;
-        query.within_th = 0;
-        console.log('out thai' + query.within_th);
-        this.setState({ query: query });
-        this.getInformation(query);
-    };
 
     async getInformation(query) {
         let response = null;
         const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
         this.props.history.push(`/${q}`);
         try {
-            response = await axios.get(`http://${backend_url}/home/durationQuery${q}`)
+            response = await axios.get(`http://${backend_url}/home/suggestThreads${q}`)
         } catch (error) {
             console.log(error);
         }
@@ -85,22 +91,20 @@ class SuggestThreads extends Component {
         const threadProperties = response.data.map(item => {
             return {
                 ...item,
-                link: "https://pantip.com/topic/" + item.topic_id,
-                con: item.countries.map(c => c.nameEnglish + " "),
+                country: item.countries.map(c => c.nameEnglish + " "),
             };
         });
         this.setState({
             threadProperties: threadProperties,
         });
-        console.log("thread[0]-day" + this.state.threadProperties[0].duration_type);
     }
 
-    getQueryParams() {
-        return qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
+    getQueryParams(value) {
+        return qs.parse(value, { ignoreQueryPrefix: true })
     }
 
     componentDidMount() {
-        const q = this.getQueryParams();
+        const q = this.getQueryParams(this.props.location.search);
         this.setState({
             query: q
         })
@@ -123,12 +127,11 @@ class SuggestThreads extends Component {
                 <Col>
                     <Col span={3}>
                         <img
-                            style={{ width: 100, height: 100, marginLeft: "15px" }}
+                            style={{ width: 100, height: 100, margin: "15px" }}
                             alt="example"
                             src={d.thumbnail}
                         />
                     </Col>
-
                     <Col span={5} style={{ lineHeight: 'normal', marginTop: '20px' }}>
                         <Row>
                             <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
@@ -136,7 +139,7 @@ class SuggestThreads extends Component {
                             </a>
                         </Row>
                         <Row>
-                            <Tag color="rgba(130, 142, 180, 0.5)">{d.con}</Tag>
+                            <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
                         </Row>
                     </Col>
                 </Col>
@@ -147,21 +150,32 @@ class SuggestThreads extends Component {
     render() {
         return (
             <div>
-                <Row>
-                    <Button id="with" size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.inCountry} value={this.state.query.within_th}>Within Thailand</Button>
-                    <Button id="with" size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.outCountry} value={this.state.query.within_th}>International Countries</Button>
+                <Row style={{marginLeft: "15%", marginRight: "15%"}}>
+                    <Col span={12}>
+                        <Button
+                            id="with"
+                            size="default"
+                            style={{ width: "100%", borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }}
+                            onClick={() => this.handleCountry('1', 1)}
+                            className={`type-btn ${this.state.withThread === 1 ? 'active' : ''}`}
+                            value={this.state.query.within_th}>
+                            Within Thailand
+                    </Button>
+                    </Col>
+                    <Col span={12}>
+                        <Button
+                            id="with"
+                            size="default"
+                            style={{ width: "100%", borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }}
+                            onClick={() => this.handleCountry('0', 2)}
+                            className={`type-btn ${this.state.withThread === 2 ? 'active' : ''}`}
+                            value={this.state.query.within_th}>
+                            International Countries
+                    </Button>
+                    </Col>
                 </Row>
-                <div style={{ marginTop: "20px", textAlign: "center" }}>Popular threads based on your Duration</div>
-                <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
-                    <Radio.Group name="radiogroup" style={{ padding: "10px" }} onChange={this.onChangeDuration} value={this.state.query.duration_type ? this.state.query.duration_type : 1}>
-                        <Radio value={"1"}>1 - 3 Days</Radio>
-                        <Radio value={"2"}>4 - 6 Days</Radio>
-                        <Radio value={"3"}>7 - 9 Days</Radio>
-                        <Radio value={"4"}>10 - 12 Days</Radio>
-                        <Radio value={"5"}>More than 12 Days</Radio>
-                    </Radio.Group>
-                </div>
 
+                <div style={{ marginTop: "20px" }}>Popular Suggestion Threads</div>
                 <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
 
                     <div>
@@ -178,9 +192,9 @@ class SuggestThreads extends Component {
                     </div>
 
                 </Carousel>
-
+                <SuggestDuration within={this.state.query.within_th} />
                 <SuggestMonth within={this.state.query.within_th} />
-                <SuggestMonth />
+                <SuggestTheme within={this.state.query.within_th} />
             </div>
 
         )

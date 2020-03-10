@@ -55,9 +55,7 @@ class SuggestMonth extends Component {
         this.setState({ query: query });
         this.getInformation(query);
     }
-
-
-
+    
     async getInformation(query) {
         let response = null;
         const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
@@ -140,7 +138,7 @@ class SuggestMonth extends Component {
         return (
             <div>
                 <div style={{ marginTop: "20px" }}>Popular threads based on your Month</div>
-                <div style={{ backgroundColor: "rgba(130, 142, 180, 0.15)", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
+                <div style={{ backgroundColor: "#fff", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
                     <Select
                         showSearch
                         style={{ marginLeft: 22, marginRight: 22, width: 150 }}
