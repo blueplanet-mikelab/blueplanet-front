@@ -100,13 +100,13 @@ class Theme extends Component {
         return list.map(d => {
             return (
                 <Col span={4} style={{ margin: "19px" }}>
-                    <div class="container">
+                    <div className="container">
                         <a href={d.link} style={{ color: "#fff", fontWeight: "bold", fontSize: "30px", fontStyle: "normal" }}>
                             <img
                                 style={{ width: "180px", height: "180px" }}
                                 src={d.picture}
                             />
-                            <div class="centered">{d.title}</div>
+                            <div className="centered">{d.title}</div>
                         </a>
                     </div>
                 </Col >
