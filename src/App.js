@@ -9,8 +9,8 @@ import Navigation from './components/Navigation';
 import Index from './pages/Index';
 import Forums from './pages/Forums';
 import UserProfile from './pages/UserProfile';
-import Register from './components/authentication/Register';
-import Login from './components/authentication/Login';
+import Register from './pages/Register';
+import Login from './pages/Login';
 import * as ROUTES from './constants/routes';
 
 // import Header from './components/HeaderPage';
