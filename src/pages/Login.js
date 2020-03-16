@@ -4,13 +4,15 @@ import { Link, withRouter } from 'react-router-dom';
 import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
 
-import { RegisterLink } from './Register'
+import { RegisterLink } from './Register';
+import { PasswordForgetLink } from './PasswordForget';
 
 const LoginPage = () => (
   <div>
     <h1>Welcome Back</h1>
     <LoginForm />
     <RegisterLink />
+    <PasswordForgetLink />
   </div>
 );
 

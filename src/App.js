@@ -11,6 +11,8 @@ import Forums from './pages/Forums';
 import UserProfile from './pages/UserProfile';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import PasswordForget from './pages/PasswordForget';
+
 import * as ROUTES from './constants/routes';
 
 // import Header from './components/HeaderPage';
@@ -38,6 +40,8 @@ import * as ROUTES from './constants/routes';
 //   }
 // }
 
+const condition = (authUser) => !!authUser;
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -48,9 +52,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(authUser => {
+    this.listener = firebase.auth().onAuthStateChanged(authUser => {
       authUser ? this.setState({ authUser }) : this.setState({ authUser: null });
     })
+  }
+
+  componentWillUnmount() {
+    this.listener();
   }
 
   render() {
@@ -61,9 +69,11 @@ class App extends Component {
 
           <Route exact path={ROUTES.HOME} component={Index} />
           <Route path={ROUTES.FORUMS} component={Forums} />
-          <Route path={ROUTES.PROFILE} component={UserProfile} />
+          <Route path={ROUTES.PROFILE} render={(props) => (<UserProfile {...props} authUser={this.state.authUser} />)} />
           <Route path={ROUTES.REGISTER} component={Register} />
           <Route path={ROUTES.LOGIN} component={Login} />
+          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
+
         </div>
 
       </Router>

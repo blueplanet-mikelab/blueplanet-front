@@ -3,6 +3,7 @@ import { Tabs, Input, Icon, Button } from 'antd'
 import "../css/userprofile.css"
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 
+import * as ROUTES from '../constants/routes';
 
 const { TabPane } = Tabs
 const { Search } = Input;
@@ -298,16 +299,20 @@ const recentlylist = [
   },
 ]
 
+const condition = authUser => !!authUser;
+
 export default class UserProfile extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       heartFavorites: favoritelist.map(() => "outlined"),
       heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
       subtabSortType: 1,
       favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
-      selectedTripList: null
+      selectedTripList: null,
+      authUser: this.props.authUser
     }
   }
 
@@ -351,8 +356,13 @@ export default class UserProfile extends Component {
     alert("click more")
   }
 
-  render() {
+  componentDidMount() {
+    if (!condition(this.state.authUser)) {
+      this.props.history.push(ROUTES.LOGIN)
+    }
+  }
 
+  render() {
     const sorter = (
       <div id="subtab">
         <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>

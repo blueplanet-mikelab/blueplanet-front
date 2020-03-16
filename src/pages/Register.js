@@ -27,7 +27,7 @@ const INITIAL_STATE = {
   fullName: '',
   email: '',
   password: '',
-  confirmedPassword: '',
+  confirmPassword: '',
   error: null
 }
 
@@ -68,11 +68,11 @@ class RegisterFormBase extends Component {
       fullName,
       email,
       password,
-      confirmedPassword,
+      confirmPassword,
       error
     } = this.state;
 
-    const isInvalid = password !== confirmedPassword || password === '' || email === '' || fullName === '';
+    const isInvalid = password !== confirmPassword || password === '' || email === '' || fullName === '';
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -98,8 +98,8 @@ class RegisterFormBase extends Component {
           placeholder="Password"
         />
         <input
-          name="confirmedPassword"
-          value={confirmedPassword}
+          name="confirmPassword"
+          value={confirmPassword}
           onChange={this.onChange}
           type="password"
           placeholder="Confirm Password"
