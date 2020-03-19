@@ -182,7 +182,7 @@ class SuggestThreads extends Component {
                             className={`type-btn ${this.state.withThread === 1 ? 'active' : ''}`}
                             value={this.state.query.within_th}>
                             Within Thailand
-                    </Button>
+                            </Button>
                     </Col>
                     <Col span={12}>
                         <Button

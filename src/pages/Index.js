@@ -60,6 +60,15 @@ class Index extends Component {
         };
     }
 
+    scrolltoSuggest = () => {
+        var element = document.getElementById("suggest");
+        element.scrollIntoView();
+    }
+
+    goForumPage = () => {
+        window.location.href = this.state.link
+    }
+
     onChangeCountry = (value) => {
         console.log(`selected ${value}`);
         this.setState({
@@ -112,14 +121,6 @@ class Index extends Component {
         });
     };
 
-    scrolltoSuggest = () => {
-        var element = document.getElementById("suggest");
-        element.scrollIntoView();
-    }
-
-    goForumPage = () => {
-        window.location.href = this.state.link
-    }
 
     render() {
         return (
@@ -178,5 +179,7 @@ class Index extends Component {
     }
 
 }
+
+
 
 export default withRouter(Index);

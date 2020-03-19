@@ -65,6 +65,7 @@ class SuggestMonth extends Component {
         } catch (error) {
             console.log(error);
         }
+
         if (response) {
             // Map data after get response
             this.mapData(response);
@@ -210,6 +211,7 @@ class SuggestMonth extends Component {
 
         )
     }
+
 }
 
 export default withRouter(SuggestMonth);

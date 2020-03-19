@@ -96,7 +96,6 @@ class Theme extends Component {
             list_theme[startIndex + 3],
             list_theme[startIndex + 4]
         ]
-
         return list.map(d => {
             return (
                 <Col span={4} style={{ margin: "1%" }}>
@@ -114,15 +113,13 @@ class Theme extends Component {
         });
     };
 
+
     render() {
         return (
             <div>
-                <Row>
-
-                </Row>
                 <div style={{ marginTop: "20px", textAlign: "center" }}>Pick by Theme</div>
                 <Carousel autoplay id="theme" style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
-                    <div style={{}}>
+                    <div>
                         {this.CreateSuggest(0)}
                     </div>
                     <div>
