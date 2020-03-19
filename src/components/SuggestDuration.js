@@ -4,9 +4,10 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Button, Radio, Carousel, Row, Col, Tag } from 'antd';
+import { Radio, Carousel, Row, Col, Tag, Menu, Icon, Dropdown } from 'antd';
 import "../css/suggest.css";
-import SuggestMonth from "./SuggestMonth";
+
+const { SubMenu } = Menu;
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 class SuggestDuration extends Component {
@@ -127,6 +128,18 @@ class SuggestDuration extends Component {
             this.state.threadProperties[startIndex + 2]
         ]
 
+        const menu = (
+            <Menu>
+                <SubMenu title="Add to My Triplist">
+                    <Menu.Item>New Triplist</Menu.Item>
+                    <Menu.Item>Japan Trip</Menu.Item>
+                </SubMenu>
+                <Menu.Item>Save to My Favorite</Menu.Item>
+                <Menu.Item>Share</Menu.Item>
+            </Menu>
+        );
+
+
         return list.map(d => {
             return (
                 <Col>
@@ -144,8 +157,20 @@ class SuggestDuration extends Component {
                                 {d.title}
                             </a>
                         </Row>
-                        <Row>
+                        <Row style={{ marginTop: "3%" }}>
                             <Tag color="rgba(130, 142, 180, 0.5)">{d.con}</Tag>
+
+                            <Icon type="heart"
+                                theme={this.state.heartFavorites}
+                                onClick={this.onHeartFavoriteClick}
+                                style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: '#10828C' }} />
+                            {/* <Icon type="more" style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} /> */}
+                            <Dropdown overlay={menu}>
+                                <a className="ant-dropdown-link" href="#" style={{ marginLeft: "5%" }}>
+                                    <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
+                                </a>
+                            </Dropdown>
+
                         </Row>
                     </Col>
                 </Col>

@@ -124,50 +124,52 @@ class Index extends Component {
     render() {
         return (
             <div>
-                <div className="country-search">
-                    <h2 style={{ margin: '5px' }}>Which Country would you like to visit?</h2>
-                    <h6 style={{ margin: '5px' }}>Type the name of Country or select on our map below. </h6>
-                    <Select
-                        showSearch
-                        style={{ marginLeft: 22, marginRight: 22, width: 200 }}
-                        placeholder="Search by Country"
-                        optionFilterProp="children"
-                        // value={this.state.query.months}
-                        onChange={this.onChangeCountry}
-                        onFocus={this.onFocus}
-                        onBlur={this.onBlur}
-                        onSearch={this.onSearch}
-                        filterOption={(input, option) =>
-                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }>
-                        {this.CreateSelection()}
-                    </Select>
-                    <Button onClick={this.goForumPage} style={{
-                        color: '#FFFFFF',
-                        background: 'linear-gradient(90deg, #FB3640 0%, #F97300 100%)',
-                        borderRadius: '5px'
-                    }} >Search</Button>
-                    <App />
-                    <div style={{ marginTop: "-250px" }}>
-                        <h2>Don’t know where to go yet? Let us help you!</h2>
-                        <h6>We’re selecting the best of threads based on your conditions.</h6>
+                <div className="index">
+                    <div className="country-search">
+                        <h2 style={{ margin: '5px' }}>Which Country would you like to visit?</h2>
+                        <h6 style={{ margin: '5px' }}>Type the name of Country or select on our map below. </h6>
+                        <Select
+                            showSearch
+                            style={{ marginLeft: 22, marginRight: 22, width: 200 }}
+                            placeholder="Search by Country"
+                            optionFilterProp="children"
+                            // value={this.state.query.months}
+                            onChange={this.onChangeCountry}
+                            onFocus={this.onFocus}
+                            onBlur={this.onBlur}
+                            onSearch={this.onSearch}
+                            filterOption={(input, option) =>
+                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }>
+                            {this.CreateSelection()}
+                        </Select>
+                        <Button onClick={this.goForumPage} style={{
+                            color: '#FFFFFF',
+                            background: 'linear-gradient(90deg, #FB3640 0%, #F97300 100%)',
+                            borderRadius: '5px'
+                        }} >Search</Button>
+                        <App />
+                        <div style={{ marginTop: "-250px" }}>
+                            <h2>Don’t know where to go yet? Let us help you!</h2>
+                            <h6>We’re selecting the best of threads based on your conditions.</h6>
+                        </div>
+                        <Button
+                            className="scrolldown-btn"
+                            style={{
+                                marginBottom: "50px",
+                                width: "50px",
+                                height: "50px"
+                            }}
+                            shape="circle"
+                            icon="down"
+                            onClick={this.scrolltoSuggest}>
+                        </Button>
                     </div>
-                    <Button
-                        className="scrolldown-btn"
-                        style={{
-                            marginBottom: "50px",
-                            width: "50px",
-                            height: "50px"
-                        }}
-                        shape="circle"
-                        icon="down"
-                        onClick={this.scrolltoSuggest}>
-                    </Button>
-
                     <div id="suggest" style={{
 
+                        backgroundColor: "#FFFFFF", margin: "3%"
                     }}>
-                        <div style={{ backgroundColor: "#F8F5E4", borderRadius: "3px" }}>
+                        <div style={{ backgroundColor: "#F8F5E4", margin: "1%", padding: "1%", borderRadius: "3px" }}>
                             <SuggestThreads />
                         </div>
                     </div>

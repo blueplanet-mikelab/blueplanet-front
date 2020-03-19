@@ -4,15 +4,14 @@ import axios from 'axios';
 import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Carousel, Col, Select, Row, Tag, Button } from 'antd';
+import { Carousel, Col, Row, Tag, Button, Menu, Icon, Dropdown } from 'antd';
 import "../css/suggest.css";
 
 import SuggestDuration from "../components/SuggestDuration";
 import SuggestMonth from "../components/SuggestMonth";
 import SuggestTheme from "../components/Theme";
 
-const { Option } = Select;
-
+const { SubMenu } = Menu;
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 class SuggestThreads extends Component {
@@ -122,6 +121,17 @@ class SuggestThreads extends Component {
             this.state.threadProperties[startIndex + 2]
         ]
 
+        const menu = (
+            <Menu>
+                <SubMenu title="Add to My Triplist">
+                    <Menu.Item>New Triplist</Menu.Item>
+                    <Menu.Item>Japan Trip</Menu.Item>
+                </SubMenu>
+                <Menu.Item>Save to My Favorite</Menu.Item>
+                <Menu.Item>Share</Menu.Item>
+            </Menu>
+        );
+
         return list.map(d => {
             return (
                 <Col>
@@ -138,8 +148,20 @@ class SuggestThreads extends Component {
                                 {d.title}
                             </a>
                         </Row>
-                        <Row>
+                        <Row style={{ marginTop: "3%" }}>
                             <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
+
+                            <Icon type="heart"
+                                theme={this.state.heartFavorites}
+                                onClick={this.onHeartFavoriteClick}
+                                style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: '#10828C' }} />
+                            {/* <Icon type="more" style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} /> */}
+                            <Dropdown overlay={menu}>
+                                <a className="ant-dropdown-link" href="#" style={{ marginLeft: "5%" }}>
+                                    <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
+                                </a>
+                            </Dropdown>
+
                         </Row>
                     </Col>
                 </Col>
@@ -150,7 +172,7 @@ class SuggestThreads extends Component {
     render() {
         return (
             <div>
-                <Row style={{marginLeft: "15%", marginRight: "15%"}}>
+                <Row style={{ marginLeft: "15%", marginRight: "15%" }}>
                     <Col span={12}>
                         <Button
                             id="with"

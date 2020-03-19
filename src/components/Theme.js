@@ -99,11 +99,11 @@ class Theme extends Component {
 
         return list.map(d => {
             return (
-                <Col span={4} style={{ margin: "19px" }}>
+                <Col span={4} style={{ margin: "1%" }}>
                     <div class="container">
                         <a href={d.link} style={{ color: "#fff", fontWeight: "bold", fontSize: "30px", fontStyle: "normal" }}>
                             <img
-                                style={{ width: "180px", height: "180px" }}
+                                style={{ width: "100%", height: "150px" }}
                                 src={d.picture}
                             />
                             <div class="centered">{d.title}</div>
@@ -122,7 +122,7 @@ class Theme extends Component {
                 </Row>
                 <div style={{ marginTop: "20px", textAlign: "center" }}>Pick by Theme</div>
                 <Carousel autoplay id="theme" style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
-                    <div>
+                    <div style={{}}>
                         {this.CreateSuggest(0)}
                     </div>
                     <div>
