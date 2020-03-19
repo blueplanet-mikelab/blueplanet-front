@@ -6,17 +6,21 @@ import * as ROUTES from '../constants/routes';
 
 import { RegisterLink } from './Register';
 import { PasswordForgetLink } from './PasswordForget';
+import LogInFacebook from '../components/authentication/LogInFacebook';
+import LogInGoogle from '../components/authentication/LogInGoogle';
 
-const LoginPage = () => (
+const LogInPage = () => (
   <div>
     <h1>Welcome Back</h1>
-    <LoginForm />
+    <LogInForm />
     <RegisterLink />
     <PasswordForgetLink />
+    <LogInFacebook />
+    <LogInGoogle />
   </div>
 );
 
-const LoginLink = () => (
+const LogInLink = () => (
   <p>
     Already have an account? <Link to={ROUTES.LOGIN}>Sign In</Link>
   </p>
@@ -28,7 +32,7 @@ const INITIAL_STATE = {
   error: null
 }
 
-class LoginFormBase extends Component {
+class LogInFormBase extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
@@ -81,7 +85,7 @@ class LoginFormBase extends Component {
   }
 }
 
-const LoginForm = withRouter(LoginFormBase)
+const LogInForm = withRouter(LogInFormBase)
 
-export default LoginPage;
-export { LoginForm, LoginLink };
+export default LogInPage;
+export { LogInForm, LogInLink };

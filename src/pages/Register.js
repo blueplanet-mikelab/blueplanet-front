@@ -4,7 +4,9 @@ import { Link, withRouter } from 'react-router-dom';
 import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
 
-import { LoginLink } from './Login';
+import { LogInLink } from './LogIn';
+import LogInFacebook from '../components/authentication/LogInFacebook';
+import LogInGoogle from '../components/authentication/LogInGoogle';
 
 import axios from 'axios';
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
@@ -13,7 +15,9 @@ const RegisterPage = () => (
   <div>
     <h1>Create your Account</h1>
     <RegisterForm />
-    <LoginLink />
+    <LogInLink />
+    <LogInFacebook />
+    <LogInGoogle />
   </div>
 )
 

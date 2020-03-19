@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Redirect, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import firebase from '../../firebase/config';
 import * as ROUTES from '../../constants/routes';
 
-class Logout extends Component {
+class LogOut extends Component {
   constructor(props) {
     super(props);
   }
@@ -24,4 +24,4 @@ class Logout extends Component {
   }
 }
 
-export default withRouter(Logout);
+export default withRouter(LogOut);
