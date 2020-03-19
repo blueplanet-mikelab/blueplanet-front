@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import LogOutButton from './user/Logout';
+import LogOutButton from './authentication/LogOut';
 import * as ROUTES from '../constants/routes';
 
 import 'antd/dist/antd.css';

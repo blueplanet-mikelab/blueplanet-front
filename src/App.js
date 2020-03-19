@@ -10,7 +10,7 @@ import Index from './pages/Index';
 import Forums from './pages/Forums';
 import UserProfile from './pages/UserProfile';
 import Register from './pages/Register';
-import Login from './pages/Login';
+import Login from './pages/LogIn';
 import PasswordForget from './pages/PasswordForget';
 
 import * as ROUTES from './constants/routes';
@@ -39,8 +39,6 @@ import * as ROUTES from './constants/routes';
 //     );
 //   }
 // }
-
-const condition = (authUser) => !!authUser;
 
 class App extends Component {
   constructor(props) {
