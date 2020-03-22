@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, Row, Col } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+
+import "../css/login.css";
 
 import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
@@ -65,29 +67,60 @@ class LogInFormBase extends Component {
     const { email, password, error } = this.state;
 
     const isInvalid = password === '' || email === '';
-
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="E-mail"
-        />
-        <input
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <Button disabled={isInvalid} type="submit">SIGN IN</Button>
-        {error && <p>{error.message}</p>}
-      </form>
+      <div>
+        <Form
+          onSubmit={this.onSubmit}
+          name="normal_login"
+          className="login-form">
+          <Form.Item name="email">
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              name="email"
+              value={email}
+              onChange={this.onChange}
+              type="text"
+              placeholder="E-mail" />
+          </Form.Item>
+          <Form.Item name="password">
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              name="password"
+              value={password}
+              onChange={this.onChange}
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Row>
+              <Col>
+                <Form.Item name="remember" valuePropName="checked" noStyle>
+                  <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+              </Col>
+              <Col>
+                <a className="login-form-forgot" href="">
+                  Forgot password
+                </a>
+              </Col>
+            </Row>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              lassName="login-form-button"
+              disabled={isInvalid}
+              htmlType="submit"
+              type="submit">SIGN IN
+            </Button>
+          </Form.Item>
+          {error && <p>{error.message}</p>}
+        </Form>
+      </div>
     );
   }
 }
+
 
 const LogInForm = withRouter(LogInFormBase)
 
