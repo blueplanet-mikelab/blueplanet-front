@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Form, Input, Button, Checkbox, Row, Col } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import "../css/login.css";
 
@@ -17,7 +17,7 @@ import LogInGoogle from '../components/authentication/LogInGoogle';
 
 const LogInPage = () => (
   <div>
-    <h1>Welcome Back</h1>
+    <h1 id="welcome-login">Welcome Back</h1>
     <LogInForm />
     <RegisterLink />
     <PasswordForgetLink />
@@ -75,7 +75,7 @@ class LogInFormBase extends Component {
           className="login-form">
           <Form.Item name="email">
             <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
+              prefix={<MailOutlined className="site-form-item-icon" />}
               name="email"
               value={email}
               onChange={this.onChange}
@@ -94,20 +94,23 @@ class LogInFormBase extends Component {
           </Form.Item>
           <Form.Item>
             <Row>
-              <Col>
+              <Col span={12}>
                 <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>Remember me</Checkbox>
+                  <Checkbox
+                    id="remember">
+                    <span id="label-remember">Remember me</span></Checkbox>
                 </Form.Item>
               </Col>
-              <Col>
-                <a className="login-form-forgot" href="">
-                  Forgot password
+              <Col span={12}>
+                <a id="login-form-forgot" href="">
+                  Forgot password?
                 </a>
               </Col>
             </Row>
           </Form.Item>
           <Form.Item>
             <Button
+              id="sign-in"
               lassName="login-form-button"
               disabled={isInvalid}
               htmlType="submit"

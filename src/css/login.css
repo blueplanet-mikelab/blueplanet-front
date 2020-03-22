@@ -1,9 +1,63 @@
-/* #components-form-demo-normal-login .login-form {
-    max-width: 300px;
-}
-#components-form-demo-normal-login .login-form-forgot {
-    float: right;
-}
-#components-form-demo-normal-login .login-form-button {
+#sign-in.ant-btn {
+    background: transparent !important;
+    color: #10828C;
     width: 100%;
-} */
+    border: transparent;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 27px;
+}
+
+#sign-in.ant-btn:hover, 
+#sign-in.ant-btn:focus, 
+#sign-in.ant-btn:active, 
+#sign-in.ant-btn.active {
+    background: transparent !important;
+    color: rgba(78, 78, 78, 0.5);
+    width: 100%;
+    border: transparent;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 27px;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+    background: #10828C !important;
+    color: #10828C;
+}
+
+.ant-checkbox-wrapper:hover .ant-checkbox-inner, 
+.ant-checkbox:hover .ant-checkbox-inner, 
+.ant-checkbox-input:focus + .ant-checkbox-inner {
+    border-color:#10828C;
+}
+
+h1#welcome-login {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 42px;
+    color: #0E3047;
+}
+#label-remember {
+    color: #10828C;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 21px;
+    font-family: Poppins;
+}
+
+#login-form-forgot {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 21px;
+    text-decoration-line: underline;
+    color: #10828C;
+}
+

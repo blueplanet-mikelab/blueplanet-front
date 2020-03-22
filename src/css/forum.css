@@ -18,14 +18,6 @@ span.ant-tag.ant-tag-has-color {
      
 } */
 
-/* #type.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
-    background: linear-gradient(90deg, #FB3640 0%, #F97300 100%) !important;
-    color: white !important;
-    border: 1px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 0px 5px 5px 0px;
-} */
-
 .type-btn.ant-btn:hover,
 .type-btn.ant-btn:focus,
 .type-btn.ant-btn:active,
