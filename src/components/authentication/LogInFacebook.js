@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import { Button } from 'antd';
+
 import firebase from '../../firebase/config';
 import * as ROUTES from '../../constants/routes';
 
@@ -39,7 +42,7 @@ class LogInFacebook extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Facebook</button>
+        <Button type="submit">Sign In with Facebook</Button>
         {error && <p>{error.message}</p>}
       </form>
     )

@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
+import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import { Form, Input, Button, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+
 import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
 
@@ -78,7 +82,7 @@ class LogInFormBase extends Component {
           type="password"
           placeholder="Password"
         />
-        <button disabled={isInvalid} type="submit">SIGN IN</button>
+        <Button disabled={isInvalid} type="submit">SIGN IN</Button>
         {error && <p>{error.message}</p>}
       </form>
     );

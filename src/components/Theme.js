@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import axios from 'axios';
-import qs from 'qs';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Carousel, Row, Col } from 'antd';
+import { Carousel, Col } from 'antd';
 import "../css/suggest.css";
 import "../css/theme.css";
 import Eating from "../images/eating.jpg";

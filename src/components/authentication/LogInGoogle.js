@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import { Button } from 'antd';
+
+
 import firebase from '../../firebase/config';
 import * as ROUTES from '../../constants/routes';
 
@@ -21,7 +25,7 @@ class LogInGoogle extends Component {
         // var token = socialAuthUser.credential.accessToken;
         this.setState({ error: null });
         this.props.history.push(ROUTES.HOME);
-        
+
         return firebase.auth()
           .user(socialAuthUser.user.uid)
           .set({
@@ -39,7 +43,7 @@ class LogInGoogle extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Google</button>
+        <Button type="submit">Sign In with Google</Button>
         {error && <p>{error.message}</p>}
       </form>
     )

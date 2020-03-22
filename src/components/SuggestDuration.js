@@ -95,7 +95,7 @@ class SuggestDuration extends Component {
             return {
                 ...item,
                 link: "https://pantip.com/topic/" + item.topic_id,
-                con: item.countries.map(c => c.nameEnglish + " "),
+                con: item.countries.map(c => c.nameEnglish + ""),
             };
         });
         this.setState({
