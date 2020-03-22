@@ -5,15 +5,14 @@ import axios from 'axios';
 import "../css/styles.css";
 import "../css/index.css";
 import MapChart from "../components/MapChart";
-import SuggestDuration from "../components/SuggestDuration";
-import SuggestMonth from "../components/SuggestMonth";
 import SuggestThreads from "../components/SuggestThreads";
-import SuggestTheme from "../components/Theme";
+// import SuggestDuration from "../components/SuggestDuration";
+// import SuggestMonth from "../components/SuggestMonth";
+// import SuggestTheme from "../components/Theme";
 
 import { Select, Button } from 'antd';
 
 const { Option } = Select;
-var con = "non";
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 // const a = () => {

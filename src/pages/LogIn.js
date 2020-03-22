@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Form, Input, Button, Checkbox, Row, Col } from 'antd';
+import { Form, Input, Button, Checkbox, Row, Col, Divider } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import "../css/login.css";
@@ -29,6 +29,7 @@ const LogInPage = () => (
 const LogInLink = () => (
   <p>
     Already have an account? <Link to={ROUTES.LOGIN}>Sign In</Link>
+    <Divider />
   </p>
 );
 
@@ -68,13 +69,14 @@ class LogInFormBase extends Component {
 
     const isInvalid = password === '' || email === '';
     return (
-      <div>
+      <div id="background-login">
         <Form
           onSubmit={this.onSubmit}
           name="normal_login"
           className="login-form">
           <Form.Item name="email">
             <Input
+              id="input-email"
               prefix={<MailOutlined className="site-form-item-icon" />}
               name="email"
               value={email}
@@ -83,7 +85,8 @@ class LogInFormBase extends Component {
               placeholder="E-mail" />
           </Form.Item>
           <Form.Item name="password">
-            <Input
+            <Input.Password
+              id="input-password"
               prefix={<LockOutlined className="site-form-item-icon" />}
               name="password"
               value={password}

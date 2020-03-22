@@ -3,9 +3,16 @@ import { withRouter } from 'react-router-dom';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Button } from 'antd';
+import { createFromIconfontCN } from '@ant-design/icons';
+
+import "../../css/loginFacebook.css";
 
 import firebase from '../../firebase/config';
 import * as ROUTES from '../../constants/routes';
+
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
+});
 
 class LogInFacebook extends Component {
   constructor(props) {
@@ -24,7 +31,7 @@ class LogInFacebook extends Component {
         // var token = socialAuthUser.credential.accessToken;
         this.setState({ error: null });
         this.props.history.push(ROUTES.HOME);
-        
+
         return firebase.auth()
           .user(socialAuthUser.user.uid)
           .set({
@@ -42,7 +49,11 @@ class LogInFacebook extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <Button type="submit">Sign In with Facebook</Button>
+        <Button id="login-facebook" type="submit">
+          <IconFont
+            id="icon-facebook"
+            type="icon-facebook"
+            style={{ fontSize: '32px' }} />Sign In with Facebook</Button>
         {error && <p>{error.message}</p>}
       </form>
     )

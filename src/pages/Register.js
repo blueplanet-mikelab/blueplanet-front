@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
+import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import { Divider } from 'antd';
+
 import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
 
@@ -24,7 +27,9 @@ const RegisterPage = () => (
 const RegisterLink = () => (
   <p>
     Don't have an account? <Link to={ROUTES.REGISTER}>Register</Link>
+    <Divider />
   </p>
+
 );
 
 const INITIAL_STATE = {

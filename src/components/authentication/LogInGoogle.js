@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Button } from 'antd';
 
+import "../../css/loginGoogle.css";
 
 import firebase from '../../firebase/config';
 import * as ROUTES from '../../constants/routes';
@@ -43,7 +44,9 @@ class LogInGoogle extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <Button type="submit">Sign In with Google</Button>
+        <Button id="login-google" type="submit">
+          <img id="icon-google" src="https://img.icons8.com/color/48/000000/google-logo.png" />
+          Sign In with Google</Button>
         {error && <p>{error.message}</p>}
       </form>
     )

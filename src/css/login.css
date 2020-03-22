@@ -1,3 +1,40 @@
+#background-login{
+    /* background: burlywood; */
+
+}
+#input-email {
+    width: 398px;
+    height: 48px;
+/* top: 317px; */
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(0, 0, 0, 0.15);
+}
+
+.ant-input-password.ant-input-affix-wrapper {
+    width: 398px;
+    height: 48px;
+    left: 521px;
+/* top: 317px; */
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(0, 0, 0, 0.15);
+}
+
 #sign-in.ant-btn {
     background: transparent !important;
     color: #10828C;
@@ -60,4 +97,3 @@ h1#welcome-login {
     text-decoration-line: underline;
     color: #10828C;
 }
-
