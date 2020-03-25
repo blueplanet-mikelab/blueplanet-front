@@ -7,7 +7,7 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import "../css/login.css";
 
-import firebase from '../firebase/config';
+import { signInWithEmailAndPassword } from '../firebase/actions';
 import * as ROUTES from '../constants/routes';
 
 import { RegisterLink } from './Register';
@@ -49,8 +49,7 @@ class LogInFormBase extends Component {
     event.preventDefault();
 
     const { email, password } = this.state;
-    firebase.auth()
-      .signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);

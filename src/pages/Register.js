@@ -4,15 +4,12 @@ import { Link, withRouter } from 'react-router-dom';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Divider } from 'antd';
 
-import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
+import { signUpWithEmailAndPassword } from '../firebase/actions';
 
 import { LogInLink } from './LogIn';
 import LogInFacebook from '../components/authentication/LogInFacebook';
 import LogInGoogle from '../components/authentication/LogInGoogle';
-
-import axios from 'axios';
-const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 const RegisterPage = () => (
   <div>
@@ -55,11 +52,9 @@ class RegisterFormBase extends Component {
       email: this.state.email,
       password: this.state.password
     };
-    axios.post(`http://${backend_url}/users/register`, newUser)
 
-    firebase.auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(authUser => {
+    signUpWithEmailAndPassword(newUser)
+      .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
       })

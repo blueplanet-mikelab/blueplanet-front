@@ -6,7 +6,7 @@ import { Button } from 'antd';
 
 import "../../css/loginGoogle.css";
 
-import firebase from '../../firebase/config';
+import { signInWithGoogle } from '../../firebase/actions';
 import * as ROUTES from '../../constants/routes';
 
 class LogInGoogle extends Component {
@@ -19,20 +19,10 @@ class LogInGoogle extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth()
-      .signInWithPopup(provider)
-      .then((socialAuthUser) => {
-        // var token = socialAuthUser.credential.accessToken;
+    signInWithGoogle()
+      .then(() => {
         this.setState({ error: null });
         this.props.history.push(ROUTES.HOME);
-
-        return firebase.auth()
-          .user(socialAuthUser.user.uid)
-          .set({
-            username: socialAuthUser.additionalUserInfo.profile.name,
-            email: socialAuthUser.additionalUserInfo.profile.email
-          })
       })
       .catch((error) => {
         this.setState({ error });

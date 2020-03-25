@@ -7,7 +7,7 @@ import { createFromIconfontCN } from '@ant-design/icons';
 
 import "../../css/loginFacebook.css";
 
-import firebase from '../../firebase/config';
+import { signInWithFacebook } from '../../firebase/actions';
 import * as ROUTES from '../../constants/routes';
 
 const IconFont = createFromIconfontCN({
@@ -17,27 +17,16 @@ const IconFont = createFromIconfontCN({
 class LogInFacebook extends Component {
   constructor(props) {
     super(props);
-
     this.state = { error: null };
   }
 
   onSubmit = (event) => {
     event.preventDefault();
 
-    var provider = new firebase.auth.FacebookAuthProvider();
-    firebase.auth()
-      .signInWithPopup(provider)
-      .then((socialAuthUser) => {
-        // var token = socialAuthUser.credential.accessToken;
+    signInWithFacebook()
+      .then(() => {
         this.setState({ error: null });
         this.props.history.push(ROUTES.HOME);
-
-        return firebase.auth()
-          .user(socialAuthUser.user.uid)
-          .set({
-            username: socialAuthUser.additionalUserInfo.profile.name,
-            email: socialAuthUser.additionalUserInfo.profile.email
-          })
       })
       .catch((error) => {
         this.setState({ error });
