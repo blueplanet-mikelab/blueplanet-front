@@ -30,7 +30,7 @@ const RegisterLink = () => (
 );
 
 const INITIAL_STATE = {
-  fullName: '',
+  displayName: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -46,9 +46,9 @@ class RegisterFormBase extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    const { fullName, email, password } = this.state;
+    const { z, email, password } = this.state;
     const newUser = {
-      fullName: this.state.fullName,
+      displayName: this.state.displayName,
       email: this.state.email,
       password: this.state.password
     };
@@ -69,20 +69,20 @@ class RegisterFormBase extends Component {
 
   render() {
     const {
-      fullName,
+      displayName,
       email,
       password,
       confirmPassword,
       error
     } = this.state;
 
-    const isInvalid = password !== confirmPassword || password === '' || email === '' || fullName === '';
+    const isInvalid = password !== confirmPassword || password === '' || email === '' || displayName === '';
 
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          name="fullName"
-          value={fullName}
+          name="displayName"
+          value={displayName}
           onChange={this.onChange}
           type="text"
           placeholder="Full Name"

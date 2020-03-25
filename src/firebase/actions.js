@@ -11,10 +11,14 @@ const providers = {
 }
 
 async function signUpWithEmailAndPassword(newUser) {
-  axios.post(`http://${backend_url}/api/users/signup`, newUser)
-
   const signUp = await auth.createUserWithEmailAndPassword(newUser.email, newUser.password)
-  identifyIdToken(auth.currentUser)
+
+  const currentUser = auth.currentUser
+  currentUser.updateProfile({ displayName: newUser.displayName })
+    .then(() => {
+      axios.post(`http://${backend_url}/api/users/signup`, currentUser)
+      identifyIdToken(currentUser)
+    })
   return signUp
 }
 
