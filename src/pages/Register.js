@@ -9,8 +9,8 @@ import * as ROUTES from '../constants/routes';
 import { signUpWithEmailAndPassword } from '../firebase/actions';
 
 import { LogInLink } from './LogIn';
-import LogInFacebook from '../components/authentication/LogInFacebook';
-import LogInGoogle from '../components/authentication/LogInGoogle';
+import LogInFacebook from '../components/logging/LogInFacebook';
+import LogInGoogle from '../components/logging/LogInGoogle';
 
 const RegisterPage = () => {
   const { currentUser } = useContext(AuthContext);
