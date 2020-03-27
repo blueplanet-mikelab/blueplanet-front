@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { Component, useContext } from 'react';
+import { Link, withRouter, Redirect } from 'react-router-dom';
+import { AuthContext } from '../auth/Auth';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Form, Input, Button, Checkbox, Row, Col, Divider } from 'antd';
@@ -12,19 +13,26 @@ import * as ROUTES from '../constants/routes';
 
 import { RegisterLink } from './Register';
 import { PasswordForgetLink } from './PasswordForget';
-import LogInFacebook from '../components/authentication/LogInFacebook';
-import LogInGoogle from '../components/authentication/LogInGoogle';
+import LogInFacebook from '../components/logging/LogInFacebook';
+import LogInGoogle from '../components/logging/LogInGoogle';
 
-const LogInPage = () => (
-  <div>
-    <h1 id="welcome-login">Welcome Back</h1>
-    <LogInForm />
-    <RegisterLink />
-    <PasswordForgetLink />
-    <LogInFacebook />
-    <LogInGoogle />
-  </div>
-);
+const LogInPage = () => {
+  const { currentUser } = useContext(AuthContext);
+  if (currentUser) {
+    return <Redirect to={ROUTES.HOME} />;
+  }
+
+  return (
+    <div>
+      <h1 id="welcome-login">Welcome Back</h1>
+      <LogInForm />
+      <RegisterLink />
+      <PasswordForgetLink />
+      <LogInFacebook />
+      <LogInGoogle />
+    </div>
+  );
+};
 
 const LogInLink = () => (
   <p>

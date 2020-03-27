@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { Component, useContext } from 'react';
+import { Link, withRouter, Redirect } from 'react-router-dom';
+import { AuthContext } from '../auth/Auth';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Divider } from 'antd';
@@ -11,15 +12,21 @@ import { LogInLink } from './LogIn';
 import LogInFacebook from '../components/authentication/LogInFacebook';
 import LogInGoogle from '../components/authentication/LogInGoogle';
 
-const RegisterPage = () => (
-  <div>
+const RegisterPage = () => {
+  const { currentUser } = useContext(AuthContext);
+  if (currentUser) {
+    return <Redirect to={ROUTES.HOME} />;
+  };
+  return (
+    <div>
     <h1>Create your Account</h1>
     <RegisterForm />
     <LogInLink />
     <LogInFacebook />
     <LogInGoogle />
   </div>
-)
+  );
+}
 
 const RegisterLink = () => (
   <p>

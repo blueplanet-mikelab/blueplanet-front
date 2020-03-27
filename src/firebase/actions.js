@@ -1,7 +1,6 @@
 import firebase from './config';
 import axios from 'axios';
 
-import * as ROUTES from '../constants/routes';
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 const auth = firebase.auth()
@@ -45,6 +44,14 @@ async function signInWithGoogle() {
   return await auth.signInWithPopup(providers.google)
 }
 
+async function signOut() {
+  return await auth.signOut()
+}
+
+const getCurrentUser = () => {
+  return auth.currentUser
+}
+
 const identifyIdToken = (currentUser) => {
   currentUser.getIdToken(true)
     .then((idToken) => {
@@ -55,4 +62,7 @@ const identifyIdToken = (currentUser) => {
     })
 }
 
-export { signUpWithEmailAndPassword, signInWithEmailAndPassword, signInWithFacebook, signInWithGoogle }
+export {
+  signUpWithEmailAndPassword, signInWithEmailAndPassword, signInWithFacebook, signInWithGoogle,
+  signOut, getCurrentUser
+}

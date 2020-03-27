@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import LogOutButton from './authentication/LogOut';
+import LogOutButton from './logging/LogOut';
 import * as ROUTES from '../constants/routes';
+import { AuthContext } from '../auth/Auth';
 
 import 'antd/dist/antd.css';
 import "../css/head.css";
 import { Menu } from 'antd';
 import logo from "../images/orbit.png";
 
-const Navigation = ({ authUser }) => {
+const Navigation = () => {
+  const { currentUser } = useContext(AuthContext);
+
   return (
     <div className='header-container'>
       <Link to={ROUTES.HOME}>
@@ -35,7 +38,7 @@ const Navigation = ({ authUser }) => {
           <Link to={ROUTES.PROFILE}>My Triplist</Link>
         </Menu.Item>
         <Menu.Item>
-          {authUser ? <LogOutButton /> : <Link to={ROUTES.LOGIN}>Log In</Link>}
+          {currentUser ? <LogOutButton /> : <Link to={ROUTES.LOGIN}>Log In</Link>}
         </Menu.Item>
         <Menu.Item>
           <Link to={'/'}>EN / TH</Link>
