@@ -16,11 +16,10 @@ import LogInFacebook from '../components/authentication/LogInFacebook';
 import LogInGoogle from '../components/authentication/LogInGoogle';
 
 const LogInPage = () => (
-  <div>
+  <div style={{ backgroundColor: "#FFF" }}>
     <h1 id="welcome-login">Welcome Back</h1>
     <LogInForm />
     <RegisterLink />
-    <PasswordForgetLink />
     <LogInFacebook />
     <LogInGoogle />
   </div>
@@ -68,13 +67,13 @@ class LogInFormBase extends Component {
     const { email, password, error } = this.state;
 
     const isInvalid = password === '' || email === '';
-    return (
-      <div id="background-login">
+    return (<div>
+      <div id="background-login" style={{ backgroundColor: "#FFF", width: "302px" }}>
         <Form
           onSubmit={this.onSubmit}
           name="normal_login"
           className="login-form">
-          <Form.Item name="email">
+          <Form.Item name="email" id="email" style={{ left: "521px" }}>
             <Input
               id="input-email"
               prefix={<MailOutlined className="site-form-item-icon" />}
@@ -96,20 +95,13 @@ class LogInFormBase extends Component {
             />
           </Form.Item>
           <Form.Item>
-            <Row>
-              <Col span={12}>
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox
-                    id="remember">
-                    <span id="label-remember">Remember me</span></Checkbox>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <a id="login-form-forgot" href="">
-                  Forgot password?
-                </a>
-              </Col>
-            </Row>
+            <Form.Item name="remember" valuePropName="checked" noStyle style={{ left: "500px" }}>
+              <Checkbox
+                id="remember">
+                <span id="label-remember" >Remember me</span></Checkbox>
+              
+              <PasswordForgetLink />
+            </Form.Item>
           </Form.Item>
           <Form.Item>
             <Button
@@ -123,6 +115,7 @@ class LogInFormBase extends Component {
           {error && <p>{error.message}</p>}
         </Form>
       </div>
+    </div>
     );
   }
 }

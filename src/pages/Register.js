@@ -7,6 +7,8 @@ import { Divider } from 'antd';
 import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
 
+import "../css/register.css";
+
 import { LogInLink } from './LogIn';
 import LogInFacebook from '../components/authentication/LogInFacebook';
 import LogInGoogle from '../components/authentication/LogInGoogle';
@@ -25,8 +27,8 @@ const RegisterPage = () => (
 )
 
 const RegisterLink = () => (
-  <p>
-    Don't have an account? <Link to={ROUTES.REGISTER}>Register</Link>
+  <p id="register">
+    Don't have an account? <Link id="link-regis" to={ROUTES.REGISTER}>Register</Link>
     <Divider />
   </p>
 

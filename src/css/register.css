@@ -1,0 +1,21 @@
+#register {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    color: rgba(78, 78, 78, 0.5);
+
+    margin-left:521px;
+}
+
+#link-regis {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    color: #10828C;
+}

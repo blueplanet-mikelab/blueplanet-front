@@ -2,6 +2,8 @@
     /* background: burlywood; */
 
 }
+
+
 #input-email {
     width: 398px;
     height: 48px;
@@ -36,9 +38,12 @@
 }
 
 #sign-in.ant-btn {
+    left: 510px;
+    width: 67px;
+    height: 27px;
     background: transparent !important;
     color: #10828C;
-    width: 100%;
+    /* width: 100%; */
     border: transparent;
     font-style: normal;
     font-weight: bold;
@@ -50,9 +55,12 @@
 #sign-in.ant-btn:focus, 
 #sign-in.ant-btn:active, 
 #sign-in.ant-btn.active {
+    width: 67px;
+    height: 27px;
+    left: 510px;
     background: transparent !important;
     color: rgba(78, 78, 78, 0.5);
-    width: 100%;
+    /* width: 100%; */
     border: transparent;
     font-style: normal;
     font-weight: bold;
@@ -88,7 +96,7 @@ h1#welcome-login {
     font-family: Poppins;
 }
 
-#login-form-forgot {
+#form-forgot {
     font-family: Poppins;
     font-style: normal;
     font-weight: normal;
