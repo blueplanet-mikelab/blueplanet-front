@@ -92,16 +92,11 @@ h1#welcome-login {
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
-    line-height: 21px;
+    /* line-height: 21px; */
     font-family: Poppins;
 }
 
-#form-forgot {
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 21px;
-    text-decoration-line: underline;
-    color: #10828C;
+#remember-forget{
+    display: flex;
+    justify-content: space-between;  
 }

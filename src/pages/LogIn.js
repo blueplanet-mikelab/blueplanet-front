@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { Component, useContext } from 'react';
+import { Link, withRouter, Redirect } from 'react-router-dom';
+import { AuthContext } from '../auth/Auth';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Form, Input, Button, Checkbox, Row, Col, Divider } from 'antd';
@@ -7,23 +8,30 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import "../css/login.css";
 
-import firebase from '../firebase/config';
+import { signInWithEmailAndPassword } from '../firebase/actions';
 import * as ROUTES from '../constants/routes';
 
 import { RegisterLink } from './Register';
 import { PasswordForgetLink } from './PasswordForget';
-import LogInFacebook from '../components/authentication/LogInFacebook';
-import LogInGoogle from '../components/authentication/LogInGoogle';
+import LogInFacebook from '../components/logging/LogInFacebook';
+import LogInGoogle from '../components/logging/LogInGoogle';
 
-const LogInPage = () => (
-  <div style={{ backgroundColor: "#FFF" }}>
-    <h1 id="welcome-login">Welcome Back</h1>
-    <LogInForm />
-    <RegisterLink />
-    <LogInFacebook />
-    <LogInGoogle />
-  </div>
-);
+const LogInPage = () => {
+  const { currentUser } = useContext(AuthContext);
+  if (currentUser) {
+    return <Redirect to={ROUTES.HOME} />;
+  }
+
+  return (
+    <div>
+      <h1 id="welcome-login">Welcome Back</h1>
+      <LogInForm />
+      <RegisterLink />
+      <LogInFacebook />
+      <LogInGoogle />
+    </div>
+  );
+};
 
 const LogInLink = () => (
   <p>
@@ -48,8 +56,7 @@ class LogInFormBase extends Component {
     event.preventDefault();
 
     const { email, password } = this.state;
-    firebase.auth()
-      .signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
@@ -96,11 +103,12 @@ class LogInFormBase extends Component {
           </Form.Item>
           <Form.Item>
             <Form.Item name="remember" valuePropName="checked" noStyle style={{ left: "500px" }}>
+              <div id="remember-forget">
               <Checkbox
                 id="remember">
                 <span id="label-remember" >Remember me</span></Checkbox>
-              
-              <PasswordForgetLink />
+                <PasswordForgetLink />
+                </div>
             </Form.Item>
           </Form.Item>
           <Form.Item>

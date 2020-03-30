@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import "../css/passforget.css";
+
 import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
 
@@ -12,8 +14,8 @@ const PasswordForgetPage = () => (
 )
 
 const PasswordForgetLink = () => (
-  <p>
-    <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
+  <p id="form-forgot">
+    <Link style={{color:'#10828C'}} to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
   </p>
 )
 

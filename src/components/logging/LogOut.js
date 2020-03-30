@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
-import firebase from '../../firebase/config';
+import { signOut } from '../../firebase/actions';
 import * as ROUTES from '../../constants/routes';
 
 class LogOut extends Component {
@@ -10,8 +10,7 @@ class LogOut extends Component {
   }
 
   onClick = () => {
-    firebase.auth()
-      .signOut()
+    signOut()
       .then(() => {
         this.props.history.push(ROUTES.HOME);
       });

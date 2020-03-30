@@ -1,9 +1,13 @@
-import React, { Component } from 'react'
-import { Tabs, Input, Icon, Button } from 'antd'
-import "../css/userprofile.css"
+import React, { Component, useContext } from 'react';
+import { withRouter, Redirect } from 'react-router-dom';
+import { AuthContext } from '../auth/Auth';
+
+import { Tabs, Input, Icon, Button } from 'antd';
+import "../css/userprofile.css";
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 
 import * as ROUTES from '../constants/routes';
+import { getCurrentUser } from '../firebase/actions';
 
 const { TabPane } = Tabs
 const { Search } = Input;
@@ -299,9 +303,20 @@ const recentlylist = [
   },
 ]
 
-const condition = authUser => !!authUser;
+const TriplistPage = () => {
+  const { currentUser } = useContext(AuthContext);
+  if (!currentUser) {
+    return <Redirect to={ROUTES.HOME} />;
+  }
 
-export default class UserProfile extends Component {
+  return (
+    <div>
+      <UserProfile />
+    </div>
+  );
+}
+
+class UserProfile extends Component {
   constructor(props) {
     super(props);
 
@@ -311,8 +326,7 @@ export default class UserProfile extends Component {
       tripListSortType: 1,
       subtabSortType: 1,
       favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
-      selectedTripList: null,
-      authUser: this.props.authUser
+      selectedTripList: null
     }
   }
 
@@ -357,9 +371,7 @@ export default class UserProfile extends Component {
   }
 
   componentDidMount() {
-    if (!condition(this.state.authUser)) {
-      this.props.history.push(ROUTES.LOGIN)
-    }
+    console.log(getCurrentUser(), "actions")
   }
 
   render() {
@@ -484,7 +496,6 @@ export default class UserProfile extends Component {
           </>
         )
       }
-
     }
 
     return (
@@ -534,3 +545,5 @@ export default class UserProfile extends Component {
     )
   }
 }
+
+export default withRouter(TriplistPage);

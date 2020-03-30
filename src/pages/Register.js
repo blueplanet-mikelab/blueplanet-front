@@ -1,41 +1,45 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { Component, useContext } from 'react';
+import { Link, withRouter, Redirect } from 'react-router-dom';
+import { AuthContext } from '../auth/Auth';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Divider } from 'antd';
 
-import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
+import { signUpWithEmailAndPassword } from '../firebase/actions';
 
 import "../css/register.css";
 
 import { LogInLink } from './LogIn';
-import LogInFacebook from '../components/authentication/LogInFacebook';
-import LogInGoogle from '../components/authentication/LogInGoogle';
+import LogInFacebook from '../components/logging/LogInFacebook';
+import LogInGoogle from '../components/logging/LogInGoogle';
 
-import axios from 'axios';
-const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
-
-const RegisterPage = () => (
-  <div>
+const RegisterPage = () => {
+  const { currentUser } = useContext(AuthContext);
+  if (currentUser) {
+    return <Redirect to={ROUTES.HOME} />;
+  };
+  return (
+    <div>
     <h1>Create your Account</h1>
     <RegisterForm />
     <LogInLink />
     <LogInFacebook />
     <LogInGoogle />
   </div>
-)
+  );
+}
 
 const RegisterLink = () => (
   <p id="register">
     Don't have an account? <Link id="link-regis" to={ROUTES.REGISTER}>Register</Link>
-    <Divider />
+    <Divider/>
   </p>
 
 );
 
 const INITIAL_STATE = {
-  fullName: '',
+  displayName: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -51,17 +55,15 @@ class RegisterFormBase extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    const { fullName, email, password } = this.state;
+    const { z, email, password } = this.state;
     const newUser = {
-      fullName: this.state.fullName,
+      displayName: this.state.displayName,
       email: this.state.email,
       password: this.state.password
     };
-    axios.post(`http://${backend_url}/users/register`, newUser)
 
-    firebase.auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(authUser => {
+    signUpWithEmailAndPassword(newUser)
+      .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
       })
@@ -76,20 +78,20 @@ class RegisterFormBase extends Component {
 
   render() {
     const {
-      fullName,
+      displayName,
       email,
       password,
       confirmPassword,
       error
     } = this.state;
 
-    const isInvalid = password !== confirmPassword || password === '' || email === '' || fullName === '';
+    const isInvalid = password !== confirmPassword || password === '' || email === '' || displayName === '';
 
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          name="fullName"
-          value={fullName}
+          name="displayName"
+          value={displayName}
           onChange={this.onChange}
           type="text"
           placeholder="Full Name"
