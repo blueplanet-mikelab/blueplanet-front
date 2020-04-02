@@ -6,7 +6,7 @@ import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Divider } from 'antd';
 
 import * as ROUTES from '../constants/routes';
-import { signUpWithEmailAndPassword } from '../firebase/actions';
+import { signUpWithEmailAndPassword } from '../auth/Auth';
 
 import { LogInLink } from './LogIn';
 import LogInFacebook from '../components/logging/LogInFacebook';
@@ -17,6 +17,7 @@ const RegisterPage = () => {
   if (currentUser) {
     return <Redirect to={ROUTES.HOME} />;
   };
+  
   return (
     <div>
     <h1>Create your Account</h1>
