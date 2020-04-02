@@ -11,14 +11,27 @@ const providers = {
 
 async function signUpWithEmailAndPassword(newUser) {
   const signUp = await auth.createUserWithEmailAndPassword(newUser.email, newUser.password)
-
   const currentUser = auth.currentUser
+
   currentUser.updateProfile({ displayName: newUser.displayName })
-    .then(() => {
-      axios.post(`http://${backend_url}/api/users/signup`, currentUser)
-      identifyIdToken(currentUser)
+    .then(async () => {
+      axios.post(`http://${backend_url}/api/users/signup`, currentUser, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': await currentUser
+            .getIdToken(true)
+            .then((idToken) => {
+              return idToken
+            })
+        }
+      })
+        .then(() => {
+          return signUp
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     })
-  return signUp
 }
 
 async function signInWithEmailAndPassword(email, password) {
@@ -48,14 +61,12 @@ async function signOut() {
   return await auth.signOut()
 }
 
-const getCurrentUser = () => {
-  return auth.currentUser
-}
-
 const identifyIdToken = (currentUser) => {
-  currentUser.getIdToken(true)
+  currentUser
+    .getIdToken(true)
     .then((idToken) => {
-      axios.post(`http://${backend_url}/api/auth`, idToken)
+      // axios.post(`http://${backend_url}/api/auth`, idToken)
+      return idToken
     })
     .catch((error) => {
       console.log(error)
@@ -63,6 +74,5 @@ const identifyIdToken = (currentUser) => {
 }
 
 export {
-  signUpWithEmailAndPassword, signInWithEmailAndPassword, signInWithFacebook, signInWithGoogle,
-  signOut, getCurrentUser
+  signUpWithEmailAndPassword, signInWithEmailAndPassword, signInWithFacebook, signInWithGoogle, signOut
 }

@@ -7,7 +7,6 @@ import "../css/userprofile.css";
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 
 import * as ROUTES from '../constants/routes';
-import { getCurrentUser } from '../firebase/actions';
 
 const { TabPane } = Tabs
 const { Search } = Input;
@@ -308,10 +307,10 @@ const TriplistPage = () => {
   if (!currentUser) {
     return <Redirect to={ROUTES.HOME} />;
   }
-
+  console.log(currentUser)
   return (
     <div>
-      <UserProfile />
+      <UserProfile currentUser={currentUser} />
     </div>
   );
 }
@@ -370,9 +369,9 @@ class UserProfile extends Component {
     alert("click more")
   }
 
-  componentDidMount() {
-    console.log(getCurrentUser(), "actions")
-  }
+  // componentDidMount() {
+  //   console.log(getCurrentUser(), "actions")
+  // }
 
   render() {
     const sorter = (
@@ -508,8 +507,8 @@ class UserProfile extends Component {
           width: `100%`
         }} />
         <div style={{ padding: '0 10%', marginTop: '-250px' }}>
-          <h1 style={{ color: 'white' }}>Somchai Paimaichaun <Icon type="edit" /></h1>
-          <h4 style={{ color: 'white', marginBottom: '20px' }}>somchai.pai@gmail.com <Icon type="edit" /></h4>
+          <h1 style={{ color: 'white' }}>{this.props.currentUser.displayName} <Icon type="edit" /></h1>
+          <h4 style={{ color: 'white', marginBottom: '20px' }}>{this.props.currentUser.email} <Icon type="edit" /></h4>
           <div id="userprofile-tabs" style={{ background: 'white', padding: '15px 30px' }}>
             <Tabs defaultActiveKey="1" tabBarStyle={{ color: 'black' }}>
               <TabPane tab="My Triplist" key="1">
