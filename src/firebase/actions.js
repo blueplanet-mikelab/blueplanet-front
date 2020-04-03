@@ -9,31 +9,6 @@ const providers = {
   google: new firebase.auth.GoogleAuthProvider()
 }
 
-async function signUpWithEmailAndPassword(newUser) {
-  const signUp = await auth.createUserWithEmailAndPassword(newUser.email, newUser.password)
-  const currentUser = auth.currentUser
-
-  currentUser.updateProfile({ displayName: newUser.displayName })
-    .then(async () => {
-      axios.post(`http://${backend_url}/api/users/signup`, currentUser, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': await currentUser
-            .getIdToken(true)
-            .then((idToken) => {
-              return idToken
-            })
-        }
-      })
-        .then(() => {
-          return signUp
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    })
-}
-
 async function signInWithEmailAndPassword(email, password) {
   const signIn = await auth.signInWithEmailAndPassword(email, password)
   identifyIdToken(auth.currentUser)
@@ -74,5 +49,5 @@ const identifyIdToken = (currentUser) => {
 }
 
 export {
-  signUpWithEmailAndPassword, signInWithEmailAndPassword, signInWithFacebook, signInWithGoogle, signOut
+  signInWithEmailAndPassword, signInWithFacebook, signInWithGoogle, signOut
 }
