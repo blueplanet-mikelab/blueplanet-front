@@ -3,7 +3,7 @@ import { Link, withRouter, Redirect } from 'react-router-dom';
 import { AuthContext } from '../auth/Auth';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Form, Input, Button, Checkbox, Row, Col, Divider } from 'antd';
+import { Form, Input, Button, Checkbox, Divider } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import "../css/login.css";
