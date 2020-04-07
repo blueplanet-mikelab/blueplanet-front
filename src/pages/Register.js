@@ -23,7 +23,7 @@ const RegisterPage = () => {
 
   return (
     <div>
-      <h1>Create your Account</h1>
+      <h1 id="head-create">Create your Account</h1>
       <RegisterForm />
       <LogInLink />
       <LogInFacebook />

@@ -1,3 +1,16 @@
+#head-create {
+    height: 42px;
+    margin-left: 501px;
+    margin-top: 50px;
+    
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 42px;
+    color: #0E3047;
+}
+
 #register {
     width: 438px;
     font-family: Poppins;

@@ -3,6 +3,41 @@
 
 }
 
+#welcome-login{
+    height: 42px;
+    margin-left: 501px;
+    margin-top: 50px;
+    
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 42px;
+    color: #0E3047;
+}
+
+#login {
+    width: 438px;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    color: rgba(78, 78, 78, 0.5);
+
+    margin-left:521px;
+}
+
+#link-login {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    /* identical to box height */
+    color: #10828C;
+}
 
 #input-email {
     width: 398px;

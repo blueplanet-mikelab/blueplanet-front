@@ -1,10 +1,75 @@
+#forgot-your-pass{
+    width: 324px;
+    height: 42px;
+    margin-left: 501px;
+    margin-top: 115px;
+    
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 42px;
+
+    color: #0E3047;  
+}
+
 #form-forgot {
     padding-top:5%;
     font-family: Poppins;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
-    /* line-height: 21px; */
+
     color: #10828C;
     text-decoration-line: underline;
+}
+
+#inform{
+    width: 352px;
+    height: 42px;
+    margin-left: 521px;
+    margin-bottom: 80px;
+    
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 21px;
+    
+    color: #4E4E4E;
+}
+
+#reset-btn.ant-btn {
+    width: 398px;
+    height: 50px;
+    left: 521px;
+   
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+   
+    color: #FFFFFF;
+    background: linear-gradient(270deg, #10828C 0%, #0E3047 100%) !important;;
+    border-radius: 5px;
+}
+
+#reset-btn.ant-btn:hover, 
+#reset-btn.ant-btn:focus, 
+#reset-btn.ant-btn:active, 
+#reset-btn.ant-btn.active {
+    width: 398px;
+    height: 50px;
+    left: 521px;
+   
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #FF3E30;
+    background: rgba(0, 0, 0, 0.15)!important;
+    border-radius: 5px;
 }

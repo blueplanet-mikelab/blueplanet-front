@@ -34,8 +34,8 @@ const LogInPage = () => {
 };
 
 const LogInLink = () => (
-  <p>
-    Already have an account? <Link to={ROUTES.LOGIN}>Sign In</Link>
+  <p id="login">
+    Already have an account? <Link id="link-login" to={ROUTES.LOGIN}>Sign In</Link>
     <Divider />
   </p>
 );
@@ -104,11 +104,11 @@ class LogInFormBase extends Component {
           <Form.Item>
             <Form.Item name="remember" valuePropName="checked" noStyle style={{ left: "500px" }}>
               <div id="remember-forget">
-              <Checkbox
-                id="remember">
-                <span id="label-remember" >Remember me</span></Checkbox>
+                <Checkbox
+                  id="remember">
+                  <span id="label-remember" >Remember me</span></Checkbox>
                 <PasswordForgetLink />
-                </div>
+              </div>
             </Form.Item>
           </Form.Item>
           <Form.Item>
