@@ -124,7 +124,7 @@ class Index extends Component {
     render() {
         return (
             <div>
-                <div className="index">
+                <div id="index" className="index">
                     <div className="country-search">
                         <h2 style={{ margin: '5px' }}>Which Country would you like to visit?</h2>
                         <h6 style={{ margin: '5px' }}>Type the name of Country or select on our map below. </h6>

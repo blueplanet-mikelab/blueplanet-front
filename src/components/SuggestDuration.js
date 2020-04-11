@@ -185,7 +185,12 @@ class SuggestDuration extends Component {
                     <Button id="with" size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.inCountry} value={this.state.query.within_th}>Within Thailand</Button>
                     <Button id="with" size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.outCountry} value={this.state.query.within_th}>International Countries</Button>
                 </Row> */}
-                <div style={{ marginTop: "20px" }}>Popular threads based on your Duration</div>
+                <div id="pop-suggest-thread">
+                    <Icon
+                        type="fire"
+                        theme="filled"
+                        style={{ marginRight: "19px" }}
+                    />Popular threads based on your Duration</div>
                 <div style={{ backgroundColor: "#fff", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
                     <Radio.Group name="radiogroup" style={{ padding: "10px" }} onChange={this.onChangeDuration} value={this.state.query.duration_type ? this.state.query.duration_type : 1}>
                         <Radio value={"1"}>1 - 3 Days</Radio>

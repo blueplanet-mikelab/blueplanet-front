@@ -161,7 +161,12 @@ class SuggestMonth extends Component {
     render() {
         return (
             <div>
-                <div style={{ marginTop: "20px" }}>Popular threads based on your Month</div>
+                <div id="pop-suggest-thread">
+                    <Icon
+                        type="fire"
+                        theme="filled"
+                        style={{ marginRight: "19px" }}
+                    />Popular threads based on your Month</div>
                 <div style={{ backgroundColor: "#fff", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
                     <Select
                         showSearch

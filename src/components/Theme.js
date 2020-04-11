@@ -115,7 +115,7 @@ class Theme extends Component {
     render() {
         return (
             <div>
-                <div style={{ marginTop: "20px", textAlign: "center" }}>Pick by Theme</div>
+                <div id="pop-suggest-thread">Pick by Theme</div>
                 <Carousel autoplay id="theme" style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
                     <div>
                         {this.CreateSuggest(0)}

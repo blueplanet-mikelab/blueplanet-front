@@ -197,7 +197,12 @@ class SuggestThreads extends Component {
                     </Col>
                 </Row>
 
-                <div style={{ marginTop: "20px" }}>Popular Suggestion Threads</div>
+                <div id="first-pop-suggest-thread">
+                    <Icon
+                        type="fire"
+                        theme="filled"
+                        style={{ marginRight: "19px" }}
+                    />Popular Suggestion Threads</div>
                 <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
 
                     <div>
