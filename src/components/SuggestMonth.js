@@ -61,7 +61,7 @@ class SuggestMonth extends Component {
         const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
         this.props.history.push(`/${q}`);
         try {
-            response = await axios.get(`http://${backend_url}/home/monthQuery${q}`)
+            response = await axios.get(`http://${backend_url}/api/home/monthQuery${q}`)
         } catch (error) {
             console.log(error);
         }

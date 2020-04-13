@@ -246,7 +246,7 @@ class Forums extends Component {
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
     this.props.history.push(`/forums${q}`);
     try {
-      response = await axios.get(`http://${backend_url}/forums/filterQuery${q}`)
+      response = await axios.get(`http://${backend_url}/api/forums/filterQuery${q}`)
     } catch (error) {
       console.log(error);
     }

@@ -76,7 +76,7 @@ class SuggestThreads extends Component {
         const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
         this.props.history.push(`/${q}`);
         try {
-            response = await axios.get(`http://${backend_url}/home/suggestThreads${q}`)
+            response = await axios.get(`http://${backend_url}/api/home/suggestThreads${q}`)
         } catch (error) {
             console.log(error);
         }

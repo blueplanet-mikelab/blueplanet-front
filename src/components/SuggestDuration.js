@@ -80,7 +80,7 @@ class SuggestDuration extends Component {
         const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
         this.props.history.push(`/${q}`);
         try {
-            response = await axios.get(`http://${backend_url}/home/durationQuery${q}`)
+            response = await axios.get(`http://${backend_url}/api/home/durationQuery${q}`)
         } catch (error) {
             console.log(error);
         }
