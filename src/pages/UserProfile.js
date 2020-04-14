@@ -1,12 +1,18 @@
 import React, { Component, useContext } from 'react';
 import { withRouter, Redirect } from 'react-router-dom';
+
 import { AuthContext } from '../auth/Auth';
+
+import axios from 'axios';
+import qs from 'qs';
 
 import { Tabs, Input, Icon, Button } from 'antd';
 import "../css/userprofile.css";
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 
 import * as ROUTES from '../constants/routes';
+
+const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 const { TabPane } = Tabs
 const { Search } = Input;
@@ -320,12 +326,75 @@ class UserProfile extends Component {
     super(props);
 
     this.state = {
+      query: {},
+      triplist: [],
       heartFavorites: favoritelist.map(() => "outlined"),
       heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
       subtabSortType: 1,
       favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
       selectedTripList: null
+    }
+  }
+
+  async getInformation(query) {
+    let response = null;
+    const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
+    this.props.history.push(`/profile${q}`);
+    try {
+      response = await axios.get(`http://${backend_url}/api/my-triplist/triplists${q}`)
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (response) {
+      // Map data after get response
+      this.mapData(response);
+    }
+  }
+
+  mapData(response) {
+    const triplist = response.data.map(item => {
+      return {
+        ...item,
+        name: item.title,
+      };
+    });
+    this.setState({
+      triplist: triplist,
+    });
+    console.log("trip" + this.state.triplist)
+  }
+
+  getQueryParams(value) {
+    return qs.parse(value, { ignoreQueryPrefix: true })
+  }
+
+  componentDidMount() {
+    this.props.currentUser.getIdToken(/* forceRefresh */ true)
+      .then((idToken) => {
+        var res = axios.get(`http://${backend_url}/api/my-triplist/triplists`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        res.then((result) => {
+          console.log(idToken)
+          console.log(result)
+          this.setState({
+            xx: result.data,
+          });
+          console.log("title " + this.state.xx[0].title)
+        })
+      }).catch(function (error) {
+        console.log(error)
+      });
+    if (this.props.location != null) {
+      const q = this.getQueryParams(this.props.location.search);
+      this.setState({
+        query: q
+      })
+      this.getInformation(q);
     }
   }
 
@@ -469,7 +538,7 @@ class UserProfile extends Component {
               >Most Threads</Button>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-              {triplist.map((item, i) => {
+              {this.state.triplist.map((item, i) => {
                 return (
                   <div style={{ width: '200px', margin: '10px' }}
                   >
