@@ -18,10 +18,10 @@ const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, on
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: `2%`, width: `80%`, margin: 'auto 0' }}>
         <h3 style={{ color: '#0E3047' }}>{item.title}</h3>
-        <p style={{ color: '#C4C4C4' }}>{item.desc}</p>
+        <p style={{ color: '#C4C4C4' }}>{item.description}</p>
         <div style={{ color: "#10828C" }}>
-          <span> <Icon type="plus" /> 32 Upvoted </span>
-          <span style={{ marginLeft: '20px' }}> <Icon type="fire" /> 48.5 Popular</span>
+          <span> <Icon type="plus" /> {item.vote}</span>
+          <span style={{ marginLeft: '20px' }}> <Icon type="fire" /> {item.popularity}</span>
         </div>
       </div>
       <Icon type="heart"

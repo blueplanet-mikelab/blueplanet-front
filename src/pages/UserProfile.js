@@ -328,11 +328,12 @@ class UserProfile extends Component {
     this.state = {
       query: {},
       triplist: [],
+      favoritelist: [],
       heartFavorites: favoritelist.map(() => "outlined"),
       heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
       subtabSortType: 1,
-      favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
+      // favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
       selectedTripList: null
     }
   }
@@ -361,7 +362,7 @@ class UserProfile extends Component {
       };
     });
     this.setState({
-      triplist: triplist,
+      // 
     });
     console.log("trip" + this.state.triplist)
   }
@@ -382,9 +383,28 @@ class UserProfile extends Component {
           console.log(idToken)
           console.log(result)
           this.setState({
-            xx: result.data,
+            triplist: result.data,
           });
-          console.log("title " + this.state.xx[0].title)
+          console.log("title " + this.state.triplist[0].title)
+          console.log("threads " + this.state.triplist[0].threads[0].title)
+        })
+        var fav = axios.get(`http://${backend_url}/api/my-triplist/favorites`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        fav.then((result) => {
+          console.log(idToken)
+          console.log(result)
+          this.setState({
+            favoritelist: result.data.favThreads,
+            heartFavorites: this.state.favoritelist.map(() => "outlined"),
+            favor_imgs: this.state.favoritelist.map(e => ({ thumbnail: e.thumbnail })),
+          });
+          console.log(" favoritelist" + favoritelist)
+          if (this.state.favoritelist == "") {
+            console.log("ืีnull")
+          }
         })
       }).catch(function (error) {
         console.log(error)
@@ -399,6 +419,18 @@ class UserProfile extends Component {
   }
 
   onHeartFavoriteClick = (i) => {
+    this.props.currentUser.getIdToken(true)
+      .then((idToken) => {
+        axios.put(`http://${backend_url}/api/my-triplist/favorites/`+'5bb8c3bd16bf1f515ce5b42f', {
+          headers: {
+            Authorization: idToken
+          }
+        })
+        console.log("...")
+      }).catch(function (error) {
+        console.log(error)
+      });
+
     const newThemes = this.state.heartFavorites
     newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
     this.setState({
@@ -481,7 +513,7 @@ class UserProfile extends Component {
           return (
             <ThreadHorizontalItem item={item}
               i={i}
-              imgStyle={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail).style}
+              // imgStyle={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail)}
               imgHandleSize={this.imgHandleSize}
               heartState={this.state.heartFavorites[i]}
               onHeartFavoriteClick={this.onHeartFavoriteClick}
@@ -498,19 +530,19 @@ class UserProfile extends Component {
         return (
           <>
             {sorter}
-            <p style={{ margin: '30px 0 0 0' }}><span style={{ color: '#10828C', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {triplist[selectedIndex].name}</p>
+            <p style={{ margin: '30px 0 0 0' }}><span style={{ color: '#10828C', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {triplist[selectedIndex].title}</p>
             <div style={{ display: 'flex', paddingBottom: '40px', margin: '20px 20px 0 0', borderBottom: '0.5px solid rgba(130, 142, 180, 0.5)' }}>
-              <img src={triplist[selectedIndex].image}
+              <img src={triplist[selectedIndex].thumbnail}
                 alt="trip image cover"
                 style={{ width: `175px`, height: `175px`, marginRight: '40px' }} />
               <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto 0' }}>
-                <h1>{triplist[selectedIndex].name} <Icon className="triplist-more" type="more" onClick={() => this.onMoreIcon()} /> </h1>
-                <span>{triplist[selectedIndex].n} Threads</span>
+                <h1>{this.state.triplist[selectedIndex].title} <Icon className="triplist-more" type="more" onClick={() => this.onMoreIcon()} /> </h1>
+                <span>{this.state.triplist[selectedIndex].numThreads} Threads</span>
                 <p></p>
-                <p>{triplist[selectedIndex].description}</p>
+                <p>{this.state.triplist[selectedIndex].description}</p>
               </div>
             </div>
-            {threadHorizontal(triplist[selectedIndex].threads)}
+            {threadHorizontal(this.state.triplist[selectedIndex].threads)}
           </>
         )
       } else {
@@ -543,15 +575,15 @@ class UserProfile extends Component {
                   <div style={{ width: '200px', margin: '10px' }}
                   >
                     <div style={{ width: '200px', height: '200px' }}>
-                      <img src={item.image}
+                      <img src={item.thumbnail}
                         alt=""
                         onClick={() => { this.setState({ selectedTripList: i }) }}
                         style={{ width: `100%`, height: `100%`, cursor: 'pointer' }} />
                     </div>
                     <div style={{ display: 'flex' }}>
                       <div>
-                        <h2 onClick={() => this.setState({ selectedTripList: i })} style={{ cursor: 'pointer' }}>{item.name}</h2>
-                        <p>{item.n}</p>
+                        <h2 onClick={() => this.setState({ selectedTripList: i })} style={{ cursor: 'pointer' }}>{item.title}</h2>
+                        <p>{item.numThreads} Threads</p>
                       </div>
                       <Icon type="more"
                         onClick={() => this.onMoreIcon()}
