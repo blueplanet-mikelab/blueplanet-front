@@ -1,7 +1,7 @@
 #login-facebook.ant-btn {
     width: 322px;
     height: 48px;
-    left: 559px;
+    left: 529px;
 /* top: 670px; */
 
     border: 1px solid #2B5998;
@@ -21,7 +21,7 @@
 #login-facebook.ant-btn.active {
     width: 322px;
     height: 48px;
-    left: 559px;
+    left: 529px;
 /* top: 670px; */
 
     background: #2B5998 !important;

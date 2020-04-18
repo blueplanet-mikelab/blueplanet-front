@@ -8,7 +8,7 @@ img#icon-google {
 #login-google.ant-btn {
     width: 322px;
     height: 48px;
-    left: 559px;
+    left: 529px;
 /* top: 738px; */
 
     border: 1px solid #FF3E30;
@@ -28,7 +28,7 @@ img#icon-google {
 #login-google.ant-btn.active {
     width: 322px;
     height: 48px;
-    left: 559px;
+    left: 529px;
 /* top: 738px; */
 
     background:  #FF3E30 !important;

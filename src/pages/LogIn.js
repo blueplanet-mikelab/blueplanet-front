@@ -74,12 +74,12 @@ class LogInFormBase extends Component {
 
     const isInvalid = password === '' || email === '';
     return (<div>
-      <div id="background-login" style={{ backgroundColor: "#FFF", width: "302px" }}>
+      <div id="background-login" style={{ width: "302px" }}>
         <Form
           onSubmit={this.onSubmit}
           name="normal_login"
           className="login-form">
-          <Form.Item name="email" id="email" style={{ left: "521px" }}>
+          <Form.Item name="email" id="email" style={{ left: "490px" }}>
             <Input
               id="input-email"
               prefix={<MailOutlined className="site-form-item-icon" />}
@@ -101,7 +101,7 @@ class LogInFormBase extends Component {
             />
           </Form.Item>
           <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle style={{ left: "500px" }}>
+            <Form.Item name="remember" valuePropName="checked" noStyle style={{ left: "470px" }}>
               <div id="remember-forget">
                 <Checkbox
                   id="remember">

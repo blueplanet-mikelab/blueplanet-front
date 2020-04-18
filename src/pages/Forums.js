@@ -231,16 +231,6 @@ class Forums extends Component {
     })
   };
 
-  // havePost() {
-  //   if (this.threadPoperties.length <= 0) {
-  //     return "Null"
-  //   } else {
-
-  //   }
-  // }
-
-
-
   async getInformation(query) {
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })

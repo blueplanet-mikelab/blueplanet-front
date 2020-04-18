@@ -59,29 +59,31 @@ class PasswordForgetForm extends Component {
     const isInvalid = email === '';
 
     return (
-      <Form onSubmit={this.onSubmit}>
-        <div id="inform">
-          <p>Don’t worry,</p>
-          <p>we will send you and email allowing you to reset it.</p>
-        </div>
-        <Form.Item name="email" id="email" style={{ left: "521px" }}>
-          <Input
-            id="input-email"
-            prefix={<MailOutlined className="site-form-item-icon" />}
-            name="email"
-            value={this.state.email}
-            onChange={this.onChange}
-            type="text"
-            placeholder="E-mail" />
-        </Form.Item>
-        <Button
-          id="reset-btn"
-          disabled={isInvalid}
-          htmlType="submit"
-          type="submit">Reset My Password
+      <div id="background-passForget" style={{ width: "302px" }}>
+        <Form onSubmit={this.onSubmit}>
+          <div id="inform">
+            <p>Don’t worry,</p>
+            <p>we will send you and email allowing you to reset it.</p>
+          </div>
+          <Form.Item name="email" id="email" style={{ left: "521px" }}>
+            <Input
+              id="input-email"
+              prefix={<MailOutlined className="site-form-item-icon" />}
+              name="email"
+              value={this.state.email}
+              onChange={this.onChange}
+              type="text"
+              placeholder="E-mail" />
+          </Form.Item>
+          <Button
+            id="reset-btn"
+            disabled={isInvalid}
+            htmlType="submit"
+            type="submit">Reset My Password
         </Button>
-        {error && <p>{error.message}</p>}
-      </Form>
+          {error && <p>{error.message}</p>}
+        </Form>
+      </div>
     )
   }
 }
