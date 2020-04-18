@@ -52,7 +52,9 @@ export const signUpWithEmailAndPassword = async (newUser) => {
 }
 
 export const signInWithEmailAndPassword = async (email, password) => {
-  const signIn = await auth.signInWithEmailAndPassword(email, password)
-  const currentUser = auth.currentUser
-  // 
+  return await auth.signInWithEmailAndPassword(email, password)
+}
+
+export const signOut = async () => {
+  return await auth.signOut()
 }

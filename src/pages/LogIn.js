@@ -1,6 +1,6 @@
 import React, { Component, useContext } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
-import { AuthContext } from '../auth/Auth';
+import { AuthContext, signInWithEmailAndPassword } from '../auth/Auth';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Form, Input, Button, Checkbox, Divider } from 'antd';
@@ -8,13 +8,12 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import "../css/login.css";
 
-import { signInWithEmailAndPassword } from '../firebase/actions';
 import * as ROUTES from '../constants/routes';
 
 import { RegisterLink } from './Register';
 import { PasswordForgetLink } from './PasswordForget';
-import LogInFacebook from '../components/logging/LogInFacebook';
-import LogInGoogle from '../components/logging/LogInGoogle';
+import LogInFacebook from '../components/login/LogInFacebook';
+import LogInGoogle from '../components/login/LogInGoogle';
 
 const LogInPage = () => {
   const { currentUser } = useContext(AuthContext);
@@ -127,7 +126,6 @@ class LogInFormBase extends Component {
     );
   }
 }
-
 
 const LogInForm = withRouter(LogInFormBase)
 
