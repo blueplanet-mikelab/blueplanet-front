@@ -16,19 +16,33 @@ import PrivateRoute from './auth/PrivateRoute';
 
 import { AuthProvider } from './auth/Auth';
 
+import 'antd/dist/antd.css';
+import { Layout } from 'antd';
+
+const { Header, Content, Footer } = Layout
+
 const App = () => (
   <AuthProvider>
     <Router>
-      <div>
-        <Navigation />
+      <Layout className='layout'>
+        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+          <Navigation />
+        </Header>
 
-        <Route exact path={ROUTES.HOME} component={Index} />
-        <Route path={ROUTES.FORUMS} component={Forums} />
-        <PrivateRoute exact path={ROUTES.PROFILE} component={UserProfile} />
-        <Route path={ROUTES.REGISTER} component={Register} />
-        <Route path={ROUTES.LOGIN} component={Login} />
-        <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
-      </div>
+        <Content style={{ padding: '0 50px', marginTop: 65 }}>
+          <Route exact path={ROUTES.HOME} component={Index} />
+          <Route path={ROUTES.FORUMS} component={Forums} />
+          <PrivateRoute exact path={ROUTES.PROFILE} component={UserProfile} />
+          <Route path={ROUTES.REGISTER} component={Register} />
+          <Route path={ROUTES.LOGIN} component={Login} />
+          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
+        </Content>
+
+        <Footer style={{ textAlign: 'center' }}>
+          Web Application for Organizing Traveling Trip
+        </Footer>
+
+      </Layout>
     </Router>
   </AuthProvider>
 )
