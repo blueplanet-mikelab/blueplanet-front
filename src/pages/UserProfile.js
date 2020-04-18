@@ -334,7 +334,7 @@ class UserProfile extends Component {
       heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
       subtabSortType: 1,
-      // favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
+      favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
       selectedTripList: null
     }
   }
@@ -387,9 +387,17 @@ class UserProfile extends Component {
           this.setState({
             triplist: result.data,
           });
-          if (this.state.triplist == "" || this.state.triplist == null) {
+          var hasThreads = "true";
+          for (var i = 0; i < this.state.triplist.length; i++) {
+            if (this.state.triplist[i].threads.length == 0) {
+              console.log("No any thread in trip")
+              hasThreads = "false";
+            }
+          }
+          if (this.state.triplist == "" || this.state.triplist == null || hasThreads == "false") {
             console.log("null")
-          } else {
+          }
+          else {
             console.log("title " + this.state.triplist[0].title)
             console.log("threads " + this.state.triplist[0].threads[0].title)
           }
@@ -425,6 +433,25 @@ class UserProfile extends Component {
       })
       this.getInformation(q);
     }
+  }
+
+  createTriplist = () => {
+    this.props.currentUser.getIdToken(true)
+      .then((idToken) => {
+        axios.post(`http://${backend_url}/api/my-triplist/triplists/add`,
+          {
+            "title": "Japan",
+            "description": "After covid-19!",
+            "thumbnail": "https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg"
+          }, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        console.log("fav ed")
+      }).catch(function (error) {
+        console.log(error)
+      });
   }
 
   testFav = () => {
@@ -507,10 +534,6 @@ class UserProfile extends Component {
     alert("click more")
   }
 
-  // componentDidMount() {
-  //   console.log(getCurrentUser(), "actions")
-  // }
-
   render() {
     const sorter = (
       <div id="subtab">
@@ -550,7 +573,7 @@ class UserProfile extends Component {
           return (
             <ThreadHorizontalItem item={item}
               i={i}
-              // imgStyle={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail)}
+              imgStyle={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail)}
               imgHandleSize={this.imgHandleSize}
               heartState={this.state.heartFavorites[i]}
               onHeartFavoriteClick={this.onHeartFavoriteClick}
