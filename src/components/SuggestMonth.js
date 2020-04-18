@@ -82,8 +82,6 @@ class SuggestMonth extends Component {
         this.setState({
             threadProperties: threadProperties,
         });
-        // console.log("thread[0]-month" + this.state.threadProperties[0].month);
-        // console.log("thread[0]-day" + this.state.threadProperties[0].duration.label);
     }
 
     getQueryParams(value) {

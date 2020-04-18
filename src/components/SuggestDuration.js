@@ -101,7 +101,7 @@ class SuggestDuration extends Component {
         this.setState({
             threadProperties: threadProperties,
         });
-        console.log("thread[0]-day" + this.state.threadProperties[0].duration_type);
+        // console.log("thread[0]-day" + this.state.threadProperties[0].duration_type);
     }
 
     getQueryParams() {

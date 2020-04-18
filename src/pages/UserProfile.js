@@ -329,6 +329,7 @@ class UserProfile extends Component {
       query: {},
       triplist: [],
       favoritelist: [],
+      favThreadslist: [],
       heartFavorites: favoritelist.map(() => "outlined"),
       heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
@@ -381,12 +382,17 @@ class UserProfile extends Component {
         })
         res.then((result) => {
           console.log(idToken)
+          console.log("result trip")
           console.log(result)
           this.setState({
             triplist: result.data,
           });
-          console.log("title " + this.state.triplist[0].title)
-          console.log("threads " + this.state.triplist[0].threads[0].title)
+          if (this.state.triplist == "" || this.state.triplist == null) {
+            console.log("null")
+          } else {
+            console.log("title " + this.state.triplist[0].title)
+            console.log("threads " + this.state.triplist[0].threads[0].title)
+          }
         })
         var fav = axios.get(`http://${backend_url}/api/my-triplist/favorites`, {
           headers: {
@@ -395,15 +401,18 @@ class UserProfile extends Component {
         })
         fav.then((result) => {
           console.log(idToken)
+          console.log("result fav")
           console.log(result)
           this.setState({
-            favoritelist: result.data.favThreads,
+            favoritelist: result.data,
+            favThreadslist: result.data.favThreads,
             heartFavorites: this.state.favoritelist.map(() => "outlined"),
             favor_imgs: this.state.favoritelist.map(e => ({ thumbnail: e.thumbnail })),
           });
-          console.log(" favoritelist" + favoritelist)
-          if (this.state.favoritelist == "") {
-            console.log("ืีnull")
+          if (this.state.favoritelist == "" || this.state.favoritelist == null || this.state.favThreadslist.length == 0) {
+            console.log("null")
+          } else {
+            console.log(" favoritelist" + this.state.favThreadslist[0].title)
           }
         })
       }).catch(function (error) {
@@ -418,15 +427,43 @@ class UserProfile extends Component {
     }
   }
 
+  testFav = () => {
+    this.props.currentUser.getIdToken(true)
+      .then((idToken) => {
+        axios.put(`http://${backend_url}/api/my-triplist/favorites/5e9a2c035bc2507a55908200`, {}, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        console.log("fav ed")
+      }).catch(function (error) {
+        console.log(error)
+      });
+  }
+
+  testDeleteFav = () => {
+    this.props.currentUser.getIdToken(true)
+      .then((idToken) => {
+        axios.delete(`http://${backend_url}/api/my-triplist/favorites/5e9a2c035bc2507a55908200`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        console.log("delete")
+      }).catch(function (error) {
+        console.log(error)
+      });
+  }
+
   onHeartFavoriteClick = (i) => {
     this.props.currentUser.getIdToken(true)
       .then((idToken) => {
-        axios.put(`http://${backend_url}/api/my-triplist/favorites/`+'5bb8c3bd16bf1f515ce5b42f', {
+        axios.put(`http://${backend_url}/api/my-triplist/favorites/5e9a2c035bc2507a55908200`, {}, {
           headers: {
-            Authorization: idToken
+            'Authorization': idToken
           }
         })
-        console.log("...")
+        console.log("fav ed")
       }).catch(function (error) {
         console.log(error)
       });
@@ -617,7 +654,11 @@ class UserProfile extends Component {
               </TabPane>
               <TabPane tab="My Favorite" key="2">
                 {sorter}
-                {threadHorizontal(favoritelist)}
+                <Button
+                  onClick={this.testFav()}>
+                  Test Fav
+                </Button>
+                {threadHorizontal(this.state.favThreadslist)}
               </TabPane>
               <TabPane tab="Recently Viewed" key="3">
                 {sorter}
