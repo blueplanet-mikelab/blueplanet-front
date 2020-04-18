@@ -1,19 +1,18 @@
 import React, { Component, useContext } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
-import { AuthContext } from '../auth/Auth';
+import { AuthContext, signUpWithEmailAndPassword } from '../auth/Auth';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Form, Input, Divider, Button } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import * as ROUTES from '../constants/routes';
-import { signUpWithEmailAndPassword } from '../auth/Auth';
 
 import "../css/register.css";
 
 import { LogInLink } from './LogIn';
-import LogInFacebook from '../components/logging/LogInFacebook';
-import LogInGoogle from '../components/logging/LogInGoogle';
+import LogInFacebook from '../components/login/LogInFacebook';
+import LogInGoogle from '../components/login/LogInGoogle';
 
 const RegisterPage = () => {
   const { currentUser } = useContext(AuthContext);
