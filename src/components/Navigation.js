@@ -5,7 +5,7 @@ import * as ROUTES from '../constants/routes';
 import { AuthContext, signOut } from '../auth/Auth';
 
 import 'antd/dist/antd.css';
-import "../css/head.css";
+import '../css/navigation.css';
 import { Menu } from 'antd';
 import logo from "../images/orbit.png";
 

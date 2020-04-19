@@ -1,105 +1,121 @@
-#index{
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: normal;
-}
-.ant-carousel .slick-slide {
-    /* text-align: center;
-    height: 160px;
-    line-height: 160px; */
-    background: #fff;
-    overflow: hidden;
+.ant-row #suggest {
+  background: #F8F5E4;
+  border-radius: 5px;
 }
 
-.ant-carousel .slick-slide h3 {
-    color: #fff;
+.bound-btn {
+  margin-top: 50px;
 }
 
-h3 {
-    text-align: center;
+.bound-btn .ant-btn-lg {
+  width: 25%;
 }
 
-button.ant-btn {
-    font-size: 14px;
-    line-height: 24px;
+.suggestion-threads {
+  margin: 50px;
 }
 
-div {
-    font-size: 14px;
+.suggest-title {
+  display: flex
 }
 
-.ant-carousel .slick-dots li button {
-    background: #181741;
+.suggest-title p, .suggest-title i, .see-more a {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #0E3047;
 }
 
-div.ant-col.ant-col-5 {
-    height: 140px;
+.suggest-title span {
+  font-weight: bold;
 }
 
-.ant-select-selection--single {
-    background-color: transparent;
-    border-color: transparent;
+div.ant-col.ant-col-12.see-more {
+  text-align: right;
 }
 
-#with.ant-btn{
-    width: 280px;
-    height: 48px;
-    background: #FFFFFF;
-    border: 1px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 5px 0px 0px 5px;
-
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
-    color: #0E3047;
+.see-more a {
+  font-weight: normal;
+  text-decoration-line: underline;
 }
 
-#with.ant-btn:hover, 
-#with.ant-btn:focus, 
-#with.ant-btn:active, 
-#with.ant-btn.active {
-    width: 280px;
-    height: 48px;
-    background: linear-gradient(90deg, #FB3640 0%, #F97300 100%) !important;
-    color: white;
-    border: 1px solid #C4C4C4;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);  
-
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
+.ant-carousel {
+  margin-top: 25px;
+  background: white;
+  border-radius: 5px;
 }
 
-#first-pop-suggest-thread{
-    /* width: 231px; */
-    height: 24px;
-    margin-left: 5%;
-    margin-top: 50px;
-    margin-bottom: 30px;
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
-    color: #0E3047;
+.thread-card {
+  margin: 20px 0px 20px 0px;
 }
 
-#pop-suggest-thread{
-    /* width: 231px; */
-    height: 24px;
-    margin-left: 5%;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
-    color: #0E3047;
+.thread-card img {
+  background: 50% 50% no-repeat;
+  width: 100%;
+  max-width: 150px;
+  height: 150px;
+  margin: 0px 20px 0px 20px;
 }
 
+.thread-title a {
+  font-weight: normal;
+  font-size: 14px;
+  color: #0E3047;
+  text-align: left !important;
+  float: left;
+}
+
+div.ant-col.ant-col-12.thread-info {
+  height: 150px;
+  padding-right: 20px;
+}
+
+.thread-option {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.ant-col .ant-col-12 #tag {
+  text-align: left;
+}
+
+.ant-tag {
+  background: linear-gradient(90deg, #0E3047 0%, #10828C 100%);
+  border-radius: 5px;
+  border-color: white;
+  color: #FFFFFF;
+  padding: 10px;
+}
+
+i.anticon.anticon-fire {
+  font-size: 20px;
+}
+
+i.anticon.anticon-heart, i.anticon.anticon-more {
+  color: #10828C;
+  font-size: 26px;
+  vertical-align:middle;
+  display: table-cell;
+}
+
+div#icon.ant-col.ant-col-12 {
+  margin: auto;
+  width: 50%;
+}
+
+#icon {
+  text-align: right;
+  height: 42px;
+  display: table;
+  width: 100%;
+}
+
+.ant-dropdown, .ant-dropdown-menu-item {
+  font-family: Poppins;
+}
+
+#selectBtn {
+  width: 30%;
+}
