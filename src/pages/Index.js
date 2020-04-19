@@ -90,7 +90,7 @@ class Index extends Component {
 
     componentDidMount() {
         axios
-            .get(`http://${backend_url}/home/mapCountries`)
+            .get(`http://${backend_url}/api/home/mapCountries`)
             .then(res => {
                 const threadPoperties = res.data.map(item => {
                     return {

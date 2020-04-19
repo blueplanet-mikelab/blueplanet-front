@@ -17,253 +17,6 @@ const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 const { TabPane } = Tabs
 const { Search } = Input;
 
-const triplist = [
-  {
-    image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-    name: 'Japan Trip1',
-    n: 1,
-    description: "1 Osaka 2020",
-    threads: [
-      {
-        thumbnail: 'https://f.ptcdn.info/140/068/000/q5qfe490o57QqCfwa0Z-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      },
-    ]
-  },
-  {
-    image: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
-    name: 'Japan Trip2',
-    n: 2,
-    description: "2 Osaka 2020",
-    threads: [
-      {
-        thumbnail: 'https://f.ptcdn.info/138/068/000/q5qawymxnU8ws8BrsG2-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      },
-    ]
-  },
-  {
-    image: 'https://f.ptcdn.info/152/068/000/q5s5qm2f2L8KXD0mmPY-o.jpg',
-    name: 'Japan Trip3',
-    n: 3,
-    description: "3 Osaka 2020",
-    threads: [
-      {
-        thumbnail: 'https://f.ptcdn.info/152/068/000/q5s5qm2f2L8KXD0mmPY-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      },
-      {
-        thumbnail: 'https://f.ptcdn.info/105/068/000/q5li8h638sXxWKv0Bvyw-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/139/068/000/q5qei46rdeSKm0sAy1Z-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      },
-    ]
-  },
-  {
-    image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-    name: 'Japan Trip4',
-    n: 4,
-    description: "4 Osaka 2020",
-    threads: [
-      {
-        thumbnail: 'https://f.ptcdn.info/035/068/000/q5bqxlum2rEpdCp5I63-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/174/068/000/q5ulkg1gu8wBg6zIJj5-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/173/068/000/q5uhlponu9Ajn6YCrcm-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/140/068/000/q5qfe490o57QqCfwa0Z-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      },
-    ]
-  },
-  {
-    image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-    name: 'Japan Trip5',
-    n: 5,
-    description: "5 Osaka 2020",
-    threads: [
-      {
-        thumbnail: 'https://f.ptcdn.info/138/068/000/q5qawymxnU8ws8BrsG2-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/152/068/000/q5s5qm2f2L8KXD0mmPY-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      },
-      {
-        thumbnail: 'https://f.ptcdn.info/105/068/000/q5li8h638sXxWKv0Bvyw-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/139/068/000/q5qei46rdeSKm0sAy1Z-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      },
-    ]
-  },
-  {
-    image: 'https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg',
-    name: 'Japan Trip6',
-    n: 6,
-    description: "6 Osaka 2020",
-    threads: [
-      {
-        thumbnail: 'https://f.ptcdn.info/035/068/000/q5bqxlum2rEpdCp5I63-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/174/068/000/q5ulkg1gu8wBg6zIJj5-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/173/068/000/q5uhlponu9Ajn6YCrcm-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/140/068/000/q5qfe490o57QqCfwa0Z-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      },
-      {
-        thumbnail: 'https://f.ptcdn.info/138/068/000/q5qawymxnU8ws8BrsG2-o.jpg',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      }, {
-        thumbnail: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
-        title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-        desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-        upvote: 32,
-        popular: 87.5
-      },
-    ]
-  }
-
-]
-
-const favoritelist = [
-  {
-    thumbnail: 'https://f.ptcdn.info/140/068/000/q5qfe490o57QqCfwa0Z-o.jpg',
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-    upvote: 32,
-    popular: 87.5
-  },
-  {
-    thumbnail: 'https://f.ptcdn.info/138/068/000/q5qawymxnU8ws8BrsG2-o.jpg',
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-    upvote: 32,
-    popular: 87.5
-  }, {
-    thumbnail: 'https://f.ptcdn.info/161/068/000/q5sx8014uQ3bbXAm8qS-o.png',
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-    upvote: 32,
-    popular: 87.5
-  }, {
-    thumbnail: 'https://f.ptcdn.info/152/068/000/q5s5qm2f2L8KXD0mmPY-o.jpg',
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-    upvote: 32,
-    popular: 87.5
-  },
-  {
-    thumbnail: 'https://f.ptcdn.info/105/068/000/q5li8h638sXxWKv0Bvyw-o.jpg',
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-    upvote: 32,
-    popular: 87.5
-  }, {
-    thumbnail: 'https://f.ptcdn.info/139/068/000/q5qei46rdeSKm0sAy1Z-o.jpg',
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-    upvote: 32,
-    popular: 87.5
-  }, {
-    thumbnail: 'https://f.ptcdn.info/035/068/000/q5bqxlum2rEpdCp5I63-o.jpg',
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-    upvote: 32,
-    popular: 87.5
-  }, {
-    thumbnail: 'https://f.ptcdn.info/174/068/000/q5ulkg1gu8wBg6zIJj5-o.jpg',
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-    upvote: 32,
-    popular: 87.5
-  }, {
-    thumbnail: 'https://f.ptcdn.info/173/068/000/q5uhlponu9Ajn6YCrcm-o.jpg',
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it ...",
-    upvote: 32,
-    popular: 87.5
-  },
-]
-
 const recentlylist = [
   {
     title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์',
@@ -324,17 +77,16 @@ const TriplistPage = () => {
 class UserProfile extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       query: {},
       triplist: [],
       favoritelist: [],
       favThreadslist: [],
-      heartFavorites: favoritelist.map(() => "outlined"),
+      // heartFavorites: favoritelist.map(() => "outlined"),
       heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
       subtabSortType: 1,
-      favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
+      // favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
       selectedTripList: null
     }
   }
@@ -389,12 +141,12 @@ class UserProfile extends Component {
           });
           var hasThreads = "true";
           for (var i = 0; i < this.state.triplist.length; i++) {
-            if (this.state.triplist[i].threads.length == 0) {
+            if (this.state.triplist[i].threads.length === 0) {
               console.log("No any thread in trip")
               hasThreads = "false";
             }
           }
-          if (this.state.triplist == "" || this.state.triplist == null || hasThreads == "false") {
+          if (this.state.triplist === "" || this.state.triplist == null || hasThreads === "false") {
             console.log("null")
           }
           else {
@@ -417,7 +169,7 @@ class UserProfile extends Component {
             heartFavorites: this.state.favoritelist.map(() => "outlined"),
             favor_imgs: this.state.favoritelist.map(e => ({ thumbnail: e.thumbnail })),
           });
-          if (this.state.favoritelist == "" || this.state.favoritelist == null || this.state.favThreadslist.length == 0) {
+          if (this.state.favoritelist === "" || this.state.favoritelist == null || this.state.favThreadslist.length === 0) {
             console.log("null")
           } else {
             console.log(" favoritelist" + this.state.favThreadslist[0].title)
@@ -590,10 +342,10 @@ class UserProfile extends Component {
         return (
           <>
             {sorter}
-            <p style={{ margin: '30px 0 0 0' }}><span style={{ color: '#10828C', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {triplist[selectedIndex].title}</p>
+            <p style={{ margin: '30px 0 0 0' }}><span style={{ color: '#10828C', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {this.state.triplist[selectedIndex].title}</p>
             <div style={{ display: 'flex', paddingBottom: '40px', margin: '20px 20px 0 0', borderBottom: '0.5px solid rgba(130, 142, 180, 0.5)' }}>
               <img src={this.state.triplist[selectedIndex].thumbnail}
-                alt="trip image cover"
+                alt="trip cover"
                 style={{ width: `175px`, height: `175px`, marginRight: '40px' }} />
               <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto 0' }}>
                 <h1>{this.state.triplist[selectedIndex].title} <Icon className="triplist-more" type="more" onClick={() => this.onMoreIcon()} /> </h1>

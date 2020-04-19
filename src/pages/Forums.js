@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import React, { Component, useContext } from 'react';
+import { withRouter, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
+import firebase from '../firebase/config';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Layout, Menu, Icon, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
 import "../css/forum.css";
+
+import { AuthContext } from '../auth/Auth';
+import * as ROUTES from '../constants/routes';
 
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
@@ -13,10 +17,24 @@ const CheckboxGroup = Checkbox.Group;
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
-var checkTheme = [];
-
 const checkBudget = (a, b) => (b <= a)
 const num_of_threads_each_page = 10;   // Use a constant here to keep track of number of threads per page
+const country = [];
+
+var checkTheme = [];
+
+const ForumlistPage = () => {
+  const { currentUser } = useContext(AuthContext);
+  if (!currentUser) {
+    return <Redirect to={ROUTES.HOME} />;
+  }
+  console.log(currentUser)
+  return (
+    <div>
+      <Forums currentUser={currentUser} />
+    </div>
+  );
+}
 
 class Forums extends Component {
   constructor(props) {
@@ -32,12 +50,7 @@ class Forums extends Component {
       sortBy: 'popular',
       minValue: 0,
       maxValue: num_of_threads_each_page,
-      heartTheme: "outlined",
-      heartFavorites: "outlined",
-      countryList: [],
-      countryList_short: [],
-      children: [],
-      countries_search: "",
+      countries_search: [],
       typeThread: 1,
       sortThread: 1,
     };
@@ -111,7 +124,6 @@ class Forums extends Component {
   }
 
   handleChange = (value) => {
-    console.log("data: " + this.state.data);
     const query = this.state.query;
     query.countries = value;
     console.log("value: " + value);
@@ -139,13 +151,6 @@ class Forums extends Component {
     query.themes = checkTheme;
     this.setState({ query: query });
     this.getInformation(query);
-    // this.setState({ data: this.state.fullData.filter(d => {
-    //   if(e.target.checked){
-    //     console.log(d.theme)
-    //     return checkTheme(d.theme, e.target.value) }
-    //   }) 
-
-    // });    
   }
 
   onChangeMonth = (value) => {
@@ -175,7 +180,6 @@ class Forums extends Component {
   };
 
   haveDuration(duration) {
-    console.log('duration:', duration);
     if (duration != "Not Define") {
       return <Tag style={{ padding: '1%' }} color="rgba(130, 142, 180, 0.5)">{duration}</Tag>
     }
@@ -203,33 +207,27 @@ class Forums extends Component {
     this.getInformation(query);
   }
 
-  // value: e.target.value,
-
-  listCountriesAndSetThreadProperties = (threadPoperties) => {
-    const countryList = []
-    const countryList_short = []
-    threadPoperties.forEach(element => {
-      element.country.forEach(c => {
-        if (!countryList.includes(c)) {
-          countryList.push(c)
-        }
-      })
-      element.country_short.forEach(c => {
-        if (!countryList_short.includes(c)) {
-          countryList_short.push(c)
-        }
-      })
-      // console.log(countryList);
-      // console.log(countryList_short);
-
-    })
-
+  onHeartFavoriteClick = (i, id) => {
+    const threadId = id;
+    console.log(id)
+    firebase.auth().currentUser.getIdToken(true)
+      .then((idToken) => {
+        axios.put(`http://${backend_url}/api/my-triplist/favorites/${threadId}`, {}, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        console.log("fav ed")
+        console.log(idToken)
+      }).catch(function (error) {
+        console.log(error)
+      });
+    const newThemes = this.state.heartFavorites
+    newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
     this.setState({
-      threadPoperties: threadPoperties,
-      countryList: countryList,
-      countryList_short: countryList_short
+      heartFavorites: newThemes
     })
-  };
+  }
 
   async getInformation(query) {
     let response = null;
@@ -263,10 +261,13 @@ class Forums extends Component {
         theme: item.theme.map(c => c.theme),
       };
     });
-    this.listCountriesAndSetThreadProperties(threadPoperties)
+    this.setState({
+      threadPoperties: threadPoperties,
+      heartRecentlyViews: threadPoperties.map(() => "outlined"),
+      heartFavorites: threadPoperties.map(() => "outlined"),
+    })
+    // this.listCountriesAndSetThreadProperties(threadPoperties)
     console.log(threadPoperties)
-    // console.log(threadPoperties[0].thumbnail)
-    // this.handleSortByPopular()
   }
 
   getQueryParams() {
@@ -274,22 +275,31 @@ class Forums extends Component {
   }
 
   componentDidMount() {
+    axios
+      .get(`http://${backend_url}/api/home/mapCountries`)
+      .then(res => {
+        const countries_search = res.data.map(item => {
+          return {
+            ...item,
+            // country: item.nameEnglish,
+          };
+        });
+        this.setState({
+          countries_search: countries_search
+        });
+        console.log(this.state.countries_search[0].nameEnglish)
+        console.log("1: " + this.state.countries_search)
+        console.log("2: " + this.state.countries_search[0])
+
+         // Add countries in selectioncountryList
+        for (var i = 0; i <= this.state.countries_search.length; i++) {
+          country.push(<Option value={this.state.countries_search[i].nameEnglish}>{this.state.countries_search[i].nameEnglish}</Option>);
+        }
+      })
+      .catch(err => console.log(err));
     const q = this.getQueryParams();
     this.setState({ query: q })
     this.getInformation(q);
-  }
-
-  onHeartFavoriteClick = () => {
-    if (this.state.heartFavorites == "filled") {
-      this.setState({
-        heartFavorites: "outlined"
-      })
-    } else {
-      this.setState({
-        heartFavorites: "filled"
-      })
-
-    }
   }
 
   render() {
@@ -313,13 +323,6 @@ class Forums extends Component {
         }}
       />
     );
-
-    const children = [];
-
-    // Add countries in selection
-    for (var i = 0; i <= this.state.countryList_short.length; i++) {
-      children.push(<Option value={this.state.countryList[i]}>{this.state.countryList[i]}</Option>);
-    }
 
     const menu = (
       <Menu>
@@ -368,7 +371,7 @@ class Forums extends Component {
                     placeholder="Please select"
                     onChange={this.handleChange}
                   >
-                    {children}
+                    {country}
                   </Select>
                 </SubMenu>
                 <ColoredShortLine color="rgba(130, 142, 180, 0.5)" />
@@ -603,7 +606,7 @@ class Forums extends Component {
 
                 {this.state.threadPoperties &&
                   this.state.threadPoperties.length > 0 &&
-                  this.state.threadPoperties.slice(this.state.minValue, this.state.maxValue).map(d => (
+                  this.state.threadPoperties.slice(this.state.minValue, this.state.maxValue).map((d, i) => (
                     <div style={{ backgroundColor: '#FFF', paddingTop: '20px', borderBottom: ' 0.5px solid rgba(130, 142, 180, 0.5)' }}>
                       <Row style={{ background: "#fff", paddingLeft: "4%", fontSize: "14px" }}>
                         <Col span={4}>
@@ -626,8 +629,8 @@ class Forums extends Component {
                             <Col>
                               <Row>
                                 <Icon type="heart"
-                                  theme={this.state.heartFavorites}
-                                  onClick={this.onHeartFavoriteClick}
+                                  theme={this.state.heartRecentlyViews[i]}
+                                  onClick={() => this.onHeartFavoriteClick(i, d._id)}
                                   style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
                                 {/* <Icon type="more" style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} /> */}
                                 <Dropdown overlay={menu}>
@@ -663,7 +666,7 @@ class Forums extends Component {
                   defaultCurrent={1}
                   defaultPageSize={num_of_threads_each_page} //default size of page
                   onChange={this.handleChangePage}
-                  total={50} //total number of card data available
+                  total={100} //total number of card data available
                 />
               </Content>
             </Layout>
@@ -674,4 +677,4 @@ class Forums extends Component {
   }
 }
 
-export default withRouter(Forums);
+export default withRouter(Forums, ForumlistPage);
