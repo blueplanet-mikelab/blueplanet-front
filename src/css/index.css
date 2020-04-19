@@ -70,12 +70,7 @@
 }
 
 .scrolldown-btn.ant-btn:hover, .scrolldown-btn.ant-btn:hover i {
-  background: linear-gradient(90deg, #FB3640 0%, #F97300 100%) !important;
+  background: linear-gradient(90deg, #FB3640 0%, #F97300 100%);
   border-color: transparent;
   color: white;
-}
-
-#suggest div {
-  background: #F8F5E4;
-  border-radius: 5px;
 }
