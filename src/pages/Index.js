@@ -1,184 +1,121 @@
-import React, { useState, Component } from "react";
-import { withRouter } from 'react-router';
-import ReactTooltip from "react-tooltip";
-import axios from 'axios';
-import "../css/styles.css";
+import React, { useState, Component } from 'react';
+import { withRouter } from 'react-router-dom';
+
+import ReactTooltip from 'react-tooltip';
+import MapChart from '../components/MapChart';
+import SuggestThreads from '../components/SuggestThreads';
+
+import * as ROUTES from '../constants/routes';
+
 import "../css/index.css";
-import MapChart from "../components/MapChart";
-import SuggestThreads from "../components/SuggestThreads";
-// import SuggestDuration from "../components/SuggestDuration";
-// import SuggestMonth from "../components/SuggestMonth";
-// import SuggestTheme from "../components/Theme";
+import { Row, Col, Select, Button } from 'antd';
 
-import { Select, Button } from 'antd';
-
-const { Option } = Select;
+import axios from 'axios';
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
-// const a = () => {
-//     console.log('a')
-//     return 1
-// }
-
-// const b = () => ( 
-//    5
-// )
-
-// const b = () => {
-//     console.log("")
-//     return ( 
-//     5
-//  )
-// }
-
-// coordinate
-// [long , lati]
-
-const App = () => {
-    const [content, setContent] = useState("");
-    return (
-        <div>
-            <MapChart setTooltipContent={setContent} />
-            <ReactTooltip>{content}</ReactTooltip>
-        </div>
-
-    );
+const { Option } = Select;
+const Tooltip = () => {
+  const [content, setContent] = useState('');
+  return (
+    <div>
+      <MapChart setTooltipContent={setContent} />
+      <ReactTooltip>{content}</ReactTooltip>
+    </div>
+  );
 }
 
 class Index extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            threads: [],
-            threadPoperties: [],
-            value: 1,
-            radio: 1,
-            query: {},
-            inputMinValue: 0,
-            inputMaxValue: 20000,
-        };
-    }
-
-    scrolltoSuggest = () => {
-        var element = document.getElementById("suggest");
-        element.scrollIntoView();
-    }
-
-    goForumPage = () => {
-        window.location.href = this.state.link
-    }
-
-    onChangeCountry = (value) => {
-        console.log(`selected ${value}`);
-        this.setState({
-            link: "/forums?=" + value
-        })
-    }
-
-
-    onBlur() {
-        console.log('blur');
-    }
-
-    onFocus() {
-        console.log('focus');
-    }
-
-    onSearch(val) {
-        console.log('search:', val);
-    }
-
-    componentDidMount() {
-        axios
-            .get(`http://${backend_url}/api/home/mapCountries`)
-            .then(res => {
-                const threadPoperties = res.data.map(item => {
-                    return {
-                        ...item,
-                        // country: item.nameEnglish,
-                    };
-                });
-                this.setState(
-                    {
-                        threadPoperties: threadPoperties,
-                    },
-                    () => {
-                        console.log(this.state)
-                        console.log(this.state.threadPoperties);
-                        // console.log("con:" + this.state.threadPoperties[0].country);
-                    }
-                );
-            })
-            .catch(err => console.log(err));
-    }
-
-    CreateSelection = () => {
-        return this.state.threadPoperties.map(d => {
-            return (
-                <Option value={d.country}>{d.nameEnglish}</Option>
-            );
-        });
+  constructor(props) {
+    super(props);
+    this.state = {
+      countrySelected: null,
+      value: 1,
     };
+  }
 
+  countries = []
 
-    render() {
-        return (
-            <div>
-                <div id="index" className="index">
-                    <div className="country-search">
-                        <h2 style={{ margin: '5px' }}>Which Country would you like to visit?</h2>
-                        <h6 style={{ margin: '5px' }}>Type the name of Country or select on our map below. </h6>
-                        <Select
-                            showSearch
-                            style={{ marginLeft: 22, marginRight: 22, width: 200 }}
-                            placeholder="Search by Country"
-                            optionFilterProp="children"
-                            // value={this.state.query.months}
-                            onChange={this.onChangeCountry}
-                            onFocus={this.onFocus}
-                            onBlur={this.onBlur}
-                            onSearch={this.onSearch}
-                            filterOption={(input, option) =>
-                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }>
-                            {this.CreateSelection()}
-                        </Select>
-                        <Button onClick={this.goForumPage} style={{
-                            color: '#FFFFFF',
-                            background: 'linear-gradient(90deg, #FB3640 0%, #F97300 100%)',
-                            borderRadius: '5px'
-                        }} >Search</Button>
-                        <App />
-                        <div style={{ marginTop: "-250px" }}>
-                            <h2>Don’t know where to go yet? Let us help you!</h2>
-                            <h6>We’re selecting the best of threads based on your conditions.</h6>
-                        </div>
-                        <Button
-                            className="scrolldown-btn"
-                            style={{
-                                marginBottom: "50px",
-                                width: "50px",
-                                height: "50px"
-                            }}
-                            shape="circle"
-                            icon="down"
-                            onClick={this.scrolltoSuggest}>
-                        </Button>
-                    </div>
-                    <div id="suggest" style={{
+  componentDidMount() {
+    axios
+      .get(`http://${backend_url}/api/home/mapCountries`)
+      .then(res => {
+        res.data.map(country => {
+          this.countries.push(
+            <Option key={country.country} value={country.nameEnglish}>
+              {country.nameEnglish}
+            </Option>
+          )
+        })
+      })
+      .catch(err => console.log(err));
+  }
 
-                        backgroundColor: "#FFFFFF", margin: "3%"
-                    }}>
-                        <div style={{ backgroundColor: "#F8F5E4", margin: "1%", padding: "1%", borderRadius: "3px" }}>
-                            <SuggestThreads />
-                        </div>
-                    </div>
-                </div>
-            </div >)
-    }
+  onChangeCountry = (country) => {
+    this.setState({
+      countrySelected: country
+    })
+  }
 
+  scrolltoSuggest = () => {
+    document.getElementById('suggest').scrollIntoView();
+  }
+
+  onSearch = () => {
+    console.log(this.state.countrySelected)
+    this.props.history.push(`${ROUTES.FORUMS}?countries=${this.state.countrySelected}`)
+  }
+
+  render() {
+    return (
+      <div className='container'>
+        <Row className='country-search'>
+          <Col span={24}>
+            <p id='main-title'>Which Country would you like to visit?</p>
+            <p id='main-tip'>Type the name of Country or select on our map below.</p>
+          </Col>
+          <Col span={24} className='search-select'>
+            <Select
+              showSearch
+              size='large'
+              placeholder='Search by Country'
+              optionFilterProp="children"
+              onChange={this.onChangeCountry}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              {this.countries}
+            </Select>
+            <Button
+              id='searchBth'
+              size='large'
+              onClick={this.onSearch}
+            >
+              Search
+            </Button>
+          </Col>
+          <Col span={24} className='country-tooltip'>
+            <Tooltip />
+          </Col>
+          <Col span={24} className='navigate'>
+            <p id='second-title'>Don’t know where to go yet? Let us help you!</p>
+            <p id='second-tip'>Type the name of Country or select on our map below.</p>
+            <Button
+              className='scrolldown-btn'
+              shape="circle"
+              icon="down"
+              onClick={this.scrolltoSuggest}>
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} id='suggest'>
+            <SuggestThreads />
+          </Col>
+        </Row>
+      </div>
+    )
+  }
 }
-
-
 
 export default withRouter(Index);
