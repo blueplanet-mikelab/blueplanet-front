@@ -6,7 +6,7 @@ import { AuthContext } from '../auth/Auth';
 import axios from 'axios';
 import qs from 'qs';
 
-import { Tabs, Input, Icon, Button } from 'antd';
+import { Tabs, Input, Icon, Button, Menu, Dropdown } from 'antd';
 import "../css/userprofile.css";
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 
@@ -16,6 +16,7 @@ const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 const { TabPane } = Tabs
 const { Search } = Input;
+const { SubMenu } = Menu;
 
 const recentlylist = [
   {
@@ -234,10 +235,12 @@ class UserProfile extends Component {
       });
   }
 
-  onHeartFavoriteClick = (i) => {
+  onHeartFavoriteClick = (i, id) => {
+    const threadId = id;
+    console.log("id in trip: " + id)
     this.props.currentUser.getIdToken(true)
       .then((idToken) => {
-        axios.put(`http://${backend_url}/api/my-triplist/favorites/5e9a2c035bc2507a55908200`, {}, {
+        axios.put(`http://${backend_url}/api/my-triplist/favorites/${threadId}`, {}, {
           headers: {
             'Authorization': idToken
           }
@@ -348,7 +351,14 @@ class UserProfile extends Component {
                 alt="trip cover"
                 style={{ width: `175px`, height: `175px`, marginRight: '40px' }} />
               <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto 0' }}>
-                <h1>{this.state.triplist[selectedIndex].title} <Icon className="triplist-more" type="more" onClick={() => this.onMoreIcon()} /> </h1>
+                <h1>{this.state.triplist[selectedIndex].title}
+                  {/* <Icon className="triplist-more" type="more" onClick={() => this.onMoreIcon()} />  */}
+                  <Dropdown overlay={menu}>
+                    <a className="ant-dropdown-link" href="#">
+                      <Icon className="triplist-more" type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
+                    </a>
+                  </Dropdown>
+                </h1>
                 <span>{this.state.triplist[selectedIndex].numThreads} Threads</span>
                 <p></p>
                 <p>{this.state.triplist[selectedIndex].description}</p>
@@ -397,9 +407,14 @@ class UserProfile extends Component {
                         <h2 onClick={() => this.setState({ selectedTripList: i })} style={{ cursor: 'pointer' }}>{item.title}</h2>
                         <p>{item.numThreads} Threads</p>
                       </div>
-                      <Icon type="more"
+                      <Dropdown overlay={menu}>
+                        <a className="ant-dropdown-link" href="#">
+                          <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: '20px 0 0 80px', fontSize: '23px' }} />
+                        </a>
+                      </Dropdown>
+                      {/* <Icon type="more"
                         onClick={() => this.onMoreIcon()}
-                        style={{ margin: '20px 0 0 80px' }} />
+                        style={{ margin: '20px 0 0 80px' }} /> */}
                     </div>
                   </div>
                 )
@@ -409,6 +424,24 @@ class UserProfile extends Component {
         )
       }
     }
+
+    const menu = (
+      <Menu>
+        <Menu.Item>Edit details</Menu.Item>
+        <Menu.Item>Delete</Menu.Item>
+      </Menu>
+    );
+
+    const recentlyMenu = (
+      <Menu>
+        <SubMenu title="Add to My Triplist">
+          <Menu.Item>New Triplist</Menu.Item>
+          <Menu.Item>Japan Trip</Menu.Item>
+        </SubMenu>
+        <Menu.Item>Save to My Favorite</Menu.Item>
+        <Menu.Item>Delete</Menu.Item>
+      </Menu>
+    );
 
     return (
       <div style={{ background: '#f8f5e4' }}>
@@ -446,9 +479,11 @@ class UserProfile extends Component {
                           theme={this.state.heartRecentlyViews[i]}
                           onClick={() => this.onHeartRecentlyViewClick(i)}
                           style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
-                        <Icon type="more"
-                          onClick={() => this.onMoreIcon()}
-                          style={{ width: `5%`, margin: 'auto', fontSize: '23px', color: '#10828C' }} />
+                        <Dropdown overlay={recentlyMenu}>
+                          <a className="ant-dropdown-link" href="#">
+                            <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
+                          </a>
+                        </Dropdown>
                       </div>
                     )
                   })}

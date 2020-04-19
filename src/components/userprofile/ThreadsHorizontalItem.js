@@ -1,11 +1,25 @@
 import React from 'react'
-import { Icon } from 'antd'
+import { Icon, Dropdown, Menu } from 'antd'
+
+const { SubMenu } = Menu;
 
 const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, onHeartFavoriteClick }) => {
 
   const onMoreIconInItem = () => {
     alert("click more in item")
   }
+
+  const menu = (
+    <Menu>
+      <SubMenu title="Add to My Triplist">
+        <Menu.Item>New Triplist</Menu.Item>
+        <Menu.Item>Japan Trip</Menu.Item>
+      </SubMenu>
+      <Menu.Item>Save to My Favorite</Menu.Item>
+      <Menu.Item>Delete</Menu.Item>
+    </Menu>
+  );
+
 
   return (
     <div className="thread-hori">
@@ -26,11 +40,16 @@ const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, on
       </div>
       <Icon type="heart"
         theme={heartState}
-        onClick={() => onHeartFavoriteClick(i)}
+        onClick={() => onHeartFavoriteClick(i, item._id)}
         style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
-      <Icon type="more"
+      <Dropdown overlay={menu}>
+        <a className="ant-dropdown-link" href="#">
+          <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
+        </a>
+      </Dropdown>
+      {/* <Icon type="more"
         onClick={() => onMoreIconInItem()}
-        style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} />
+        style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} /> */}
     </div>
   )
 }
