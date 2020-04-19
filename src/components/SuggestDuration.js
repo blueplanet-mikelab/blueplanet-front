@@ -27,6 +27,7 @@ class SuggestDuration extends Component {
   }
 
   onChangeDuration = (e) => {
+    this.onWithin()
     console.log('radio checked', e.target.value);
     const query = this.state.query;
     query.duration_type = e.target.value;
@@ -49,23 +50,6 @@ class SuggestDuration extends Component {
   onSearch(val) {
     console.log('search:', val);
   }
-
-  // inCountry = (e) => {
-  //     const query = this.state.query;
-  //     query.within_th = 1;
-  //     console.log('in thai' + query.within_th);
-  //     this.setState({ query: query });
-  //     this.getInformation(query);
-
-  // }
-
-  // outCountry = (e) => {
-  //     const query = this.state.query;
-  //     query.within_th = 0;
-  //     console.log('out thai' + query.within_th);
-  //     this.setState({ query: query });
-  //     this.getInformation(query);
-  // };
 
   onWithin = () => {
     const query = this.state.query;
@@ -101,6 +85,7 @@ class SuggestDuration extends Component {
     this.setState({
       threadProperties: threadProperties,
     });
+    console.log("within duration" + this.props.within_th)
     // console.log("thread[0]-day" + this.state.threadProperties[0].duration_type);
   }
 
