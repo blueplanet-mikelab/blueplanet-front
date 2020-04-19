@@ -110,7 +110,7 @@ class SuggestThreads extends Component {
           <Col span={12} className='thread-info'>
             <Row className='thread-title'>
               <Col>
-                <a href={`https://pantip.com/topic/${thread.topic_id}`}>
+                <a href={`https://pantip.com/topic/${thread.topic_id}`} target="_blank">
                   {thread.title}
                 </a>
               </Col>

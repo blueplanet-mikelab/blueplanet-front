@@ -180,11 +180,6 @@ class SuggestDuration extends Component {
   render() {
     return (
       <div>
-        {/* <Row>
-
-                    <Button id="with" size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.inCountry} value={this.state.query.within_th}>Within Thailand</Button>
-                    <Button id="with" size="default" style={{ borderRadius: 0, paddingLeft: "50px", paddingRight: "50px", marginTop: "25px" }} onClick={this.outCountry} value={this.state.query.within_th}>International Countries</Button>
-                </Row> */}
         <div id="pop-suggest-thread">
           <Icon
             type="fire"
