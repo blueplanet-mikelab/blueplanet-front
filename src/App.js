@@ -29,7 +29,7 @@ const App = () => (
           <Navigation />
         </Header>
 
-        <Content style={{ padding: '0 50px', marginTop: 65 }}>
+        <Content style={{ padding: '0 50px', marginTop: 65, background: 'white' }}>
           <Route exact path={ROUTES.HOME} component={Index} />
           <Route path={ROUTES.FORUMS} component={Forums} />
           <PrivateRoute exact path={ROUTES.PROFILE} component={UserProfile} />
