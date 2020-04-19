@@ -1,11 +1,6 @@
-#background-login{
-    /* background: burlywood; */
-
-}
-
 #welcome-login{
     height: 42px;
-    margin-left: 470px;
+    margin-left: 370px;
     margin-top: 50px;
     
     font-family: Poppins;
@@ -26,7 +21,7 @@
     /* identical to box height */
     color: rgba(78, 78, 78, 0.5);
 
-    margin-left: 490px;
+    margin-left: 390px;
 }
 
 #link-login {
@@ -58,7 +53,7 @@
 .ant-input-password.ant-input-affix-wrapper {
     width: 398px;
     height: 48px;
-    left: 490px;
+    left: 390px;
 /* top: 317px; */
     border: 1px solid rgba(0, 0, 0, 0.15);
     box-sizing: border-box;
@@ -73,7 +68,7 @@
 }
 
 #sign-in.ant-btn {
-    left: 480px;
+    left: 380px;
     width: 67px;
     height: 27px;
     background: transparent !important;
@@ -92,7 +87,7 @@
 #sign-in.ant-btn.active {
     width: 67px;
     height: 27px;
-    left: 480px;
+    left: 380px;
     background: transparent !important;
     color: rgba(78, 78, 78, 0.5);
     /* width: 100%; */

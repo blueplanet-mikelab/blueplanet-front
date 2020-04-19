@@ -592,7 +592,7 @@ class UserProfile extends Component {
             {sorter}
             <p style={{ margin: '30px 0 0 0' }}><span style={{ color: '#10828C', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {triplist[selectedIndex].title}</p>
             <div style={{ display: 'flex', paddingBottom: '40px', margin: '20px 20px 0 0', borderBottom: '0.5px solid rgba(130, 142, 180, 0.5)' }}>
-              <img src={triplist[selectedIndex].thumbnail}
+              <img src={this.state.triplist[selectedIndex].thumbnail}
                 alt="trip image cover"
                 style={{ width: `175px`, height: `175px`, marginRight: '40px' }} />
               <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto 0' }}>

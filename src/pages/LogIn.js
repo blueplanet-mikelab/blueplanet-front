@@ -79,7 +79,7 @@ class LogInFormBase extends Component {
           onSubmit={this.onSubmit}
           name="normal_login"
           className="login-form">
-          <Form.Item name="email" id="email" style={{ left: "490px" }}>
+          <Form.Item name="email" id="email" style={{ left: "390px" }}>
             <Input
               id="input-email"
               prefix={<MailOutlined className="site-form-item-icon" />}
@@ -101,7 +101,7 @@ class LogInFormBase extends Component {
             />
           </Form.Item>
           <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle style={{ left: "470px" }}>
+            <Form.Item name="remember" valuePropName="checked" noStyle style={{ left: "370px" }}>
               <div id="remember-forget">
                 <Checkbox
                   id="remember">

@@ -91,7 +91,7 @@ class RegisterFormBase extends Component {
     return (
       <div id="background-regis" style={{ width: "302px" }}>
         <Form onSubmit={this.onSubmit}>
-          <Form.Item name="displayName" id="displayName" style={{ left: "490px" }}>
+          <Form.Item name="displayName" id="displayName" style={{ left: "390px" }}>
             <Input
               id="input-displayname"
               prefix={<UserOutlined className="site-form-item-icon" />}
@@ -101,7 +101,7 @@ class RegisterFormBase extends Component {
               type="text"
               placeholder="Full Name" />
           </Form.Item>
-          <Form.Item name="email" id="email" style={{ left: "490px" }}>
+          <Form.Item name="email" id="email" style={{ left: "390px" }}>
             <Input
               id="input-email"
               prefix={<MailOutlined className="site-form-item-icon" />}
