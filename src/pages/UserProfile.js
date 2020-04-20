@@ -6,7 +6,7 @@ import { AuthContext } from '../auth/Auth';
 import axios from 'axios';
 import qs from 'qs';
 
-import { Tabs, Input, Icon, Button, Menu, Dropdown } from 'antd';
+import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal } from 'antd';
 import "../css/userprofile.css";
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 
@@ -17,6 +17,23 @@ const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 const { TabPane } = Tabs
 const { Search } = Input;
 const { SubMenu } = Menu;
+var menu = (
+  <Menu>
+    <Menu.Item key="1">Edit details</Menu.Item>
+    <Menu.Item key="2">Delete</Menu.Item>
+  </Menu>
+);
+
+var favMenu = (
+  <Menu>
+    <SubMenu title="Add to My Triplist">
+      <Menu.Item>New Triplist</Menu.Item>
+    </SubMenu>
+    <Menu.Item>Save to My Favorite</Menu.Item>
+    <Menu.Item>Delete</Menu.Item>
+  </Menu>
+);
+
 
 const recentlylist = [
   {
@@ -83,12 +100,15 @@ class UserProfile extends Component {
       triplist: [],
       favoritelist: [],
       favThreadslist: [],
+      menu: menu,
+      favMenu: favMenu,
       // heartFavorites: favoritelist.map(() => "outlined"),
       heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
       subtabSortType: 1,
       // favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
-      selectedTripList: null
+      selectedTripList: null,
+      selectedTripListId: null
     }
   }
 
@@ -147,7 +167,7 @@ class UserProfile extends Component {
               hasThreads = "false";
             }
           }
-          if (this.state.triplist === "" || this.state.triplist == null || hasThreads === "false") {
+          if (this.state.triplist === "" || this.state.triplist == null || this.state.triplist.length === 0 || hasThreads === "false") {
             console.log("null")
           }
           else {
@@ -221,10 +241,11 @@ class UserProfile extends Component {
       });
   }
 
-  testDeleteFav = () => {
+  deleteFavorite = (id) => {
+    const favId = id
     this.props.currentUser.getIdToken(true)
       .then((idToken) => {
-        axios.delete(`http://${backend_url}/api/my-triplist/favorites/5e9a2c035bc2507a55908200`, {
+        axios.delete(`http://${backend_url}/api/my-triplist/favorites/${favId}`, {
           headers: {
             'Authorization': idToken
           }
@@ -233,6 +254,23 @@ class UserProfile extends Component {
       }).catch(function (error) {
         console.log(error)
       });
+    message.success('Your Favorite has been deleted.');
+  }
+
+  deleteTriplist = (id) => {
+    const tripId = id
+    this.props.currentUser.getIdToken(true)
+      .then((idToken) => {
+        axios.delete(`http://${backend_url}/api/my-triplist/triplists/${tripId}`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        console.log("delete")
+      }).catch(function (error) {
+        console.log(error)
+      });
+    message.success('Your Triplist has been deleted.');
   }
 
   onHeartFavoriteClick = (i, id) => {
@@ -285,6 +323,49 @@ class UserProfile extends Component {
     })
   }
 
+  handleTriplistSelectionDropdown = (index) => {
+    this.setState({
+      selectedTripListId: index
+    })
+  }
+
+  handleTripDropDown = (id) => {
+    const tripId = id;
+    var menuToDelete = (
+      <Menu>
+        <Menu.Item key="1">Edit details</Menu.Item>
+        <Menu.Item key="2"><Button onClick={() => this.deleteTriplist(tripId)}>Delete</Button></Menu.Item>
+      </Menu>
+    );
+    this.setState({
+      menu: menuToDelete
+    })
+    console.log(this.state.menu)
+    console.log('click drop', id);
+  }
+
+  handleFavDropDown = (id) => {
+    const favId = id;
+
+
+    var menuToDeleteFav = (
+      <Menu>
+        <SubMenu title="Add to My Triplist">
+          <Menu.Item>New Triplist</Menu.Item>
+        </SubMenu>
+        <Menu.Item>Save to My Favorite</Menu.Item>
+        <Menu.Item><Button onClick={() => this.deleteFavorite(favId)}>Delete</Button></Menu.Item>
+      </Menu>
+
+    );
+    this.setState({
+      favMenu: menuToDeleteFav
+    })
+    console.log(this.state.menu)
+    console.log('click drop', id);
+  }
+
+
   onMoreIcon = () => {
     alert("click more")
   }
@@ -332,6 +413,8 @@ class UserProfile extends Component {
               imgHandleSize={this.imgHandleSize}
               heartState={this.state.heartFavorites[i]}
               onHeartFavoriteClick={this.onHeartFavoriteClick}
+              handleFavDropDown={this.handleFavDropDown}
+              favMenu={this.state.favMenu}
             />
           )
         })}
@@ -339,13 +422,13 @@ class UserProfile extends Component {
     )
 
     const tripListTap = () => {
-
       const selectedIndex = this.state.selectedTripList
       if (selectedIndex != null) {
         return (
           <>
             {sorter}
-            <p style={{ margin: '30px 0 0 0' }}><span style={{ color: '#10828C', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {this.state.triplist[selectedIndex].title}</p>
+            <p style={{ margin: '30px 0 0 0' }}><span style={{ color: '#10828C', cursor: 'pointer', fontWeight: 'bold' }}
+              onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {this.state.triplist[selectedIndex].title}</p>
             <div style={{ display: 'flex', paddingBottom: '40px', margin: '20px 20px 0 0', borderBottom: '0.5px solid rgba(130, 142, 180, 0.5)' }}>
               <img src={this.state.triplist[selectedIndex].thumbnail}
                 alt="trip cover"
@@ -355,7 +438,7 @@ class UserProfile extends Component {
                   {/* <Icon className="triplist-more" type="more" onClick={() => this.onMoreIcon()} />  */}
                   <Dropdown overlay={menu}>
                     <a className="ant-dropdown-link" href="#">
-                      <Icon className="triplist-more" type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
+                      <Icon className="triplist-more" type="more" />
                     </a>
                   </Dropdown>
                 </h1>
@@ -407,9 +490,14 @@ class UserProfile extends Component {
                         <h2 onClick={() => this.setState({ selectedTripList: i })} style={{ cursor: 'pointer' }}>{item.title}</h2>
                         <p>{item.numThreads} Threads</p>
                       </div>
-                      <Dropdown overlay={menu}>
+                      <Dropdown key={i} overlay={this.state.menu} trigger={['click']}>
                         <a className="ant-dropdown-link" href="#">
-                          <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: '20px 0 0 80px', fontSize: '23px' }} />
+                          <Icon
+                            type="more"
+                            style={{ color: "#10828C", padding: '20px 0 0 80px', fontSize: '23px', width: '5%' }}
+                            onClick={() => this.handleTripDropDown(item._id)}
+                          />
+
                         </a>
                       </Dropdown>
                       {/* <Icon type="more"
@@ -425,12 +513,12 @@ class UserProfile extends Component {
       }
     }
 
-    const menu = (
-      <Menu>
-        <Menu.Item>Edit details</Menu.Item>
-        <Menu.Item>Delete</Menu.Item>
-      </Menu>
-    );
+    // const menu = (
+    //   <Menu>
+    //     <Menu.Item key="1">Edit details</Menu.Item>
+    //     <Menu.Item key="2">Delete</Menu.Item>
+    //   </Menu>
+    // );
 
     const recentlyMenu = (
       <Menu>
@@ -456,16 +544,16 @@ class UserProfile extends Component {
           <h1 style={{ color: 'white' }}>{this.props.currentUser.displayName} <Icon type="edit" /></h1>
           <h4 style={{ color: 'white', marginBottom: '20px' }}>{this.props.currentUser.email} <Icon type="edit" /></h4>
           <div id="userprofile-tabs" style={{ background: 'white', padding: '15px 30px' }}>
+            <Button
+              onClick={() => this.createTriplist()}>
+              Test create trip
+                </Button>
             <Tabs defaultActiveKey="1" tabBarStyle={{ color: 'black' }}>
               <TabPane tab="My Triplist" key="1">
                 {tripListTap()}
               </TabPane>
               <TabPane tab="My Favorite" key="2">
                 {sorter}
-                <Button
-                  onClick={this.testFav()}>
-                  Test Fav
-                </Button>
                 {threadHorizontal(this.state.favThreadslist)}
               </TabPane>
               <TabPane tab="Recently Viewed" key="3">

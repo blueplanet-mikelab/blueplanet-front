@@ -61,6 +61,8 @@ height: auto; */
 }
 
 .triplist-more svg {
-    margin-top: -12px;
+    padding-top: 12px;
     margin-left: 25px;
+    font-size: 33px;
+    font-weight: bold;
 }

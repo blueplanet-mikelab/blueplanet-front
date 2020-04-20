@@ -3,23 +3,21 @@ import { Icon, Dropdown, Menu } from 'antd'
 
 const { SubMenu } = Menu;
 
-const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, onHeartFavoriteClick }) => {
+const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, onHeartFavoriteClick, handleFavDropDown, favMenu }) => {
 
   const onMoreIconInItem = () => {
     alert("click more in item")
   }
 
-  const menu = (
+  var menu = (
     <Menu>
       <SubMenu title="Add to My Triplist">
         <Menu.Item>New Triplist</Menu.Item>
-        <Menu.Item>Japan Trip</Menu.Item>
       </SubMenu>
       <Menu.Item>Save to My Favorite</Menu.Item>
       <Menu.Item>Delete</Menu.Item>
     </Menu>
   );
-
 
   return (
     <div className="thread-hori">
@@ -42,9 +40,12 @@ const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, on
         theme={heartState}
         onClick={() => onHeartFavoriteClick(i, item._id)}
         style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
-      <Dropdown overlay={menu}>
+      <Dropdown overlay={favMenu} trigger={['click']}>
         <a className="ant-dropdown-link" href="#">
-          <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
+          <Icon
+            type="more"
+            style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }}
+            onClick={() => handleFavDropDown(item._id)} />
         </a>
       </Dropdown>
       {/* <Icon type="more"
