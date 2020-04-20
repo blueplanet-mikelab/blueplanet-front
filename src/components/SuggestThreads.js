@@ -152,7 +152,7 @@ class SuggestThreads extends Component {
   render() {
     return (
       <div className='container'>
-        <Row id='suggest' className='bound-btn'>
+        <Row className='bound-btn'>
           <Button
             size='large'
             onClick={() => { this.onBoundClinked('1', 1) }}

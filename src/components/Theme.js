@@ -120,7 +120,7 @@ const Theme = () => {
         </Link>
         </Col>
         <Col span={24} className='carousel-box'>
-          <Carousel className='theme'>
+          <Carousel autoplay className='theme'>
             {getCarousel()}
           </Carousel>
         </Col>

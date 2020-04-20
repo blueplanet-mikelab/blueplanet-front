@@ -9,10 +9,20 @@
   padding: 0 10px !important;
   line-height: 64px;
   background: linear-gradient(90deg, #0E3047 0%, #10828C 100%) !important;
+  position: fixed;
+  z-index: 1;
+  width: 100%
+}
+
+.ant-layout-content {
+  font-family: 'Poppins', sans-serif;
+  padding: 65px 50px;
+  background: white;
 }
 
 .ant-layout-footer {
   font-family: 'Poppins', sans-serif;
+  text-align: center;
 }
 
 .container {

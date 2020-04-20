@@ -1,6 +1,7 @@
 .ant-row #suggest {
   background: #F8F5E4;
   border-radius: 5px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
 }
 
 .bound-btn {
@@ -20,7 +21,6 @@
 }
 
 .suggest-title p, .suggest-title i, .see-more a {
-  font-family: Poppins;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -44,6 +44,7 @@ div.ant-col.ant-col-12.see-more {
   margin-top: 25px;
   background: white;
   border-radius: 5px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
 }
 
 .thread-card {
