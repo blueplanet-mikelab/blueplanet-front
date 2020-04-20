@@ -41,7 +41,6 @@ class SuggestThreads extends Component {
   onBoundClinked = (type, thread) => {
     const query = this.state.query;
     query.within_th = type;
-    console.log(this.state.query.within_th)
     this.setState({
       query: query,
       withThread: thread
@@ -76,6 +75,15 @@ class SuggestThreads extends Component {
 
     this.setState({
       threadProperties: threadProperties,
+    })
+  }
+
+  getCarousel = () => {
+    const carouselIndex = [0, 3, 6, 9]
+    return carouselIndex.map(index => {
+      return (
+        <div>{this.createSuggestion(index)}</div>
+      )
     })
   }
 
@@ -136,15 +144,6 @@ class SuggestThreads extends Component {
     })
   }
 
-  getCarousel = () => {
-    const carouselIndex = [0, 3, 6, 9]
-    return carouselIndex.map(index => {
-      return (
-        <div>{this.createSuggestion(index)}</div>
-      )
-    })
-  }
-
   render() {
     return (
       <div className='container'>
@@ -179,7 +178,7 @@ class SuggestThreads extends Component {
           <Col span={12} className='see-more'>
             <Link to={ROUTES.FORUMS + '?type=suggest'}>See more</Link>
           </Col>
-          <Col span={24}>
+          <Col span={24} className='carousel-box'>
             <Carousel autoplay>
               {this.getCarousel()}
             </Carousel>

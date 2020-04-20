@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
+import * as ROUTES from '../constants/routes';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { Radio, Carousel, Row, Col, Tag, Menu, Icon, Dropdown } from 'antd';
@@ -14,62 +15,45 @@ class SuggestDuration extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      threads: [],
-      threadSuggest: [],
       threadProperties: [],
-      list: [],
-      value: 1,
-      radio: 1,
-      fullData: [],
-      query: {},
-      checkRoute: 1,
+      query: {}
     };
-  }
-
-  onChangeDuration = (e) => {
-    this.onWithin()
-    console.log('radio checked', e.target.value);
-    const query = this.state.query;
-    query.duration_type = e.target.value;
-    this.setState({ query: query });
-    this.getInformation(query);
-    this.setState({
-      radio: e.target.value,
-      checkRoute: 1,
-    });
-  }
-
-  onBlur() {
-    console.log('blur');
-  }
-
-  onFocus() {
-    console.log('focus');
-  }
-
-  onSearch(val) {
-    console.log('search:', val);
   }
 
   onWithin = () => {
     const query = this.state.query;
     query.within_th = this.props.within;
     console.log("checkwithin:" + query.within_th)
-    this.setState({ query: query });
-    this.getInformation(query);
+
+    this.setState({
+      query: query
+    });
+    this.getThreads(query);
   }
 
-  async getInformation(query) {
+  onChangeDuration = (e) => {
+    this.onWithin()
+    const query = this.state.query;
+    query.duration_type = e.target.value;
+
+    this.setState({
+      query: query
+    })
+    this.getThreads(query);
+  }
+
+  getThreads = async (query) => {
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
     this.props.history.push(`/${q}`);
+
     try {
       response = await axios.get(`http://${backend_url}/api/home/durationQuery${q}`)
     } catch (error) {
       console.log(error);
     }
+
     if (response) {
-      // Map data after get response
       this.mapData(response);
     }
   }
@@ -86,7 +70,6 @@ class SuggestDuration extends Component {
       threadProperties: threadProperties,
     });
     console.log("within duration" + this.props.within_th)
-    // console.log("thread[0]-day" + this.state.threadProperties[0].duration_type);
   }
 
   getQueryParams() {
@@ -95,19 +78,30 @@ class SuggestDuration extends Component {
 
   componentDidMount() {
     this.onWithin()
-    const q = this.getQueryParams();
+    const query = this.getQueryParams();
+    query.duration_type = '1';
+
     this.setState({
-      query: q
+      query: query
     })
-    this.getInformation(q);
+    this.getThreads(query)
   }
 
-  CreateSuggest(startIndex) {
+  getCarousel = () => {
+    const carouselIndex = [0, 3, 6, 9]
+    return carouselIndex.map(index => {
+      return (
+        <div>{this.createSuggestion(index)}</div>
+      )
+    })
+  }
+
+  createSuggestion = (startIndex) => {
     if (this.state.threadProperties < 1) {
       return 'Loading'
     }
 
-    const list = [
+    const threadList = [
       this.state.threadProperties[startIndex],
       this.state.threadProperties[startIndex + 1],
       this.state.threadProperties[startIndex + 2]
@@ -115,92 +109,84 @@ class SuggestDuration extends Component {
 
     const menu = (
       <Menu>
-        <SubMenu title="Add to My Triplist">
+        <SubMenu title='Add to My Triplist'>
           <Menu.Item>New Triplist</Menu.Item>
-          <Menu.Item>Japan Trip</Menu.Item>
+          {/* <Menu.Item>Japan Trip</Menu.Item> */}
         </SubMenu>
         <Menu.Item>Save to My Favorite</Menu.Item>
         <Menu.Item>Share</Menu.Item>
       </Menu>
-    );
+    )
 
-    return list.map(d => {
+    return threadList.map(thread => {
       return (
-        <Col>
-          <Col span={3}>
-            <img
-              style={{ width: 100, height: 100, marginLeft: "15px" }}
-              alt="example"
-              src={d.thumbnail}
-            />
+        <Col span={8} className='thread-card'>
+          <Col span={12}>
+            <img src={thread.thumbnail} />
           </Col>
-
-          <Col span={5} style={{ lineHeight: 'normal', marginTop: '20px' }}>
-            <Row>
-              <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
-                {d.title}
-              </a>
-            </Row>
-            <Row style={{ marginTop: "3%" }}>
-              <Tag color="rgba(130, 142, 180, 0.5)">{d.con}</Tag>
-
-              <Icon type="heart"
-                theme={this.state.heartFavorites}
-                onClick={this.onHeartFavoriteClick}
-                style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: '#10828C' }} />
-              {/* <Icon type="more" style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} /> */}
-              <Dropdown overlay={menu}>
-                <a className="ant-dropdown-link" href="#" style={{ marginLeft: "5%" }}>
-                  <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
+          <Col span={12} className='thread-info'>
+            <Row className='thread-title'>
+              <Col>
+                <a href={`https://pantip.com/topic/${thread.topic_id}`} target="_blank">
+                  {thread.title}
                 </a>
-              </Dropdown>
-
+              </Col>
+            </Row>
+            <Row className='thread-option'>
+              <Col span={12} id='tag'>
+                <Tag>{thread.countries[0].nameEnglish}</Tag>
+              </Col>
+              <Col span={12} id='icon'>
+                <Icon
+                  type='heart'
+                  theme={this.state.heartFavorites}
+                  onClick={this.onHeartFavoriteClick}
+                />
+                <Dropdown overlay={menu}>
+                  <Icon type='more' />
+                </Dropdown>
+              </Col>
             </Row>
           </Col>
         </Col>
-      );
-    });
-  };
+      )
+    })
+  }
 
   render() {
     return (
-      <div>
-        <div id="pop-suggest-thread">
-          <Icon
-            type="fire"
-            theme="filled"
-            style={{ marginRight: "19px" }}
-          />Popular threads based on your Duration</div>
-        <div style={{ backgroundColor: "#fff", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
-          <Radio.Group name="radiogroup" style={{ padding: "10px" }} onChange={this.onChangeDuration} value={this.state.query.duration_type ? this.state.query.duration_type : 1}>
-            <Radio value={"1"}>1 - 3 Days</Radio>
-            <Radio value={"2"}>4 - 6 Days</Radio>
-            <Radio value={"3"}>7 - 9 Days</Radio>
-            <Radio value={"4"}>10 - 12 Days</Radio>
-            <Radio value={"5"}>More than 12 Days</Radio>
-          </Radio.Group>
-        </div>
-
-        <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
-
-          <div>
-            {this.CreateSuggest(0)}
-          </div>
-          <div>
-            {this.CreateSuggest(3)}
-          </div>
-          <div>
-            {this.CreateSuggest(6)}
-          </div>
-          <div>
-            {this.CreateSuggest(9)}
-          </div>
-
-        </Carousel>
-
-        {/* <SuggestMonth within={this.state.query.within_th} /> */}
+      <div className='container'>
+        <Row className='suggestion-threads'>
+          <Col span={12} className='suggest-title'>
+            <Icon
+              type='fire'
+              theme='filled'
+            />
+            <p>&nbsp;&nbsp; Popular threads based on your <span>Duration</span></p>
+          </Col>
+          <Col span={12} className='see-more'>
+            <Link to={ROUTES.FORUMS + '?duration_type=' + this.state.query.duration_type}>See more</Link>
+          </Col>
+          <Col span={24} className='carousel-box'>
+            <Radio.Group
+              name='radiogroup'
+              onChange={this.onChangeDuration}
+              value={this.state.query.duration_type ? this.state.query.duration_type : 1}
+              className='radio-style'
+              size='large'
+            >
+              <Radio value={'1'} id='first'>1 - 3 Days</Radio>
+              <Radio value={'2'}>4 - 6 Days</Radio>
+              <Radio value={'3'}>7 - 9 Days</Radio>
+              <Radio value={'4'}>10 - 12 Days</Radio>
+              <Radio value={'5'} id='last'>More than 12 Days</Radio>
+            </Radio.Group>
+            <Carousel autoplay>
+              {this.getCarousel()}
+            </Carousel>
+          </Col>
+        </Row>
       </div>
-
     )
   }
 }
