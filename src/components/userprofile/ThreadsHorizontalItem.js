@@ -1,23 +1,7 @@
 import React from 'react'
-import { Icon, Dropdown, Menu } from 'antd'
-
-const { SubMenu } = Menu;
+import { Icon, Dropdown } from 'antd'
 
 const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, onHeartFavoriteClick, handleFavDropDown, favMenu }) => {
-
-  const onMoreIconInItem = () => {
-    alert("click more in item")
-  }
-
-  var menu = (
-    <Menu>
-      <SubMenu title="Add to My Triplist">
-        <Menu.Item>New Triplist</Menu.Item>
-      </SubMenu>
-      <Menu.Item>Save to My Favorite</Menu.Item>
-      <Menu.Item>Delete</Menu.Item>
-    </Menu>
-  );
 
   return (
     <div className="thread-hori">
@@ -45,12 +29,9 @@ const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, on
           <Icon
             type="more"
             style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }}
-            onClick={() => handleFavDropDown(item._id)} />
+            onClick={() => handleFavDropDown(item._id, item.thumbnail)} />
         </a>
       </Dropdown>
-      {/* <Icon type="more"
-        onClick={() => onMoreIconInItem()}
-        style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} /> */}
     </div>
   )
 }

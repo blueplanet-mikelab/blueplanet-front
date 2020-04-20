@@ -26,7 +26,7 @@ var menu = (
   </Menu>
 );
 
-var threadIntripenu = (
+var threadIntripMenu = (
   <Menu>
     <SubMenu title="Add to My Triplist">
       <Menu.Item>New Triplist</Menu.Item>
@@ -115,6 +115,7 @@ class UserProfile extends Component {
       favThreadslist: [],
       menu: menu,
       favMenu: favMenu,
+      threadIntripMenu: threadIntripMenu,
       // heartFavorites: favoritelist.map(() => "outlined"),
       heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
@@ -349,6 +350,23 @@ class UserProfile extends Component {
     message.success('Your Triplist has been deleted.');
   }
 
+  deleteThreadInTrip = (tripId, id) => {
+    const TripId = tripId
+    const threadId = id
+    this.props.currentUser.getIdToken(true)
+      .then((idToken) => {
+        axios.delete(`http://${backend_url}/api/my-triplist/triplists/${TripId}/remove/${threadId}`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        console.log("delete")
+      }).catch(function (error) {
+        console.log(error)
+      });
+    message.success('Your thread has been deleted.');
+  }
+
   onHeartFavoriteClick = (i, id) => {
     const threadId = id;
     console.log("id in trip: " + id)
@@ -415,6 +433,31 @@ class UserProfile extends Component {
     );
     this.setState({
       menu: menuToDelete
+    })
+    console.log(this.state.menu)
+    console.log('click drop', id);
+  }
+
+  handleThreadInTripDropDown = (id, thumbnail) => {
+    const threadId = id;
+    var allTrip = this.state.triplist.map(thread => {
+      return (
+        <Menu.Item><Button onClick={() => this.addThreadFromfavoriteToTrip(thread._id, threadId)}>{thread.title}</Button></Menu.Item>
+      )
+    })
+    var menuThreadInTrip = (
+      <Menu>
+        <SubMenu title="Add to My Triplist">
+          <Menu.Item><Button onClick={() => this.showModal(threadId, thumbnail)}>New Triplist</Button></Menu.Item>
+          {allTrip}
+        </SubMenu>
+        <Menu.Item>Save to My Favorite</Menu.Item>
+        <Menu.Item><Button onClick={() => this.deleteThreadInTrip(this.state.triplist[this.state.selectedTripList]._id, threadId)}>Delete</Button></Menu.Item>
+      </Menu>
+
+    );
+    this.setState({
+      threadIntripMenu: menuThreadInTrip
     })
     console.log(this.state.menu)
     console.log('click drop', id);
@@ -493,8 +536,8 @@ class UserProfile extends Component {
               imgHandleSize={this.imgHandleSize}
               heartState={this.state.heartFavorites[i]}
               onHeartFavoriteClick={this.onHeartFavoriteClick}
-              handleFavDropDown={this.handleFavDropDown}
-              favMenu={this.state.favMenu}
+              handleThreadInTripDropDown={this.handleThreadInTripDropDown}
+              threadIntripMenu={this.state.threadIntripMenu}
             />
           )
         })}
@@ -545,7 +588,7 @@ class UserProfile extends Component {
                 <p>{this.state.triplist[selectedIndex].description}</p>
               </div>
             </div>
-            {threadHorizontal(this.state.triplist[selectedIndex].threads)}
+            {threadHorizontalInTriplist(this.state.triplist[selectedIndex].threads)}
           </>
         )
       } else {
