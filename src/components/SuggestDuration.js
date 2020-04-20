@@ -4,9 +4,9 @@ import axios from 'axios';
 import qs from 'qs';
 import * as ROUTES from '../constants/routes';
 
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Radio, Carousel, Row, Col, Tag, Menu, Icon, Dropdown } from 'antd';
+import 'antd/dist/antd.css';
 import "../css/suggest.css";
+import { Radio, Carousel, Row, Col, Tag, Menu, Icon, Dropdown } from 'antd';
 
 const { SubMenu } = Menu;
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
@@ -91,7 +91,7 @@ class SuggestDuration extends Component {
     const carouselIndex = [0, 3, 6, 9]
     return carouselIndex.map(index => {
       return (
-        <div>{this.createSuggestion(index)}</div>
+        <div key={index}>{this.createSuggestion(index)}</div>
       )
     })
   }
@@ -120,14 +120,18 @@ class SuggestDuration extends Component {
 
     return threadList.map(thread => {
       return (
-        <Col span={8} className='thread-card'>
+        <Col span={8} className='thread-card' key={thread.topic_id}>
           <Col span={12}>
-            <img src={thread.thumbnail} />
+            <img src={thread.thumbnail} alt='Thumbnail' />
           </Col>
           <Col span={12} className='thread-info'>
             <Row className='thread-title'>
               <Col>
-                <a href={`https://pantip.com/topic/${thread.topic_id}`} target="_blank">
+                <a
+                  href={`https://pantip.com/topic/${thread.topic_id}`}
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
                   {thread.title}
                 </a>
               </Col>

@@ -82,7 +82,7 @@ class SuggestThreads extends Component {
     const carouselIndex = [0, 3, 6, 9]
     return carouselIndex.map(index => {
       return (
-        <div>{this.createSuggestion(index)}</div>
+        <div key={index}>{this.createSuggestion(index)}</div>
       )
     })
   }
@@ -111,14 +111,18 @@ class SuggestThreads extends Component {
 
     return threadList.map(thread => {
       return (
-        <Col span={8} className='thread-card'>
+        <Col span={8} className='thread-card' key={thread.topic_id}>
           <Col span={12}>
-            <img src={thread.thumbnail} />
+            <img src={thread.thumbnail} alt='Thumbnail' />
           </Col>
           <Col span={12} className='thread-info'>
             <Row className='thread-title'>
               <Col>
-                <a href={`https://pantip.com/topic/${thread.topic_id}`} target="_blank">
+                <a 
+                  href={`https://pantip.com/topic/${thread.topic_id}`}
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
                   {thread.title}
                 </a>
               </Col>
