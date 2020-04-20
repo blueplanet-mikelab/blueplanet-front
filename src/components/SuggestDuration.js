@@ -16,23 +16,12 @@ class SuggestDuration extends Component {
     super(props);
     this.state = {
       threadProperties: [],
-      query: {}
+      query: {},
+      q: ''
     };
   }
 
-  onWithin = () => {
-    const query = this.state.query;
-    query.within_th = this.props.within;
-    console.log("checkwithin:" + query.within_th)
-
-    this.setState({
-      query: query
-    });
-    this.getThreads(query);
-  }
-
   onChangeDuration = (e) => {
-    this.onWithin()
     const query = this.state.query;
     query.duration_type = e.target.value;
 
@@ -45,16 +34,21 @@ class SuggestDuration extends Component {
   getThreads = async (query) => {
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
-    this.props.history.push(`/${q}`);
+    if (q !== this.state.q) {
+      this.setState({
+        q: q
+      })
+      this.props.history.push(`/${q}`);
 
-    try {
-      response = await axios.get(`http://${backend_url}/api/home/durationQuery${q}`)
-    } catch (error) {
-      console.log(error);
-    }
+      try {
+        response = await axios.get(`http://${backend_url}/api/home/durationQuery${q}`)
+      } catch (error) {
+        console.log(error);
+      }
 
-    if (response) {
-      this.mapData(response);
+      if (response) {
+        this.mapData(response);
+      }
     }
   }
 
@@ -69,7 +63,6 @@ class SuggestDuration extends Component {
     this.setState({
       threadProperties: threadProperties,
     });
-    console.log("within duration" + this.props.within_th)
   }
 
   getQueryParams() {
@@ -77,7 +70,6 @@ class SuggestDuration extends Component {
   }
 
   componentDidMount() {
-    this.onWithin()
     const query = this.getQueryParams();
     query.duration_type = '1';
 
@@ -85,6 +77,15 @@ class SuggestDuration extends Component {
       query: query
     })
     this.getThreads(query)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const query = this.state.query;
+    query.within_th = nextProps.within
+    this.setState({
+      query: query
+    });
+    this.getThreads(query);
   }
 
   getCarousel = () => {
@@ -169,7 +170,9 @@ class SuggestDuration extends Component {
             <p>&nbsp;&nbsp; Popular threads based on your <span>Duration</span></p>
           </Col>
           <Col span={12} className='see-more'>
-            <Link to={ROUTES.FORUMS + '?duration_type=' + this.state.query.duration_type}>See more</Link>
+            <Link to={ROUTES.FORUMS + '?duration_type=' + this.state.query.duration_type}>
+              See more
+            </Link>
           </Col>
           <Col span={24} className='carousel-box'>
             <Radio.Group

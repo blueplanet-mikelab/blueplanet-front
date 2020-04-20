@@ -31,6 +31,7 @@ class SuggestThreads extends Component {
 
   componentDidMount() {
     const query = this.getQueryParams(this.props.location.search);
+    query.within_th = 0;
     this.setState({
       query: query
     })
@@ -111,14 +112,14 @@ class SuggestThreads extends Component {
 
     return threadList.map(thread => {
       return (
-        <Col span={8} className='thread-card' key={thread.topic_id}>
+        <Col span={8} className='thread-card' key={thread.title}>
           <Col span={12}>
             <img src={thread.thumbnail} alt='Thumbnail' />
           </Col>
           <Col span={12} className='thread-info'>
             <Row className='thread-title'>
               <Col>
-                <a 
+                <a
                   href={`https://pantip.com/topic/${thread.topic_id}`}
                   rel='noopener noreferrer'
                   target='_blank'
@@ -180,7 +181,9 @@ class SuggestThreads extends Component {
             <p>&nbsp;&nbsp; Popular <span>Suggestion Threads</span></p>
           </Col>
           <Col span={12} className='see-more'>
-            <Link to={ROUTES.FORUMS + '?type=suggest'}>See more</Link>
+            <Link to={ROUTES.FORUMS + '?type=suggest'}>
+              See more
+            </Link>
           </Col>
           <Col span={24} className='carousel-box'>
             <Carousel autoplay>

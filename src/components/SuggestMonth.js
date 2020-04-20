@@ -19,21 +19,13 @@ class SuggestMonth extends Component {
     this.state = {
       threadProperties: [],
       query: {},
+      q: ''
     };
   }
 
   onChangeMonth = (value) => {
-    this.onWithin()
     const query = this.state.query;
     query.month = value;
-    this.setState({ query: query });
-    this.getThreads(query);
-  }
-
-  onWithin = () => {
-    const query = this.state.query;
-    query.within_th = this.props.within;
-    console.log("checkwithin:" + query.within_th)
     this.setState({ query: query });
     this.getThreads(query);
   }
@@ -41,16 +33,21 @@ class SuggestMonth extends Component {
   getThreads = async (query) => {
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
-    this.props.history.push(`/${q}`);
+    if (q !== this.state.q) {
+      this.setState({
+        q: q
+      })
+      this.props.history.push(`/${q}`);
 
-    try {
-      response = await axios.get(`http://${backend_url}/api/home/monthQuery${q}`)
-    } catch (error) {
-      console.log(error);
-    }
+      try {
+        response = await axios.get(`http://${backend_url}/api/home/monthQuery${q}`)
+      } catch (error) {
+        console.log(error);
+      }
 
-    if (response) {
-      this.mapData(response);
+      if (response) {
+        this.mapData(response);
+      }
     }
   }
 
@@ -72,13 +69,21 @@ class SuggestMonth extends Component {
   }
 
   componentDidMount() {
-    this.onWithin()
     const query = this.getQueryParams(this.props.location.search);
     query.month = 'January'
 
     this.setState({
       query: query
     })
+    this.getThreads(query);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const query = this.state.query;
+    query.within_th = nextProps.within
+    this.setState({
+      query: query
+    });
     this.getThreads(query);
   }
 
@@ -171,7 +176,9 @@ class SuggestMonth extends Component {
             <p>&nbsp;&nbsp; Popular threads based on your <span>Month</span></p>
           </Col>
           <Col span={12} className='see-more'>
-            <Link to={ROUTES.FORUMS + '?months=' + this.state.query.month}>See more</Link>
+            <Link to={ROUTES.FORUMS + '?months=' + this.state.query.month}>
+              See more
+            </Link>
           </Col>
           <Col span={24} className='carousel-box' id='select'>
             <Select
