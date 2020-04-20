@@ -17,13 +17,7 @@ class SuggestMonth extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      threads: [],
-      threadSuggest: [],
       threadProperties: [],
-      list: [],
-      value: 1,
-      radio: 1,
-      fullData: [],
       query: {},
     };
   }
