@@ -25,11 +25,11 @@ const App = () => (
   <AuthProvider>
     <Router>
       <Layout className='layout'>
-        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+        <Header>
           <Navigation />
         </Header>
 
-        <Content style={{ padding: '0 50px', marginTop: 65, background: 'white' }}>
+        <Content>
           <Route exact path={ROUTES.HOME} component={Index} />
           <Route path={ROUTES.FORUMS} component={Forums} />
           <PrivateRoute exact path={ROUTES.PROFILE} component={UserProfile} />
@@ -38,7 +38,7 @@ const App = () => (
           <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
         </Content>
 
-        <Footer style={{ textAlign: 'center' }}>
+        <Footer>
           Web Application for Organizing Traveling Trip
         </Footer>
 
