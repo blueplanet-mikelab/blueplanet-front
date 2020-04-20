@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
+import * as ROUTES from '../constants/routes';
 
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Carousel, Col, Select, Row, Tag, Menu, Icon, Dropdown } from 'antd';
+import 'antd/dist/antd.css';
 import "../css/suggest.css";
+import { Carousel, Col, Select, Row, Tag, Menu, Icon, Dropdown } from 'antd';
 
 const { Option } = Select;
 const { SubMenu } = Menu;
@@ -13,207 +14,183 @@ const { SubMenu } = Menu;
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 class SuggestMonth extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            threads: [],
-            threadSuggest: [],
-            threadProperties: [],
-            list: [],
-            value: 1,
-            radio: 1,
-            fullData: [],
-            query: {},
-        };
-    }
-
-    onBlur() {
-        console.log('blur');
-    }
-
-    onFocus() {
-        console.log('focus');
-    }
-
-    onSearch(val) {
-        console.log('search:', val);
-    }
-
-    onChangeMonth = (value) => {
-        this.onWithin()
-        console.log(`selected ${value}`);
-        const query = this.state.query;
-        query.month = value;
-        this.setState({ query: query });
-        this.getInformation(query);
-    }
-
-    onWithin = () => {
-        const query = this.state.query;
-        query.within_th = this.props.within;
-        console.log("checkwithin:" + query.within_th)
-        this.setState({ query: query });
-        this.getInformation(query);
-    }
-
-    async getInformation(query) {
-        let response = null;
-        const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
-        this.props.history.push(`/${q}`);
-        try {
-            response = await axios.get(`http://${backend_url}/api/home/monthQuery${q}`)
-        } catch (error) {
-            console.log(error);
-        }
-
-        if (response) {
-            // Map data after get response
-            this.mapData(response);
-        }
-    }
-
-    mapData(response) {
-        const threadProperties = response.data.map(item => {
-            return {
-                ...item,
-                country: item.countries.map(c => c.nameEnglish + " "),
-            };
-        });
-        this.setState({
-            threadProperties: threadProperties,
-        });
-    }
-
-    getQueryParams(value) {
-        return qs.parse(value, { ignoreQueryPrefix: true })
-    }
-
-    componentDidMount() {
-        this.onWithin()
-        const q = this.getQueryParams(this.props.location.search);
-        this.setState({
-            query: q
-        })
-        this.getInformation(q);
-    }
-
-    CreateSuggest(startIndex) {
-        if (this.state.threadProperties < 1) {
-            return 'Loading'
-        }
-
-        const list = [
-            this.state.threadProperties[startIndex],
-            this.state.threadProperties[startIndex + 1],
-            this.state.threadProperties[startIndex + 2]
-        ]
-
-        const menu = (
-            <Menu>
-                <SubMenu title="Add to My Triplist">
-                    <Menu.Item>New Triplist</Menu.Item>
-                    <Menu.Item>Japan Trip</Menu.Item>
-                </SubMenu>
-                <Menu.Item>Save to My Favorite</Menu.Item>
-                <Menu.Item>Share</Menu.Item>
-            </Menu>
-        );
-
-        return list.map(d => {
-            return (
-                <Col>
-                    <Col span={3}>
-                        <img
-                            style={{ width: 100, height: 100, margin: "15px" }}
-                            alt="example"
-                            src={d.thumbnail}
-                        />
-                    </Col>
-                    <Col span={5} style={{ lineHeight: 'normal', marginTop: '20px' }}>
-                        <Row>
-                            <a href={d.link} target="_blank" rel="noopener noreferrer" style={{ color: "#181741" }}>
-                                {d.title}
-                            </a>
-                        </Row>
-                        <Row style={{ marginTop: "3%" }}>
-                            <Tag color="rgba(130, 142, 180, 0.5)">{d.country}</Tag>
-
-                            <Icon type="heart"
-                                theme={this.state.heartFavorites}
-                                onClick={this.onHeartFavoriteClick}
-                                style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: '#10828C' }} />
-                            {/* <Icon type="more" style={{ width: `5%`, margin: 'auto', fontSize: '23px' }} /> */}
-                            <Dropdown overlay={menu}>
-                                <a className="ant-dropdown-link" href="#" style={{ marginLeft: "5%" }}>
-                                    <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
-                                </a>
-                            </Dropdown>
-
-                        </Row>
-                    </Col>
-                </Col>
-            );
-        });
+  constructor(props) {
+    super(props);
+    this.state = {
+      threadProperties: [],
+      query: {},
     };
+  }
 
-    render() {
-        return (
-            <div>
-                <div id="pop-suggest-thread">
-                    <Icon
-                        type="fire"
-                        theme="filled"
-                        style={{ marginRight: "19px" }}
-                    />Popular threads based on your Month</div>
-                <div style={{ backgroundColor: "#fff", marginLeft: "50px", marginRight: "40px", marginTop: "20px" }}>
-                    <Select
-                        showSearch
-                        style={{ marginLeft: 22, marginRight: 22, width: 150 }}
-                        placeholder="Filter by Month"
-                        optionFilterProp="children"
-                        value={this.state.query.month}
-                        onChange={this.onChangeMonth}
-                        onFocus={this.onFocus}
-                        onBlur={this.onBlur}
-                        onSearch={this.onSearch}
-                        filterOption={(input, option) =>
-                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }>
-                        <Option value="January">January</Option>
-                        <Option value="February">February</Option>
-                        <Option value="March">March</Option>
-                        <Option value="April">April</Option>
-                        <Option value="May">May</Option>
-                        <Option value="June">June</Option>
-                        <Option value="July">July</Option>
-                        <Option value="August">August</Option>
-                        <Option value="September">September</Option>
-                        <Option value="October">October</Option>
-                        <Option value="November">November</Option>
-                        <Option value="December">December </Option>
-                    </Select>
-                </div>
+  onChangeMonth = (value) => {
+    this.onWithin()
+    const query = this.state.query;
+    query.month = value;
+    this.setState({ query: query });
+    this.getThreads(query);
+  }
 
-                <Carousel autoplay style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
+  onWithin = () => {
+    const query = this.state.query;
+    query.within_th = this.props.within;
+    console.log("checkwithin:" + query.within_th)
+    this.setState({ query: query });
+    this.getThreads(query);
+  }
 
-                    <div>
-                        {this.CreateSuggest(0)}
-                    </div>
-                    <div>
-                        {this.CreateSuggest(3)}
-                    </div>
-                    <div>
-                        {this.CreateSuggest(6)}
-                    </div>
-                    <div>
-                        {this.CreateSuggest(9)}
-                    </div>
+  getThreads = async (query) => {
+    let response = null;
+    const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
+    this.props.history.push(`/${q}`);
 
-                </Carousel>
-            </div>
-
-        )
+    try {
+      response = await axios.get(`http://${backend_url}/api/home/monthQuery${q}`)
+    } catch (error) {
+      console.log(error);
     }
+
+    if (response) {
+      this.mapData(response);
+    }
+  }
+
+  mapData(response) {
+    const threadProperties = response.data.map(item => {
+      return {
+        ...item,
+        country: item.countries.map(c => c.nameEnglish + " "),
+      };
+    });
+
+    this.setState({
+      threadProperties: threadProperties,
+    });
+  }
+
+  getQueryParams(value) {
+    return qs.parse(value, { ignoreQueryPrefix: true })
+  }
+
+  componentDidMount() {
+    this.onWithin()
+    const query = this.getQueryParams(this.props.location.search);
+    query.month = 'January'
+
+    this.setState({
+      query: query
+    })
+    this.getThreads(query);
+  }
+
+  getSelection = () => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    return months.map(month => {
+      return <Option key={month} value={month}>{month}</Option>
+    })
+  }
+
+  getCarousel = () => {
+    const carouselIndex = [0, 3, 6, 9]
+    return carouselIndex.map(index => {
+      return (
+        <div key={index}>{this.createSuggestion(index)}</div>
+      )
+    })
+  }
+
+  createSuggestion = (startIndex) => {
+    if (this.state.threadProperties < 1) {
+      return 'Loading'
+    }
+
+    const threadList = [
+      this.state.threadProperties[startIndex],
+      this.state.threadProperties[startIndex + 1],
+      this.state.threadProperties[startIndex + 2]
+    ]
+
+    const menu = (
+      <Menu>
+        <SubMenu title='Add to My Triplist'>
+          <Menu.Item>New Triplist</Menu.Item>
+          {/* <Menu.Item>Japan Trip</Menu.Item> */}
+        </SubMenu>
+        <Menu.Item>Save to My Favorite</Menu.Item>
+        <Menu.Item>Share</Menu.Item>
+      </Menu>
+    )
+
+    return threadList.map(thread => {
+      return (
+        <Col span={8} className='thread-card' key={thread.topic_id}>
+          <Col span={12}>
+            <img src={thread.thumbnail} alt='Thumbnail' />
+          </Col>
+          <Col span={12} className='thread-info'>
+            <Row className='thread-title'>
+              <Col>
+                <a
+                  href={`https://pantip.com/topic/${thread.topic_id}`}
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  {thread.title}
+                </a>
+              </Col>
+            </Row>
+            <Row className='thread-option'>
+              <Col span={12} id='tag'>
+                <Tag>{thread.countries[0].nameEnglish}</Tag>
+              </Col>
+              <Col span={12} id='icon'>
+                <Icon
+                  type='heart'
+                  theme={this.state.heartFavorites}
+                  onClick={this.onHeartFavoriteClick}
+                />
+                <Dropdown overlay={menu}>
+                  <Icon type='more' />
+                </Dropdown>
+              </Col>
+            </Row>
+          </Col>
+        </Col>
+      )
+    })
+  }
+
+  render() {
+    return (
+      <div className='container'>
+        <Row className='suggestion-threads'>
+          <Col span={12} className='suggest-title'>
+            <Icon
+              type='fire'
+              theme='filled'
+            />
+            <p>&nbsp;&nbsp; Popular threads based on your <span>Month</span></p>
+          </Col>
+          <Col span={12} className='see-more'>
+            <Link to={ROUTES.FORUMS + '?months=' + this.state.query.month}>See more</Link>
+          </Col>
+          <Col span={24} className='carousel-box' id='select'>
+            <Select
+              defaultValue='January'
+              placeholder='Month'
+              value={this.state.query.month}
+              onChange={this.onChangeMonth}
+              className='select-option'
+            >
+              {this.getSelection()}
+            </Select>
+            <Carousel autoplay>
+              {this.getCarousel()}
+            </Carousel>
+          </Col>
+        </Row>
+      </div>
+    )
+  }
 
 }
 

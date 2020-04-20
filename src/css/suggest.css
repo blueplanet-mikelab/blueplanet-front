@@ -40,7 +40,7 @@ div.ant-col.ant-col-12.see-more {
   text-decoration-line: underline;
 }
 
-.ant-carousel {
+.carousel-box {
   margin-top: 25px;
   background: white;
   border-radius: 5px;
@@ -96,7 +96,7 @@ i.anticon.anticon-fire {
 i.anticon.anticon-heart, i.anticon.anticon-more {
   color: #10828C;
   font-size: 26px;
-  vertical-align:middle;
+  vertical-align: middle;
   display: table-cell;
 }
 
@@ -118,4 +118,73 @@ div#icon.ant-col.ant-col-12 {
 
 #selectBtn {
   width: 30%;
+}
+
+.ant-radio-group {
+  width: 100%;
+  margin: 30px 0 10px 0;
+}
+
+.ant-radio-group span {
+  color: #0E3047;
+}
+
+.radio-style .ant-radio {
+  text-align: -webkit-center;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  width: 220px;
+}
+
+.radio-style .ant-radio:before {
+  display: block;
+  content: '';
+  position: relative;
+  background: #10828C;
+  height: 4px;
+  width: 100%;
+  bottom: -30%;
+}
+
+.radio-style .ant-radio-wrapper {
+  margin-right: 0;
+  line-height: 30px;
+}
+
+.radio-style .ant-radio-wrapper #first {
+  text-align: left;
+}
+
+.ant-radio-checked .ant-radio-inner  {
+  border-color: #10828C;
+}
+
+span.ant-radio-inner::after {
+  background-color: #10828C;
+}
+
+#select {
+  text-align: left;
+}
+
+.select-option {
+  margin: 30px 0 10px 25px;
+}
+
+.select-option .ant-select-selection  {
+  border-color: transparent;
+}
+
+.select-option .ant-select-selection-selected-value,
+.ant-select-arrow {
+  color: #0E3047;
+}
+
+.ant-select-selection__rendered {
+  width: 100px;
+}
+
+li.ant-select-dropdown-menu-item {
+  font-family: Poppins; 
 }

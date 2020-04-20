@@ -41,7 +41,6 @@ class SuggestThreads extends Component {
   onBoundClinked = (type, thread) => {
     const query = this.state.query;
     query.within_th = type;
-    console.log(this.state.query.within_th)
     this.setState({
       query: query,
       withThread: thread
@@ -79,6 +78,15 @@ class SuggestThreads extends Component {
     })
   }
 
+  getCarousel = () => {
+    const carouselIndex = [0, 3, 6, 9]
+    return carouselIndex.map(index => {
+      return (
+        <div key={index}>{this.createSuggestion(index)}</div>
+      )
+    })
+  }
+
   createSuggestion = (startIndex) => {
     if (this.state.threadProperties < 1) {
       return 'Loading'
@@ -103,14 +111,18 @@ class SuggestThreads extends Component {
 
     return threadList.map(thread => {
       return (
-        <Col span={8} className='thread-card'>
+        <Col span={8} className='thread-card' key={thread.topic_id}>
           <Col span={12}>
-            <img src={thread.thumbnail} />
+            <img src={thread.thumbnail} alt='Thumbnail' />
           </Col>
           <Col span={12} className='thread-info'>
             <Row className='thread-title'>
               <Col>
-                <a href={`https://pantip.com/topic/${thread.topic_id}`} target="_blank">
+                <a 
+                  href={`https://pantip.com/topic/${thread.topic_id}`}
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
                   {thread.title}
                 </a>
               </Col>
@@ -132,15 +144,6 @@ class SuggestThreads extends Component {
             </Row>
           </Col>
         </Col>
-      )
-    })
-  }
-
-  getCarousel = () => {
-    const carouselIndex = [0, 3, 6, 9]
-    return carouselIndex.map(index => {
-      return (
-        <div>{this.createSuggestion(index)}</div>
       )
     })
   }
@@ -179,7 +182,7 @@ class SuggestThreads extends Component {
           <Col span={12} className='see-more'>
             <Link to={ROUTES.FORUMS + '?type=suggest'}>See more</Link>
           </Col>
-          <Col span={24}>
+          <Col span={24} className='carousel-box'>
             <Carousel autoplay>
               {this.getCarousel()}
             </Carousel>
