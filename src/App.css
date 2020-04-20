@@ -14,3 +14,17 @@
 .ant-layout-footer {
   font-family: 'Poppins', sans-serif;
 }
+
+.container {
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
