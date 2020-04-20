@@ -134,7 +134,7 @@ div#icon.ant-col.ant-col-12 {
   display: block;
   height: 30px;
   line-height: 30px;
-  width: 220px;
+  width: 180px;
 }
 
 .radio-style .ant-radio:before {
@@ -187,4 +187,33 @@ span.ant-radio-inner::after {
 
 li.ant-select-dropdown-menu-item {
   font-family: Poppins; 
+}
+
+div.ant-col.ant-col-4.theme-img {
+  width: 200px;
+  display: block;
+}
+
+.theme-img img {
+  background: 50% 50% no-repeat;
+  width: 100%;
+  height: 200px;
+  filter: brightness(50%);
+}
+
+.ant-carousel .theme {
+  margin: 35px 0 35px 0;
+}
+
+.theme-img {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 1em;
+}
+
+p.centered.theme-title {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 24px;
+  color: #FFFFFF;
 }
