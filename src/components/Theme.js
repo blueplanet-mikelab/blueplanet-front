@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import React from 'react';
+import { withRouter, Link } from 'react-router-dom';
+import * as ROUTES from '../constants/routes';
 
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Carousel, Col } from 'antd';
+import 'antd/dist/antd.css';
 import "../css/suggest.css";
-import "../css/theme.css";
+import { Row, Col, Carousel, Icon } from 'antd';
+
 import Eating from "../images/eating.jpg";
 import Entertainment from "../images/entertainment.jpg";
 import Festival from "../images/festival.jpg";
@@ -16,118 +17,116 @@ import Religion from "../images/religion.jpg";
 import Sea from "../images/sea.jpg";
 import Sightseeing from "../images/sightseeing.jpg";
 
-class Theme extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            threads: [],
-            threadSuggest: [],
-            threadProperties: [],
-            list: [],
-            value: 1,
-            radio: 1,
-            fullData: [],
-            query: {},
-            checkRoute: 1,
-        };
-    }
+const getCarousel = () => {
+  const carouselIndex = [0, 5]
+  return carouselIndex.map(index => {
+    return (
+      <Row justify='space-around' key={index}>{createSuggestion(index)}</Row>
+    )
+  })
+}
 
-    CreateSuggest(startIndex) {
+const createSuggestion = (startIndex) => {
+  const list_theme = [
+    {
+      title: "Eating",
+      picture: Eating,
+      link: "/forums?themes=Eating"
+    },
+    {
+      title: "Entertainment",
+      picture: Entertainment,
+      link: "/forums?themes=Entertainment"
+    },
+    {
+      title: "Festival",
+      picture: Festival,
+      link: "/forums?themes=Festival"
+    },
+    {
+      title: "Historical",
+      picture: Historical,
+      link: "/forums?themes=Historical"
+    },
+    {
+      title: "Mountain",
+      picture: Mountain,
+      link: "/forums?themes=Mountain"
+    },
+    {
+      title: "NightLifeStyle",
+      picture: NightLifeStyle,
+      link: "/forums?themes=NightLifeStyle"
+    },
+    {
+      title: "Photography",
+      picture: Photography,
+      link: "/forums?themes=Photography"
+    },
+    {
+      title: "Religion",
+      picture: Religion,
+      link: "/forums?themes=Religion"
+    },
+    {
+      title: "Sea",
+      picture: Sea,
+      link: "/forums?themes=Sea"
+    },
+    {
+      title: "Sightseeing",
+      picture: Sightseeing,
+      link: "/forums?themes=Sightseeing"
+    },
+  ]
 
-        const list_theme = [
-            {
-                title: "Eating",
-                picture: Eating,
-                link: "/forums?themes=Eating"
-            },
-            {
-                title: "Entertainment",
-                picture: Entertainment,
-                link: "/forums?themes=Entertainment"
-            },
-            {
-                title: "Festival",
-                picture: Festival,
-                link: "/forums?themes=Festival"
-            },
-            {
-                title: "Historical",
-                picture: Historical,
-                link: "/forums?themes=Historical"
-            },
-            {
-                title: "Mountain",
-                picture: Mountain,
-                link: "/forums?themes=Mountain"
-            },
-            {
-                title: "NightLifeStyle",
-                picture: NightLifeStyle,
-                link: "/forums?themes=NightLifeStyle"
-            },
-            {
-                title: "Photography",
-                picture: Photography,
-                link: "/forums?themes=Photography"
-            },
-            {
-                title: "Religion",
-                picture: Religion,
-                link: "/forums?themes=Religion"
-            },
-            {
-                title: "Sea",
-                picture: Sea,
-                link: "/forums?themes=Sea"
-            },
-            {
-                title: "Sightseeing",
-                picture: Sightseeing,
-                link: "/forums?themes=Sightseeing"
-            },
-        ]
+  const list = [
+    list_theme[startIndex],
+    list_theme[startIndex + 1],
+    list_theme[startIndex + 2],
+    list_theme[startIndex + 3],
+    list_theme[startIndex + 4]
+  ]
 
-        const list = [
-            list_theme[startIndex],
-            list_theme[startIndex + 1],
-            list_theme[startIndex + 2],
-            list_theme[startIndex + 3],
-            list_theme[startIndex + 4]
-        ]
-        return list.map(d => {
-            return (
-                <Col span={4} style={{ margin: "1%" }}>
-                    <div class="container">
-                        <a href={d.link} style={{ color: "#fff", fontWeight: "bold", fontSize: "30px", fontStyle: "normal" }}>
-                            <img
-                                style={{ width: "100%", height: "150px" }}
-                                src={d.picture}
-                            />
-                            <div class="centered">{d.title}</div>
-                        </a>
-                    </div>
-                </Col >
-            );
-        });
-    };
+  return list.map(theme => {
+    return (
+      <Col span={4} key={theme.title} className='theme-img'>
+        <a href={theme.link}>
+          <img
+            src={theme.picture}
+            alt={theme.title}
+          />
+          <p className='centered theme-title'>{theme.title}</p>
+        </a>
+      </Col>
+    );
+  });
+}
 
-
-    render() {
-        return (
-            <div>
-                <div id="pop-suggest-thread">Pick by Theme</div>
-                <Carousel autoplay id="theme" style={{ marginLeft: "50px", marginRight: "40px", marginBottom: "20px" }}>
-                    <div>
-                        {this.CreateSuggest(0)}
-                    </div>
-                    <div>
-                        {this.CreateSuggest(5)}
-                    </div>
-                </Carousel>
-            </div>
-
-        )
-    }
+const Theme = () => {
+  return (
+    <div className='container'>
+      <Row className='suggestion-threads'>
+        <Col span={12} className='suggest-title'>
+          <Icon
+            type='fire'
+            theme='filled'
+          />
+          <p>&nbsp;&nbsp; Pick by <span>Theme</span></p>
+        </Col>
+        <Col span={12} className='see-more'>
+          <Link to={ROUTES.FORUMS}>
+            See more
+        </Link>
+        </Col>
+        <Col span={24} className='carousel-box'>
+          <Carousel autoplay className='theme'>
+            {getCarousel()}
+          </Carousel>
+        </Col>
+      </Row>
+    </div>
+  )
 }
 
 export default withRouter(Theme);
