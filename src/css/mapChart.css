@@ -1,0 +1,15 @@
+svg.rsm-svg {
+  margin: -80px 0px 0px -70px;
+  width: 80%;
+}
+
+.rsm-geography {
+  fill: #D6D6DA;
+  outline: none;
+  stroke: #EAEAEC;
+}
+
+.rsm-geography:hover {
+  fill: #F97300;
+  outline: none;
+}

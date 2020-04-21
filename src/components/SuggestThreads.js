@@ -7,6 +7,7 @@ import * as ROUTES from '../constants/routes';
 import 'antd/dist/antd.css';
 import "../css/suggest.css";
 import { Carousel, Col, Row, Tag, Button, Menu, Icon, Dropdown } from 'antd';
+import SpinLoading from './SpinLoading';
 
 import SuggestDuration from "../components/SuggestDuration";
 import SuggestMonth from "../components/SuggestMonth";
@@ -90,7 +91,7 @@ class SuggestThreads extends Component {
 
   createSuggestion = (startIndex) => {
     if (this.state.threadProperties < 1) {
-      return 'Loading'
+      return <SpinLoading />
     }
 
     const threadList = [

@@ -39,7 +39,7 @@ class Index extends Component {
     axios
       .get(`http://${backend_url}/api/home/mapCountries`)
       .then(res => {
-        res.data.map(country => {
+        res.data.forEach(country => {
           this.countries.push(
             <Option key={country.country} value={country.nameEnglish}>
               {country.nameEnglish}

@@ -1,15 +1,12 @@
 import React, { memo, Component, } from "react";
+import { ZoomableGroup, ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
+import SpinLoading from './SpinLoading';
+import '../css/mapChart.css';
+
 import axios from 'axios';
-import {
-  ZoomableGroup,
-  ComposableMap,
-  Geographies,
-  Geography,
-  Marker
-} from "react-simple-maps";
+const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 // calculate number of people
-
 const rounded = num => {
   if (num > 1000000000) {
     return Math.round(num / 1000000000) / 10 + "K";
@@ -20,24 +17,8 @@ const rounded = num => {
   }
 };
 
-const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
-
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
-
-// const colorScale = scaleQuantize()
-//   .domain([1, 10])
-//   .range([
-//     "#ffedea",
-//     "#ffcec5",
-//     "#ffad9f",
-//     "#ff8a75",
-//     "#ff5533",
-//     "#e2492d",
-//     "#be3d26",
-//     "#9a311f",
-//     "#782618"
-//   ]);
 
 class MapChart extends Component {
   constructor(props) {
@@ -58,68 +39,55 @@ class MapChart extends Component {
             country: item.nameEnglish,
           };
         });
-        this.setState(
-          {
-            threadPoperties
-          },
-          () => {
-            console.log(this.state)
-            console.log(this.state.threadPoperties);
-            // console.log("con:" + threadPoperties[0].country);
-            // console.log("long" + threadPoperties[0].longitude)
-          }
-        );
+        this.setState({
+          threadPoperties
+        });
       })
       .catch(err => console.log(err));
   }
 
   createMarks() {
     if (this.state.threadPoperties < 1) {
-      return 'Loading'
+      return <SpinLoading />
     }
-    const markers = [
-      { markerOffset: -15, name: "1", coordinates: [this.state.threadPoperties[0].longitude, this.state.threadPoperties[0].latitude] },
-      { markerOffset: 25, name: "2", coordinates: [this.state.threadPoperties[1].longitude, this.state.threadPoperties[1].latitude] },
-      { markerOffset: -15, name: "3", coordinates: [this.state.threadPoperties[2].longitude, this.state.threadPoperties[2].latitude] }
-    ];
 
-    return markers.map(d => {
+    var markers =[];
+    for (var i = 0; i < 3; i++) {
+      markers.push({
+        markerOffset: 25,
+        name: `${i+1}`,
+        coordinates: [this.state.threadPoperties[i].longitude, this.state.threadPoperties[i].latitude]
+      })
+    }
+
+    return markers.map(marker => {
       return (
-        <Marker key={d.name} coordinates={d.coordinates}>
-          <circle r={5} fill="#F00" stroke="#fff" strokeWidth={1} />
+        <Marker key={marker.name} coordinates={marker.coordinates}>
+          <g
+            fill="none"
+            stroke="#FB3640"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            transform="translate(-12, -24)"
+          >
+            <circle cx="12" cy="10" r="3" />
+            <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z" />
+          </g>
           <text
             textAnchor="middle"
-            y={d.markerOffset}
-            style={{ fontFamily: "system-ui", fill: "#5D5A6D" }}
+            y={marker.markerOffset}
           >
-            {d.name}
+            {marker.name}
           </text>
         </Marker>
       );
     });
   };
 
-  createcolor(name) {
-    if (name = "Thailand") {
-      return "#FFFFFF"
-    } else {
-      return "#000000"
-    }
-  };
-
   render() {
-    // const rounded = () => {
-    //     return (
-    //         <img
-    //             style={{ width: 100, height: 100, margin: "20px" }}
-    //             src="https://f.ptcdn.info/814/059/000/pfamjgizd8alwLvBl45-o.jpg"
-    //         />
-    //     );
-
-    // };
-
     return (
-      <ComposableMap data-tip="" style={{ marginTop: "-80px", marginLeft: "-70px", width: '85%', }}>
+      <ComposableMap data-tip=''>
         <ZoomableGroup>
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
@@ -128,31 +96,13 @@ class MapChart extends Component {
                   key={geo.rsmKey}
                   geography={geo}
                   onMouseEnter={() => {
-                    // const { NAME } = geo.properties;
                     const { NAME, POP_EST } = geo.properties;
-                    // this.props.setTooltipContent(`${NAME}`);
                     this.props.setTooltipContent(`${NAME} — ${rounded(POP_EST)}`);
                   }}
                   onMouseLeave={() => {
-                    this.props.setTooltipContent("");
-                  }}
-                  style={{
-                    default: {
-                      fill: "#D6D6DA",
-                      outline: "none",
-                      stroke: "#EAEAEC"
-                    },
-                    hover: {
-                      fill: "#F53",
-                      outline: "none"
-                    },
-                    pressed: {
-                      fill: "#E42",
-                      outline: "none"
-                    }
+                    this.props.setTooltipContent('');
                   }}
                 />
-
               ))
             }
           </Geographies>
@@ -161,8 +111,6 @@ class MapChart extends Component {
       </ComposableMap>
     )
   }
-
 }
-
 
 export default memo(MapChart);
