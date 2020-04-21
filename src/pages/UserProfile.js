@@ -37,7 +37,6 @@ var threadIntripMenu = (
   </Menu>
 );
 
-
 var favMenu = (
   <Menu>
     <SubMenu title="Add to My Triplist">
@@ -47,7 +46,6 @@ var favMenu = (
     <Menu.Item>Delete</Menu.Item>
   </Menu>
 );
-
 
 const recentlylist = [
   {
@@ -125,8 +123,11 @@ class UserProfile extends Component {
       selectedTripList: null,
       selectedTripListId: null,
       visible: false,
+      editVisible: false,
       titleTripByFav: "",
       shortDescByFav: "",
+      inputEditTitle: "",
+      inputEditShortDes: ""
     }
   }
 
@@ -265,6 +266,27 @@ class UserProfile extends Component {
       });
   }
 
+  editTriplist = (id, thumbnail) => {
+    console.log(this.state.inputEditTitle)
+    console.log(this.state.inputEditShortDes)
+    this.props.currentUser.getIdToken(true)
+      .then((idToken) => {
+        axios.put(`http://${backend_url}/api/my-triplist/triplists/${id}`,
+          {
+            "title": this.state.inputEditTitle,
+            "description": this.state.inputEditShortDes,
+            "thumbnail": thumbnail
+          }, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        console.log("edit trip")
+      }).catch(function (error) {
+        console.log(error)
+      });
+  }
+
   addThreadFromfavoriteToTrip = (trip, id) => {
     const tripId = trip;
     const threadId = id;
@@ -316,6 +338,44 @@ class UserProfile extends Component {
     console.log(e);
     this.setState({
       visible: false,
+    });
+  };
+
+  inputEditTitle = (input) => {
+    this.setState({
+      inputEditTitle: input.target.value,
+    });
+    console.log('changed', input.target.value);
+  }
+
+  inputEditShortDes = (input) => {
+    this.setState({
+      inputEditShortDes: input.target.value,
+    });
+    console.log('changed', input.target.value);
+  }
+
+  showEditTripModal = (id, thumbnail) => {
+    this.setState({
+      editVisible: true,
+      idThread: id,
+      thumbnailThread: thumbnail
+    });
+  };
+
+  handleCompleteEditTrip = e => {
+    console.log(this.state.idThread)
+    console.log(this.state.thumbnailThread)
+    this.editTriplist(this.state.idThread, this.state.thumbnailThread)
+    this.setState({
+      editVisible: false,
+    });
+  };
+
+  handleCancelEditTrip = e => {
+    console.log(e);
+    this.setState({
+      editVisible: false,
     });
   };
 
@@ -423,11 +483,11 @@ class UserProfile extends Component {
     })
   }
 
-  handleTripDropDown = (id) => {
+  handleTripDropDown = (id, thumbnail) => {
     const tripId = id;
     var menuToDelete = (
       <Menu>
-        <Menu.Item key="1">Edit details</Menu.Item>
+        <Menu.Item key="1"><Button onClick={() => this.showEditTripModal(tripId, thumbnail)}>Edit details</Button></Menu.Item>
         <Menu.Item key="2"><Button onClick={() => this.deleteTriplist(tripId)}>Delete</Button></Menu.Item>
       </Menu>
     );
@@ -462,7 +522,6 @@ class UserProfile extends Component {
     console.log('click drop', id);
   }
 
-
   handleFavDropDown = (id, thumbnail) => {
     const favId = id;
     var allTrip = this.state.triplist.map(thread => {
@@ -487,7 +546,6 @@ class UserProfile extends Component {
     console.log(this.state.menu)
     console.log('click drop', id);
   }
-
 
   onMoreIcon = () => {
     alert("click more")
@@ -576,10 +634,13 @@ class UserProfile extends Component {
                 style={{ width: `175px`, height: `175px`, marginRight: '40px' }} />
               <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto 0' }}>
                 <h1>{this.state.triplist[selectedIndex].title}
-                  {/* <Icon className="triplist-more" type="more" onClick={() => this.onMoreIcon()} />  */}
-                  <Dropdown overlay={menu} trigger={['click']}>
+                  <Dropdown overlay={this.state.menu} trigger={['click']}>
                     <a className="ant-dropdown-link" href="#">
-                      <Icon className="triplist-more" type="more" />
+                      <Icon
+                        type="more"
+                        className="triplist-more"
+                        onClick={() => this.handleTripDropDown(this.state.triplist[selectedIndex]._id, this.state.triplist[selectedIndex].thumbnail)}
+                      />
                     </a>
                   </Dropdown>
                 </h1>
@@ -630,7 +691,7 @@ class UserProfile extends Component {
                           <Icon
                             type="more"
                             style={{ color: "#10828C", padding: '20px 0 0 170px', fontSize: '23px', width: '5%' }}
-                            onClick={() => this.handleTripDropDown(item._id)}
+                            onClick={() => this.handleTripDropDown(item._id, item.thumbnail)}
                           />
                         </a>
                       </Dropdown>
@@ -674,14 +735,9 @@ class UserProfile extends Component {
           <h1 style={{ color: 'white' }}>{this.props.currentUser.displayName} <Icon type="edit" /></h1>
           <h4 style={{ color: 'white', marginBottom: '20px' }}>{this.props.currentUser.email} <Icon type="edit" /></h4>
           <div id="userprofile-tabs" style={{ background: 'white', padding: '15px 30px' }}>
-            {/* <Button
-              onClick={() => this.createTriplist()}>
-              Test create trip
-                </Button> */}
-
-            {/* My Triplist options Edit details */}
+            {/* My Triplist options create by thread details */}
             <div>
-              <Modal
+              <Modal id="create-trip"
                 title="Create Your Trip"
                 visible={this.state.visible}
                 onOk={this.handleOk}
@@ -697,7 +753,24 @@ class UserProfile extends Component {
                     placeholder="input descriotion" /></p>
               </Modal>
             </div>
-            {/*  */}
+            {/* My Triplist options Edit details */}
+            <div>
+              <Modal id="edit-trip"
+                title="Create Your Trip"
+                visible={this.state.editVisible}
+                onOk={this.handleCompleteEditTrip}
+                onCancel={this.handleCancelEditTrip}
+              >
+                <p>title:
+                  <Input type="text"
+                    onChange={this.inputEditTitle}
+                    placeholder="input title" /></p>
+                <p>des:
+                  <Input type="text"
+                    onChange={this.inputEditShortDes}
+                    placeholder="input descriotion" /></p>
+              </Modal>
+            </div>
             <Tabs defaultActiveKey="1" tabBarStyle={{ color: 'black' }}>
               <TabPane tab="My Triplist" key="1">
                 {tripListTap()}
