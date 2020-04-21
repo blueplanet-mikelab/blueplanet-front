@@ -7,6 +7,7 @@ import * as ROUTES from '../constants/routes';
 import 'antd/dist/antd.css';
 import "../css/suggest.css";
 import { Radio, Carousel, Row, Col, Tag, Menu, Icon, Dropdown } from 'antd';
+import SpinLoading from './SpinLoading';
 
 const { SubMenu } = Menu;
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
@@ -99,7 +100,7 @@ class SuggestDuration extends Component {
 
   createSuggestion = (startIndex) => {
     if (this.state.threadProperties < 1) {
-      return 'Loading'
+      return <SpinLoading />
     }
 
     const threadList = [

@@ -165,11 +165,8 @@ span.ant-radio-inner::after {
   background-color: #10828C;
 }
 
-#select {
-  text-align: left;
-}
-
 .select-option {
+  display: table;
   margin: 30px 0 10px 25px;
 }
 

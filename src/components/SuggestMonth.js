@@ -7,6 +7,7 @@ import * as ROUTES from '../constants/routes';
 import 'antd/dist/antd.css';
 import "../css/suggest.css";
 import { Carousel, Col, Select, Row, Tag, Menu, Icon, Dropdown } from 'antd';
+import SpinLoading from './SpinLoading';
 
 const { Option } = Select;
 const { SubMenu } = Menu;
@@ -105,7 +106,7 @@ class SuggestMonth extends Component {
 
   createSuggestion = (startIndex) => {
     if (this.state.threadProperties < 1) {
-      return 'Loading'
+      return <SpinLoading />
     }
 
     const threadList = [
@@ -180,7 +181,7 @@ class SuggestMonth extends Component {
               See more
             </Link>
           </Col>
-          <Col span={24} className='carousel-box' id='select'>
+          <Col span={24} className='carousel-box'>
             <Select
               defaultValue='January'
               placeholder='Month'
