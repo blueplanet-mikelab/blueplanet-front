@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, Dropdown } from 'antd'
 
-const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, onHeartFavoriteClick, handleFavDropDown, favMenu }) => {
+const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, onHeartFavoriteClick, handleFavDropDown, favMenu, addRecentlyView }) => {
 
   return (
     <div className="thread-hori">
@@ -13,7 +13,16 @@ const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, on
         />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: `2%`, width: `80%`, margin: 'auto 0' }}>
-        <h3 style={{ color: '#0E3047' }}>{item.title}</h3>
+        <h3>
+          <a href={`https://pantip.com/topic/${item.topic_id}`}
+            onClick={() => addRecentlyView(item._id)}
+            target='_blank'
+            rel='noopener noreferrer'
+            style={{ color: '#0E3047' }}>
+            {item.title}
+          </a>
+        </h3>
+        {/* <h3 style={{ color: '#0E3047' }}>{item.title}</h3> */}
         <p style={{ color: '#C4C4C4' }}>{item.description}</p>
         <div style={{ color: "#10828C" }}>
           <span> <Icon type="plus" /> {item.vote}</span>

@@ -42,6 +42,15 @@ var favMenu = (
     <SubMenu title="Add to My Triplist">
       <Menu.Item>New Triplist</Menu.Item>
     </SubMenu>
+    <Menu.Item>Delete</Menu.Item>
+  </Menu>
+);
+
+const recentlyMenu = (
+  <Menu>
+    <SubMenu title="Add to My Triplist">
+      <Menu.Item>New Triplist</Menu.Item>
+    </SubMenu>
     <Menu.Item>Save to My Favorite</Menu.Item>
     <Menu.Item>Delete</Menu.Item>
   </Menu>
@@ -112,9 +121,12 @@ class UserProfile extends Component {
       triplist: [],
       favoritelist: [],
       favThreadslist: [],
+      recentlylist: [],
+      recentThreadslist: [],
       menu: menu,
       favMenu: favMenu,
       threadIntripMenu: threadIntripMenu,
+      recentlyMenu: recentlyMenu,
       // heartFavorites: favoritelist.map(() => "outlined"),
       heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
@@ -167,6 +179,7 @@ class UserProfile extends Component {
   componentDidMount() {
     this.props.currentUser.getIdToken(/* forceRefresh */ true)
       .then((idToken) => {
+        //Get trip list
         var res = axios.get(`http://${backend_url}/api/my-triplist/triplists`, {
           headers: {
             'Authorization': idToken
@@ -194,6 +207,8 @@ class UserProfile extends Component {
             console.log("threads " + this.state.triplist[0].threads[0].title)
           }
         })
+
+        // Get favorite list
         var fav = axios.get(`http://${backend_url}/api/my-triplist/favorites`, {
           headers: {
             'Authorization': idToken
@@ -215,6 +230,28 @@ class UserProfile extends Component {
             console.log(" favoritelist" + this.state.favThreadslist[0].title)
           }
         })
+        // Get recently-view list
+        var recently = axios.get(`http://${backend_url}/api/my-triplist/recently-viewed`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        recently.then((result) => {
+          console.log(idToken)
+          console.log("result recent")
+          console.log(result)
+          this.setState({
+            recentlylist: result.data,
+            recentThreadslist: result.data.recentThreads,
+            heartFavorites: this.state.recentlylist.map(() => "outlined"),
+          });
+          if (this.state.recentlylist === "" || this.state.recentlylist == null || this.state.recentlylist.length === 0) {
+            console.log("null")
+          } else {
+            console.log("recentThreadslist" + this.state.recentThreadslist[0].title)
+          }
+        })
+
       }).catch(function (error) {
         console.log(error)
       });
@@ -282,6 +319,21 @@ class UserProfile extends Component {
           }
         })
         console.log("edit trip")
+      }).catch(function (error) {
+        console.log(error)
+      });
+  }
+
+  addRecentlyView = (id) => {
+    console.log(id)
+    this.props.currentUser.getIdToken(true)
+      .then((idToken) => {
+        axios.put(`http://${backend_url}/api/my-triplist/recently-viewed/${id}`, {}, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        console.log("add recently")
       }).catch(function (error) {
         console.log(error)
       });
@@ -535,7 +587,6 @@ class UserProfile extends Component {
           <Menu.Item><Button onClick={() => this.showModal(favId, thumbnail)}>New Triplist</Button></Menu.Item>
           {allTrip}
         </SubMenu>
-        <Menu.Item>Save to My Favorite</Menu.Item>
         <Menu.Item><Button onClick={() => this.deleteFavorite(favId)}>Delete</Button></Menu.Item>
       </Menu>
 
@@ -588,7 +639,8 @@ class UserProfile extends Component {
       <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
         {threadlist.map((item, i) => {
           return (
-            <ThreadHorizontalItemOfTriplist item={item}
+            <ThreadHorizontalItemOfTriplist
+              item={item}
               i={i}
               imgStyle={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail)}
               imgHandleSize={this.imgHandleSize}
@@ -606,7 +658,8 @@ class UserProfile extends Component {
       <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
         {threadlist.map((item, i) => {
           return (
-            <ThreadHorizontalItem item={item}
+            <ThreadHorizontalItem
+              item={item}
               i={i}
               imgStyle={this.state.favor_imgs.find(e => e.thumbnail === item.thumbnail)}
               imgHandleSize={this.imgHandleSize}
@@ -614,6 +667,7 @@ class UserProfile extends Component {
               onHeartFavoriteClick={this.onHeartFavoriteClick}
               handleFavDropDown={this.handleFavDropDown}
               favMenu={this.state.favMenu}
+              addRecentlyView={this.addRecentlyView}
             />
           )
         })}
@@ -711,17 +765,6 @@ class UserProfile extends Component {
       }
     }
 
-    const recentlyMenu = (
-      <Menu>
-        <SubMenu title="Add to My Triplist">
-          <Menu.Item>New Triplist</Menu.Item>
-          <Menu.Item>Japan Trip</Menu.Item>
-        </SubMenu>
-        <Menu.Item>Save to My Favorite</Menu.Item>
-        <Menu.Item>Delete</Menu.Item>
-      </Menu>
-    );
-
     return (
       <div style={{ background: '#f8f5e4' }}>
         <div style={{
@@ -780,12 +823,13 @@ class UserProfile extends Component {
                 {threadHorizontal(this.state.favThreadslist)}
               </TabPane>
               <TabPane tab="Recently Viewed" key="3">
-                {sorter}
                 <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
-                  {recentlylist.map((item, i) => {
+                  {this.state.recentThreadslist.map((item, i) => {
                     return (
                       <div className="thread-hori" style={{ padding: '5px 0' }}>
-                        <div style={{ width: `90%` }}><h3 style={{ margin: 'auto 0', color: '#0E3047' }}>{item.title}</h3></div>
+                        <div style={{ width: `90%` }}>
+                          <h3 style={{ margin: 'auto 0', color: '#0E3047' }}>{item.title}</h3>
+                        </div>
                         <Icon type="heart"
                           theme={this.state.heartRecentlyViews[i]}
                           onClick={() => this.onHeartRecentlyViewClick(i)}
