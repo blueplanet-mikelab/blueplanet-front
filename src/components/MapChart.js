@@ -51,11 +51,11 @@ class MapChart extends Component {
       return <SpinLoading />
     }
 
-    var markers =[];
+    var markers = [];
     for (var i = 0; i < 3; i++) {
       markers.push({
         markerOffset: 25,
-        name: `${i+1}`,
+        name: `${i + 1}`,
         coordinates: [this.state.threadPoperties[i].longitude, this.state.threadPoperties[i].latitude]
       })
     }
@@ -87,7 +87,7 @@ class MapChart extends Component {
 
   render() {
     return (
-      <ComposableMap data-tip=''>
+      <ComposableMap data-tip="">
         <ZoomableGroup>
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
