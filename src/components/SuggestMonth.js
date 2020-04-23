@@ -56,6 +56,7 @@ class SuggestMonth extends Component {
     const threadProperties = response.data.map(item => {
       return {
         ...item,
+        link: 'https://pantip.com/topic/' + item.topic_id,
         country: item.countries.map(c => c.nameEnglish + " "),
       };
     });
@@ -136,7 +137,7 @@ class SuggestMonth extends Component {
             <Row className='thread-title'>
               <Col>
                 <a
-                  href={`https://pantip.com/topic/${thread.topic_id}`}
+                  href={thread.link}
                   rel='noopener noreferrer'
                   target='_blank'
                 >

@@ -130,7 +130,7 @@ class SuggestDuration extends Component {
             <Row className='thread-title'>
               <Col>
                 <a
-                  href={`https://pantip.com/topic/${thread.topic_id}`}
+                  href={thread.link}
                   rel='noopener noreferrer'
                   target='_blank'
                 >

@@ -1,66 +1,293 @@
-/* theme check */
-label.ant-checkbox-wrapper {
-    margin-left: 22px; 
-    margin-right: 15px;
-    margin-top: 15px;
-
-}
+/* 
 span.ant-tag.ant-tag-has-color {
     background: linear-gradient(90deg, #0E3047 0%, #10828C 100%);
 }
-
-/* #type.ant-btn.ant-btn-lg {
-    width: 100%;
-    border-radius: 0;
-    padding-left: 100px; 
-    padding-right: 100px;
-    margin-top: 25px;
-     
-} */
-
-.type-btn.ant-btn:hover,
-.type-btn.ant-btn:focus,
-.type-btn.ant-btn:active,
-.type-btn.ant-btn.active {
-    width: 100%;
-    background: linear-gradient(90deg, #FB3640 0%, #F97300 100%) !important;
-    color: white !important;
-    border: 1px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 0px 5px 5px 0px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-}
-
-.sort-btn.ant-btn:hover,
-.sort-btn.ant-btn:focus,
-.sort-btn.ant-btn:active,
-.sort-btn.ant-btn.active {
-    width: 100%;
-    border: 1px solid #C4C4C4;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-    background: white !important;
-    color: #F97300 !important;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-    border-radius: 5px;
-}
-
-#sort.ant-btn.ant-btn-lg {
-    width: 100%;
-    border-radius: 0;
-    background: rgba(255, 224, 198, 0.5);
-    border: rgba(255, 224, 198, 0.5);
-}
-
-/* #sort.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
-    background: white !important;
-    color: #F97300 !important;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-    border-radius: 5px;
-} */
 
 #fav.ant-btn:hover, .ant-btn:focus, .ant-btn:active, .ant-btn.active {
     background: white;
     color: #F97300;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
     border-radius: 5px;
+} */
+
+.forum-layout {
+  margin-top: 65px;
+}
+
+.sider {
+  background: #FFFFFF;
+  color: #0E3047;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.space {
+  margin: 30px 25px 0px 25px;
+}
+
+#filter-tag {
+  text-align: left;
+}
+
+#reset-filter-tag {
+  text-align: right;
+}
+
+#reset-filter-tag a {
+  color: #10828C;
+}
+
+.ant-menu .ant-menu-light .ant-menu-root .ant-menu-inline {
+  width: 200px;
+}
+
+.sub-menu span {
+  color: #0E3047;
+  font-size: 14px;
+}
+
+.sub-menu .ant-menu-submenu-title span {
+  font-weight: normal;
+}
+
+div.ant-menu-submenu-title {
+  text-align: left;
+  
+}
+
+ul.ant-menu.ant-menu-light.ant-menu-root.ant-menu-inline {
+  border-color: transparent;
+}
+
+.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+  width: 95%;
+}
+
+#devider-line {
+  color: rgba(130, 142, 180, 0.5);
+  background-color: rgba(130, 142, 180, 0.5);
+  height: 1px;
+  border: 0.5px;
+  margin: 0 25px;
+}
+
+#country\0024Menu, #duration\0024Menu,
+#budget\0024Menu, #month\0024Menu, #theme\0024Menu {
+  text-align: left;
+  padding: 0px 25px 20px 25px;
+}
+
+div#select-box.ant-select.ant-select-enabled, .ant-select-selection__rendered {
+  width: 100%;
+}
+
+.ant-radio .ant-radio-checked span, span {
+  font-weight: normal;
+}
+
+div.ant-radio-group.ant-radio-group-outline.radio-box {
+  font-weight: normal;
+  text-align: left;
+  display: grid;
+  margin: 0;
+}
+
+label.ant-radio-wrapper, label.ant-checkbox-wrapper {
+  line-height: 30px;
+}
+
+.ant-slider-track {
+  background-color: #10828C;
+}
+
+.ant-slider-handle, .ant-slider-handle:hover, .ant-slider-handle:active, .ant-slider-handle:focus,
+.ant-slider:hover .ant-slider-handle:not(.ant-tooltip-open) {
+  border-color: #10828C;
+}
+
+.input-budget {
+  display: inline-flex;
+}
+
+.input-budget p {
+  font-size: 12px;
+  font-weight: normal;
+  color: #0E3047;
+  margin-top: 10px;
+}
+
+.input-min {
+  margin-right: 15px;
+}
+
+.input-max {
+  margin-left: 15px;
+}
+
+div.select-month.ant-select.ant-select-enabled {
+  width: 100%;
+}
+
+#theme-menu {
+  height: 100%;
+}
+
+div.ant-checkbox-group {
+  display: grid;
+  line-height: 25px;
+}
+
+li#theme-menu.ant-menu-item {
+  padding-left: 0 !important;
+}
+
+li#theme-menu.ant-menu-item.ant-menu-item,
+li#theme-menu.ant-menu-item.ant-menu-item-active.ant-menu-item-selected {
+  background: transparent;
+}
+
+li#theme-menu.ant-menu-item.ant-menu-item::after,
+li#theme-menu.ant-menu-item.ant-menu-item-active.ant-menu-item-selected::after {
+  border-color: transparent;
+}
+
+.ant-checkbox-wrapper + .ant-checkbox-wrapper {
+  margin-left: 0;
+}
+
+.forum-header.ant-layout-header {
+  background: #F8F5E4;
+  height: fit-content;
+  padding: 20px 20px;
+}
+
+.forum-header p {
+  font-weight: bold;
+  font-size: 26px;
+  text-align: left;
+  color: #0E3047;
+  margin: 0 0;
+  height: 64px;
+}
+
+#type-btn {
+  width: 100%;
+  height: 100%;
+}
+
+#type-btn span {
+  padding: 20px 0;
+}
+
+#type-btn.active, #type-btn:hover {
+  background: linear-gradient(90deg, #FB3640 0%, #F97300 100%);
+  color: white;
+  border: 0 gray;
+}
+
+#type-btn.active span {
+  font-weight: 500;
+}
+
+.sort-row {
+  background: rgba(255, 224, 198, 0.5);
+  padding: 0 5px;
+}
+
+button#sort-btn.ant-btn.sort-btn.ant-btn-lg {
+  color: #181741;
+  background: transparent;
+  width: 100%;
+  border: none;
+  box-shadow: none;
+}
+
+#sort-btn span {
+  font-weight: 300;
+}
+
+#sort-btn.active, #sort-btn:hover {
+  background: white !important;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 5px;
+}
+
+#sort-btn.active span, #sort-btn:hover span,
+#sort-btn.active i, #sort-btn:hover i {
+  color: #F97300;
+  font-weight: 500;
+}
+
+.sort-col {
+  padding: 0 5px;
+}
+
+.forum-content {
+  background: #F8F5E4;
+}
+
+.thread-row {
+  margin: 20px 20px;
+}
+
+.forum-row {
+  margin: 0 20px;
+  padding: 10px 0;
+  background: white;
+  border-radius: 5px;
+}
+
+div.ant-col.ant-col-4.forum-thread-img,
+div.ant-col.ant-col-18.forum-thread-info {
+  text-align: left;
+}
+
+div.ant-col.ant-col-2.forum-option {
+  padding-top: 40px;
+}
+
+.forum-thread-img img {
+  background: 50% 50% no-repeat;
+  width: 100%;
+  max-width: 125px;
+  height: 125px;
+}
+
+div.ant-col.ant-col-18.forum-thread-info {
+  height: 125px;
+  display: grid;
+}
+
+div.ant-row.forum-tag {
+  margin: auto 0;
+}
+
+div.ant-row.forum-pop {
+  align-self: flex-end;
+}
+
+.forum-thread-info a {
+  font-weight: 500;
+  font-size: 16px;
+  color: #0E3047;
+}
+
+.forum-pop {
+  font-size: 14px;
+  color: #10828C;
+  vertical-align: text-bottom;
+  display: inline-flex;
+}
+
+.forum-option {
+  height: 125px;
+  position: relative;
+}
+
+i#icon-heart.anticon.anticon-heart {
+  padding-right: 20px;
+}
+
+.forum-pop p {
+  margin: 0 10px;
 }

@@ -1,11 +1,16 @@
-.ant-row #suggest {
+#suggest-box {
   background: #F8F5E4;
   border-radius: 5px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+  padding: 5px 0;
+  margin-bottom: 50px;
 }
 
-.bound-btn {
-  margin-top: 50px;
+.ant-row #suggest {
+  padding: 0 50px;
+}
+
+div.ant-row.bound-btn {
+  padding-top: 50px;
 }
 
 .bound-btn .ant-btn-lg {
@@ -117,8 +122,18 @@ div#icon.ant-col.ant-col-12 {
   font-family: Poppins;
 }
 
-#selectBtn {
+#select-btn {
   width: 30%;
+}
+
+#select-btn.active, #select-btn:hover {
+  background: linear-gradient(90deg, #FB3640 0%, #F97300 100%);
+  color: white;
+  border: 0 gray;
+}
+
+#select-btn.active span {
+  font-weight: 500;
 }
 
 .ant-radio-group {
@@ -177,6 +192,10 @@ span.ant-radio-inner::after {
 .select-option .ant-select-selection-selected-value,
 .ant-select-arrow {
   color: #0E3047;
+}
+
+div.select-option.ant-select.ant-select-enabled {
+  width: 25%;
 }
 
 .ant-select-selection__rendered {

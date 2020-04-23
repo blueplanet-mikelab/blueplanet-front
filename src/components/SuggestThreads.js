@@ -26,7 +26,7 @@ class SuggestThreads extends Component {
     };
   }
 
-  getQueryParams = (value) => {
+  getQueryParams(value) {
     return qs.parse(value, { ignoreQueryPrefix: true })
   }
 
@@ -71,6 +71,7 @@ class SuggestThreads extends Component {
     const threadProperties = response.data.map(item => {
       return {
         ...item,
+        link: "https://pantip.com/topic/" + item.topic_id,
         country: item.countries.map(c => c.nameEnglish + " "),
       }
     })
@@ -121,7 +122,7 @@ class SuggestThreads extends Component {
             <Row className='thread-title'>
               <Col>
                 <a
-                  href={`https://pantip.com/topic/${thread.topic_id}`}
+                  href={thread.link}
                   rel='noopener noreferrer'
                   target='_blank'
                 >
@@ -152,14 +153,14 @@ class SuggestThreads extends Component {
 
   render() {
     return (
-      <div className='container'>
+      <div className='container' id='suggest-box'>
         <Row className='bound-btn'>
           <Button
             size='large'
             onClick={() => { this.onBoundClinked('1', 1) }}
             value={this.state.query.within_th}
             className={`type-btn ${this.state.withThread === 1 ? 'active' : ''}`}
-            id='selectBtn'
+            id='select-btn'
           >
             Within Thailand
           </Button>
@@ -168,7 +169,7 @@ class SuggestThreads extends Component {
             onClick={() => { this.onBoundClinked('0', 2) }}
             value={this.state.query.within_th}
             className={`type-btn ${this.state.withThread === 2 ? 'active' : ''}`}
-            id='selectBtn'
+            id='select-btn'
           >
             International Countries
           </Button>
