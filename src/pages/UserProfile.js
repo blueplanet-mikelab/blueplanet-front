@@ -22,26 +22,7 @@ const { SubMenu } = Menu;
 
 var menu = (
   <Menu>
-    <Menu.Item key="1">Edit details</Menu.Item>
-    <Menu.Item key="2">Delete</Menu.Item>
-  </Menu>
-);
-
-var threadMenu = (
-  <Menu>
-    <SubMenu title="Add to My Triplist">
-      <Menu.Item>New Triplist</Menu.Item>
-    </SubMenu>
-    <Menu.Item>Save to My Favorite</Menu.Item>
-    <Menu.Item>Delete</Menu.Item>
-  </Menu>
-);
-
-var favMenu = (
-  <Menu>
-    <SubMenu title="Add to My Triplist">
-      <Menu.Item>New Triplist</Menu.Item>
-    </SubMenu>
+    <Menu.Item>Edit details</Menu.Item>
     <Menu.Item>Delete</Menu.Item>
   </Menu>
 );
@@ -70,14 +51,11 @@ class UserProfile extends Component {
       recentlylist: [],
       recentThreadslist: [],
       menu: menu,
-      favMenu: favMenu,
-      threadIntripMenu: threadMenu,
-      recentlyMenu: threadMenu,
-      // heartFavorites: favoritelist.map(() => "outlined"),
-      // heartRecentlyViews: recentlylist.map(() => "outlined"),
+      favMenu: menu,
+      threadIntripMenu: menu,
+      recentlyMenu: menu,
       tripListSortType: 1,
       subtabSortType: 1,
-      // favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
       selectedTripList: null,
       visible: false,
       editVisible: false,
@@ -131,7 +109,6 @@ class UserProfile extends Component {
           }
         })
         res.then((result) => {
-          console.log(idToken)
           console.log("result trip")
           console.log(result)
           this.setState({
@@ -160,7 +137,6 @@ class UserProfile extends Component {
           }
         })
         fav.then((result) => {
-          console.log(idToken)
           console.log("result fav")
           console.log(result)
           this.setState({
@@ -182,7 +158,6 @@ class UserProfile extends Component {
           }
         })
         recently.then((result) => {
-          console.log(idToken)
           console.log("result recent")
           console.log(result)
           this.setState({
@@ -207,25 +182,6 @@ class UserProfile extends Component {
       })
       this.getInformation(q);
     }
-  }
-
-  createTriplist = () => {
-    this.props.currentUser.getIdToken(true)
-      .then((idToken) => {
-        axios.post(`http://${backend_url}/api/my-triplist/triplists/add`,
-          {
-            "title": "Japan",
-            "description": "After covid-19!",
-            "thumbnail": "https://resources.matcha-jp.com/old_thumbnails/720x2000/284.jpg"
-          }, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-        console.log("created")
-      }).catch(function (error) {
-        console.log(error)
-      });
   }
 
   createTriplistByThread = (id, thumbnail) => {
@@ -284,7 +240,7 @@ class UserProfile extends Component {
       });
   }
 
-  addThreadFromfavoriteToTrip = (trip, id) => {
+  addThreadIntoTrip = (trip, id) => {
     const tripId = trip;
     const threadId = id;
     this.props.currentUser.getIdToken(true)
@@ -476,22 +432,20 @@ class UserProfile extends Component {
     const tripId = id;
     var menuToDelete = (
       <Menu>
-        <Menu.Item key="1"><Button onClick={() => this.showEditTripModal(tripId, thumbnail)}>Edit details</Button></Menu.Item>
-        <Menu.Item key="2"><Button onClick={() => this.deleteTriplist(tripId)}>Delete</Button></Menu.Item>
+        <Menu.Item><Button onClick={() => this.showEditTripModal(tripId, thumbnail)}>Edit details</Button></Menu.Item>
+        <Menu.Item><Button onClick={() => this.deleteTriplist(tripId)}>Delete</Button></Menu.Item>
       </Menu>
     );
     this.setState({
       menu: menuToDelete
     })
-    console.log(this.state.menu)
-    console.log('click drop', id);
   }
 
   handleThreadInTripDropDown = (id, thumbnail) => {
     const threadId = id;
     var allTrip = this.state.triplist.map(thread => {
       return (
-        <Menu.Item><Button onClick={() => this.addThreadFromfavoriteToTrip(thread._id, threadId)}>{thread.title}</Button></Menu.Item>
+        <Menu.Item><Button onClick={() => this.addThreadIntoTrip(thread._id, threadId)}>{thread.title}</Button></Menu.Item>
       )
     })
     var menuThreadInTrip = (
@@ -503,7 +457,6 @@ class UserProfile extends Component {
         <Menu.Item>Save to My Favorite</Menu.Item>
         <Menu.Item><Button onClick={() => this.deleteThreadInTriplist(threadId, this.state.triplist[this.state.selectedTripList]._id)}>Delete</Button></Menu.Item>
       </Menu>
-
     );
     this.setState({
       threadIntripMenu: menuThreadInTrip
@@ -515,7 +468,7 @@ class UserProfile extends Component {
     const favId = id;
     var allTrip = this.state.triplist.map(thread => {
       return (
-        <Menu.Item><Button onClick={() => this.addThreadFromfavoriteToTrip(thread._id, favId)}>{thread.title}</Button></Menu.Item>
+        <Menu.Item><Button onClick={() => this.addThreadIntoTrip(thread._id, favId)}>{thread.title}</Button></Menu.Item>
       )
     })
     var menuInFav = (
@@ -530,6 +483,28 @@ class UserProfile extends Component {
     this.setState({
       favMenu: menuInFav
     })
+  }
+
+  handleRecentlyViewDropDown = (id) => {
+    var allTrip = this.state.triplist.map(thread => {
+      return (
+        <Menu.Item><Button onClick={() => this.addThreadIntoTrip(thread._id, id)}>{thread.title}</Button></Menu.Item>
+      )
+    })
+    var menuThreadInRecently = (
+      <Menu>
+        <SubMenu title="Add to My Triplist">
+          {/* <Menu.Item><Button onClick={() => this.showModal(id)}>New Triplist</Button></Menu.Item> */}
+          {allTrip}
+        </SubMenu>
+        {/* <Menu.Item>Save to My Favorite</Menu.Item> */}
+      </Menu>
+
+    );
+    this.setState({
+      recentlyMenu: menuThreadInRecently
+    })
+    console.log('click drop', id);
   }
 
   render() {
@@ -623,7 +598,7 @@ class UserProfile extends Component {
                       <Icon
                         type="more"
                         className="triplist-more"
-                        onClick={() => this.handleTripDropDown(this.state.triplist[selectedIndex]._id, this.state.triplist[selectedIndex].thumbnail)}/>
+                        onClick={() => this.handleTripDropDown(this.state.triplist[selectedIndex]._id, this.state.triplist[selectedIndex].thumbnail)} />
                     </a>
                   </Dropdown>
                 </h1>
@@ -765,7 +740,10 @@ class UserProfile extends Component {
                           style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
                         <Dropdown overlay={this.state.recentlyMenu} trigger={['click']}>
                           <a className="ant-dropdown-link" href="#">
-                            <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
+                            <Icon
+                              type="more"
+                              style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }}
+                              onClick={() => this.handleRecentlyViewDropDown(item._id)} />
                           </a>
                         </Dropdown>
                       </div>
