@@ -31,7 +31,7 @@ const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, on
       </div>
       <Icon type="heart"
         theme={heartState}
-        onClick={() => onHeartFavoriteClick(i, item._id)}
+        onClick={() => onHeartFavoriteClick(i, item._id, 'favorite')}
         style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
       <Dropdown overlay={favMenu} trigger={['click']}>
         <a className="ant-dropdown-link" href="#">

@@ -27,7 +27,7 @@ var menu = (
   </Menu>
 );
 
-var threadIntripMenu = (
+var threadMenu = (
   <Menu>
     <SubMenu title="Add to My Triplist">
       <Menu.Item>New Triplist</Menu.Item>
@@ -45,60 +45,6 @@ var favMenu = (
     <Menu.Item>Delete</Menu.Item>
   </Menu>
 );
-
-const recentlyMenu = (
-  <Menu>
-    <SubMenu title="Add to My Triplist">
-      <Menu.Item>New Triplist</Menu.Item>
-    </SubMenu>
-    <Menu.Item>Save to My Favorite</Menu.Item>
-    <Menu.Item>Delete</Menu.Item>
-  </Menu>
-);
-
-const recentlylist = [
-  {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์',
-    topic_id: 3900001
-  },
-  {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  }, {
-    title: '[CR] SINGAPORE: รีวิวเที่ยวสิงคโปร์ฉบับสมบูรณ์ (เที่ยวครบ กินครบ เดินครบ จบในกระทู้เดียว)',
-    topic_id: 3900001
-  },
-]
 
 const TriplistPage = () => {
   const { currentUser } = useContext(AuthContext);
@@ -125,15 +71,14 @@ class UserProfile extends Component {
       recentThreadslist: [],
       menu: menu,
       favMenu: favMenu,
-      threadIntripMenu: threadIntripMenu,
-      recentlyMenu: recentlyMenu,
+      threadIntripMenu: threadMenu,
+      recentlyMenu: threadMenu,
       // heartFavorites: favoritelist.map(() => "outlined"),
-      heartRecentlyViews: recentlylist.map(() => "outlined"),
+      // heartRecentlyViews: recentlylist.map(() => "outlined"),
       tripListSortType: 1,
       subtabSortType: 1,
       // favor_imgs: favoritelist.map(e => ({ thumbnail: e.thumbnail })),
       selectedTripList: null,
-      selectedTripListId: null,
       visible: false,
       editVisible: false,
       titleTripByFav: "",
@@ -243,7 +188,7 @@ class UserProfile extends Component {
           this.setState({
             recentlylist: result.data,
             recentThreadslist: result.data.recentThreads,
-            heartFavorites: this.state.recentlylist.map(() => "outlined"),
+            heartRecentlyViews: this.state.recentlylist.map(() => "outlined"),
           });
           if (this.state.recentlylist === "" || this.state.recentlylist == null || this.state.recentlylist.length === 0) {
             console.log("null")
@@ -479,7 +424,7 @@ class UserProfile extends Component {
     message.success('Your thread has been deleted.');
   }
 
-  onHeartFavoriteClick = (i, id) => {
+  onHeartFavoriteClick = (i, id, type) => {
     const threadId = id;
     console.log("id in trip: " + id)
     this.props.currentUser.getIdToken(true)
@@ -493,20 +438,19 @@ class UserProfile extends Component {
       }).catch(function (error) {
         console.log(error)
       });
-
-    const newThemes = this.state.heartFavorites
-    newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
-    this.setState({
-      heartFavorites: newThemes
-    })
-  }
-
-  onHeartRecentlyViewClick = (i) => {
-    const newThemes = this.state.heartRecentlyViews
-    newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
-    this.setState({
-      heartRecentlyViews: newThemes
-    })
+    if (type === 'favorite') {
+      const newThemes = this.state.heartFavorites
+      newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
+      this.setState({
+        heartFavorites: newThemes
+      })
+    } else if (type === 'recently') {
+      const newThemes = this.state.heartRecentlyViews
+      newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
+      this.setState({
+        heartRecentlyViews: newThemes
+      })
+    }
   }
 
   imgHandleSize = ({ target: img }, item) => {
@@ -519,19 +463,12 @@ class UserProfile extends Component {
         }
       }
     })
-
     this.setState({ favor_imgs })
   }
 
   handleTriplistSelection = (index) => {
     this.setState({
       selectedTripList: index
-    })
-  }
-
-  handleTriplistSelectionDropdown = (index) => {
-    this.setState({
-      selectedTripListId: index
     })
   }
 
@@ -589,17 +526,10 @@ class UserProfile extends Component {
         </SubMenu>
         <Menu.Item><Button onClick={() => this.deleteFavorite(favId)}>Delete</Button></Menu.Item>
       </Menu>
-
     );
     this.setState({
       favMenu: menuInFav
     })
-    console.log(this.state.menu)
-    console.log('click drop', id);
-  }
-
-  onMoreIcon = () => {
-    alert("click more")
   }
 
   render() {
@@ -693,8 +623,7 @@ class UserProfile extends Component {
                       <Icon
                         type="more"
                         className="triplist-more"
-                        onClick={() => this.handleTripDropDown(this.state.triplist[selectedIndex]._id, this.state.triplist[selectedIndex].thumbnail)}
-                      />
+                        onClick={() => this.handleTripDropDown(this.state.triplist[selectedIndex]._id, this.state.triplist[selectedIndex].thumbnail)}/>
                     </a>
                   </Dropdown>
                 </h1>
@@ -832,9 +761,9 @@ class UserProfile extends Component {
                         </div>
                         <Icon type="heart"
                           theme={this.state.heartRecentlyViews[i]}
-                          onClick={() => this.onHeartRecentlyViewClick(i)}
+                          onClick={() => this.onHeartFavoriteClick(i, item._id, 'recently')}
                           style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
-                        <Dropdown overlay={recentlyMenu} trigger={['click']}>
+                        <Dropdown overlay={this.state.recentlyMenu} trigger={['click']}>
                           <a className="ant-dropdown-link" href="#">
                             <Icon type="more" style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }} />
                           </a>
