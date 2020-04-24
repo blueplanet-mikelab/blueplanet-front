@@ -67,7 +67,7 @@ class Index extends Component {
 
   render() {
     return (
-      <div className='container'>
+      <div className='container content-box'>
         <Row className='country-search'>
           <Col span={24}>
             <p id='main-title'>Which Country would you like to visit?</p>
