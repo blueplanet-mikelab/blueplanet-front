@@ -6,7 +6,9 @@ import { AuthContext } from '../auth/Auth';
 import axios from 'axios';
 import qs from 'qs';
 
-import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal } from 'antd';
+import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal, Upload } from 'antd';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+
 import "../css/userprofile.css";
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 import ThreadHorizontalItemOfTriplist from '../components/userprofile/ThreadHorizontalItemOfTriplist';
@@ -62,7 +64,8 @@ class UserProfile extends Component {
       titleTripByFav: "",
       shortDescByFav: "",
       inputEditTitle: "",
-      inputEditShortDes: ""
+      inputEditShortDes: "",
+      loading: false,
     }
   }
 
@@ -109,6 +112,7 @@ class UserProfile extends Component {
           }
         })
         res.then((result) => {
+          // console.log(idToken)
           console.log("result trip")
           console.log(result)
           this.setState({
@@ -168,7 +172,7 @@ class UserProfile extends Component {
           if (this.state.recentlylist === "" || this.state.recentlylist == null || this.state.recentlylist.length === 0) {
             console.log("null")
           } else {
-            console.log("recentThreadslist" + this.state.recentThreadslist[0].title)
+            console.log("recentThreadslist" + this.state.recentlylist[0].title)
           }
         })
 
@@ -507,7 +511,51 @@ class UserProfile extends Component {
     console.log('click drop', id);
   }
 
+  getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
+
+  beforeUpload = (file) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
+
+  handleChange = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({ loading: true });
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      this.getBase64(info.file.originFileObj, imageUrl => {
+        this.setState({
+          imageUrl,
+          loading: false,
+        })
+        console.log("img: " + imageUrl)
+        console.log(info.file)
+      });
+    }
+  };
+
   render() {
+    const uploadButton = (
+      <div>
+        {this.state.loading ? <LoadingOutlined /> : <PlusOutlined />}
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
+    const { imageUrl } = this.state;
+
     const sorter = (
       <div id="subtab">
         <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>
@@ -669,6 +717,41 @@ class UserProfile extends Component {
       }
     }
 
+    const recentlyTap = () => {
+      if (this.state.recentlylist != null) {
+        return (
+          <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
+            {this.state.recentlylist.map((item, i) => {
+              return (
+                <div className="thread-hori" style={{ padding: '5px 0' }}>
+                  <div style={{ width: `90%` }}>
+                    <h3 style={{ margin: 'auto 0', color: '#0E3047' }}>{item.title}</h3>
+                  </div>
+                  <Icon type="heart"
+                    theme={this.state.heartRecentlyViews[i]}
+                    onClick={() => this.onHeartFavoriteClick(i, item._id, 'recently')}
+                    style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
+                  <Dropdown overlay={this.state.recentlyMenu} trigger={['click']}>
+                    <a className="ant-dropdown-link" href="#">
+                      <Icon
+                        type="more"
+                        style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }}
+                        onClick={() => this.handleRecentlyViewDropDown(item._id)} />
+                    </a>
+                  </Dropdown>
+                </div>
+              )
+            })}
+          </div>
+        )
+      } else {
+        return (
+          <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}></div>
+
+        )
+      }
+    }
+
     return (
       <div style={{ background: '#f8f5e4' }}>
         <div style={{
@@ -690,11 +773,22 @@ class UserProfile extends Component {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
               >
-                <p>title:
+                <Upload
+                  name="avatar"
+                  listType="picture-card"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  beforeUpload={this.beforeUpload}
+                  onChange={this.handleChange}
+                >
+                  {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                </Upload>
+                <p>Name
                   <Input type="text"
                     onChange={this.inputTitleByFav}
                     placeholder="input title" /></p>
-                <p>des:
+                <p>Description
                   <Input type="text"
                     onChange={this.inputShortDesByFav}
                     placeholder="input descriotion" /></p>
@@ -708,11 +802,11 @@ class UserProfile extends Component {
                 onOk={this.handleCompleteEditTrip}
                 onCancel={this.handleCancelEditTrip}
               >
-                <p>title:
+                <p>Name
                   <Input type="text"
                     onChange={this.inputEditTitle}
                     placeholder="input title" /></p>
-                <p>des:
+                <p>Description
                   <Input type="text"
                     onChange={this.inputEditShortDes}
                     placeholder="input descriotion" /></p>
@@ -727,29 +821,7 @@ class UserProfile extends Component {
                 {threadHorizontal(this.state.favThreadslist)}
               </TabPane>
               <TabPane tab="Recently Viewed" key="3">
-                <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
-                  {this.state.recentThreadslist.map((item, i) => {
-                    return (
-                      <div className="thread-hori" style={{ padding: '5px 0' }}>
-                        <div style={{ width: `90%` }}>
-                          <h3 style={{ margin: 'auto 0', color: '#0E3047' }}>{item.title}</h3>
-                        </div>
-                        <Icon type="heart"
-                          theme={this.state.heartRecentlyViews[i]}
-                          onClick={() => this.onHeartFavoriteClick(i, item._id, 'recently')}
-                          style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
-                        <Dropdown overlay={this.state.recentlyMenu} trigger={['click']}>
-                          <a className="ant-dropdown-link" href="#">
-                            <Icon
-                              type="more"
-                              style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }}
-                              onClick={() => this.handleRecentlyViewDropDown(item._id)} />
-                          </a>
-                        </Dropdown>
-                      </div>
-                    )
-                  })}
-                </div>
+                {recentlyTap()}
               </TabPane>
             </Tabs>
           </div>

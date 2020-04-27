@@ -19,6 +19,7 @@ const { Header, Content, Sider } = Layout;
 const { Option } = Select;
 // const num_of_threads_each_page = 10;
 const country = [];
+var current = 1;
 
 const ForumlistPage = () => {
   const { currentUser } = useContext(AuthContext);
@@ -41,47 +42,74 @@ class Forums extends Component {
       // maxValue: num_of_threads_each_page,
       typeThread: 1,
       sortThread: 1,
-      heartFavorites: 'outlined'
+      heartFavorites: 'outlined',
+      current: 1,
     };
   }
 
-  updateThreads = (query) => {
+  updateThreads = (query, current) => {
     this.setState({
-      query: query
+      query: query,
     });
 
-    this.getThreads(query);
+    this.getThreads(query, current);
   }
 
   onChangeCountry = (value) => {
     const query = this.state.query;
     query.countries = value;
-    this.updateThreads(query)
+    this.setState({
+      current: '1',
+    });
+    this.updateThreads(query, '1')
   };
 
   onChangeDuration = (e) => {
     const query = this.state.query;
     query.duration_type = e.target.value;
-    this.updateThreads(query)
+    this.setState({
+      current: '1',
+    });
+    this.updateThreads(query, '1')
   }
 
   onChangeBudget = (value) => {
     const query = this.state.query;
     query.budget_min = value[0];
     query.budget_max = value[1];
-    this.updateThreads(query)
+    this.setState({
+      current: '1',
+    });
+    this.updateThreads(query, '1')
   }
 
   onChangeMin = (value) => {
     const query = this.state.query;
     query.budget_min = value;
-    this.updateThreads(query)
+    this.setState({
+      current: '1',
+    });
+    this.updateThreads(query, '1')
   };
 
   onChangeMax = (value) => {
     const query = this.state.query;
     query.budget_max = value;
-    this.updateThreads(query)
+    this.setState({
+      current: '1',
+    });
+    this.updateThreads(query, '1')
+  };
+
+  onChangePage = (page) => {
+    console.log(page);
+    this.setState({
+      current: page,
+    });
+    current = page;
+    console.log("current: " + current)
+    const query = this.state.query;
+    this.updateThreads(query, page)
   };
 
   getSelection = () => {
@@ -94,7 +122,10 @@ class Forums extends Component {
   onChangeMonth = (value) => {
     const query = this.state.query;
     query.months = value;
-    this.updateThreads(query)
+    this.setState({
+      current: '1',
+    });
+    this.updateThreads(query, '1')
   }
 
   getCheckBox = () => {
@@ -110,7 +141,10 @@ class Forums extends Component {
   onChangeTheme = (checked) => {
     const query = this.state.query;
     query.themes = checked
-    this.updateThreads(query)
+    this.setState({
+      current: '1',
+    });
+    this.updateThreads(query, '1')
   }
 
   handleType = (type, typeThread) => {
@@ -119,9 +153,10 @@ class Forums extends Component {
 
     this.setState({
       query: query,
-      typeThread
+      typeThread,
+      current: '1'
     });
-    this.getThreads(query);
+    this.getThreads(query, '1');
   }
 
   // onChangePage = page => {
@@ -144,9 +179,10 @@ class Forums extends Component {
 
     this.setState({
       query: query,
-      sortThread
+      sortThread,
+      current: '1'
     });
-    this.getThreads(query);
+    this.getThreads(query, '1');
   }
 
   onHeartFavoriteClick = (i, id) => {
@@ -172,13 +208,15 @@ class Forums extends Component {
     })
   }
 
-  getThreads = async (query) => {
+  getThreads = async (query, current) => {
+    console.log("current in getThreads" + current)
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
     this.props.history.push(`/forums${q}`);
 
     try {
-      response = await axios.get(`http://${backend_url}/api/forums/filterQuery${q}`)
+      response = await axios.get(`http://${backend_url}/api/forums/${current}/filter${q}`)
+      console.log(response)
     } catch (error) {
       console.log(error);
     }
@@ -189,12 +227,12 @@ class Forums extends Component {
   }
 
   mapData(response) {
-    const threadProperties = response.data.map(item => {
+    const threadProperties = response.data.threads.map(item => {
       return {
         ...item,
         link: 'https://pantip.com/topic/' + item.topic_id,
         day: item.duration.label,
-        budget: '฿'.repeat(parseInt(item.floorBudget).toString().length),
+        budget: '฿'.repeat(parseInt(item.floor_budget).toString().length),
         popular: item.popularity,
         country: item.countries.map(c => c.nameEnglish),
 
@@ -212,6 +250,7 @@ class Forums extends Component {
       heartRecentlyViews: threadProperties.map(() => 'outlined'),
       // heartFavorites: threadProperties.map(() => 'outlined'),
     })
+    console.log(this.state.threadProperties)
   }
 
   componentDidMount() {
@@ -240,7 +279,7 @@ class Forums extends Component {
       query.budget_min = 0;
       query.budget_max = 50000;
     }
-    this.updateThreads(query)
+    this.updateThreads(query, current)
   }
 
   getQueryParams() {
@@ -302,10 +341,10 @@ class Forums extends Component {
       return <SpinLoading />
     }
 
-    const threadList = [
-      this.state.threadProperties[0],
-      this.state.threadProperties[1]
-    ]
+    // const threadList = [
+    //   this.state.threadProperties[0],
+    //   this.state.threadProperties[1]
+    // ]
 
     const menu = (
       <Menu>
@@ -318,7 +357,7 @@ class Forums extends Component {
       </Menu>
     )
 
-    return threadList.map(thread => {
+    return this.state.threadProperties.map(thread => {
       return (
         <Row key={thread.topic_id} className='thread-row'>
           <Col span={4} className='forum-thread-img'>
@@ -505,6 +544,8 @@ class Forums extends Component {
             <Content className='forum-content'>
               <Row className='forum-row'>
                 {this.getForumThreads()}
+                <Pagination current={this.state.current} onChange={this.onChangePage} total={100}
+                  style={{ backgroundColor: '#FFF' }} />
               </Row>
             </Content>
           </Layout>
