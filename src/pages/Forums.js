@@ -17,7 +17,6 @@ const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
-// const num_of_threads_each_page = 10;
 const country = [];
 var current = 1;
 
@@ -36,7 +35,6 @@ class Forums extends Component {
     this.state = {
       threadProperties: [],
       query: {},
-      // currentPage: 1,
       sortBy: 'popular',
       // minValue: 0,
       // maxValue: num_of_threads_each_page,

@@ -12,6 +12,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import "../css/userprofile.css";
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
 import ThreadHorizontalItemOfTriplist from '../components/userprofile/ThreadHorizontalItemOfTriplist';
+import ThreadHorizontalRecentlyItem from '../components/userprofile/ThreadHorizontalRecentlyItem';
 
 
 import * as ROUTES from '../constants/routes';
@@ -22,6 +23,7 @@ const { TabPane } = Tabs
 const { Search } = Input;
 const { SubMenu } = Menu;
 
+var tripPagination, favPagination = 1;
 var menu = (
   <Menu>
     <Menu.Item>Edit details</Menu.Item>
@@ -66,6 +68,8 @@ class UserProfile extends Component {
       inputEditTitle: "",
       inputEditShortDes: "",
       loading: false,
+      tripPagination: 1,
+      favPagination: 1,
     }
   }
 
@@ -102,7 +106,7 @@ class UserProfile extends Component {
     return qs.parse(value, { ignoreQueryPrefix: true })
   }
 
-  componentDidMount() {
+  componentDidMount(tripPagination, favPagination) {
     this.props.currentUser.getIdToken(/* forceRefresh */ true)
       .then((idToken) => {
         //Get trip list
@@ -135,7 +139,7 @@ class UserProfile extends Component {
         })
 
         // Get favorite list
-        var fav = axios.get(`http://${backend_url}/api/my-triplist/favorites`, {
+        var fav = axios.get(`http://${backend_url}/api/my-triplist/favorites/1`, {
           headers: {
             'Authorization': idToken
           }
@@ -145,7 +149,7 @@ class UserProfile extends Component {
           console.log(result)
           this.setState({
             favoritelist: result.data,
-            favThreadslist: result.data.favThreads,
+            favThreadslist: result.data.favorite.threads,
             heartFavorites: this.state.favoritelist.map(() => "outlined"),
             favor_imgs: this.state.favoritelist.map(e => ({ thumbnail: e.thumbnail })),
           });
@@ -627,6 +631,27 @@ class UserProfile extends Component {
       </div>
     )
 
+    const threadHorizontalRecently = (threadlist) => {
+      if (this.state.recentlylist != null) {
+        return (
+          <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
+            {threadlist.map((item, i) => {
+              return (
+                <ThreadHorizontalRecentlyItem
+                  item={item}
+                  i={i}
+                  heartState={this.state.heartRecentlyViews[i]}
+                  onHeartFavoriteClick={this.onHeartFavoriteClick}
+                  handleFavDropDown={this.handleRecentlyViewDropDown}
+                  recentlyMenu={this.state.recentlyMenu}
+                />
+              )
+            })}
+          </div>
+        )
+      }
+    }
+
     const tripListTap = () => {
       const selectedIndex = this.state.selectedTripList
       if (selectedIndex != null) {
@@ -717,41 +742,6 @@ class UserProfile extends Component {
       }
     }
 
-    const recentlyTap = () => {
-      if (this.state.recentlylist != null) {
-        return (
-          <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
-            {this.state.recentlylist.map((item, i) => {
-              return (
-                <div className="thread-hori" style={{ padding: '5px 0' }}>
-                  <div style={{ width: `90%` }}>
-                    <h3 style={{ margin: 'auto 0', color: '#0E3047' }}>{item.title}</h3>
-                  </div>
-                  <Icon type="heart"
-                    theme={this.state.heartRecentlyViews[i]}
-                    onClick={() => this.onHeartFavoriteClick(i, item._id, 'recently')}
-                    style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
-                  <Dropdown overlay={this.state.recentlyMenu} trigger={['click']}>
-                    <a className="ant-dropdown-link" href="#">
-                      <Icon
-                        type="more"
-                        style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }}
-                        onClick={() => this.handleRecentlyViewDropDown(item._id)} />
-                    </a>
-                  </Dropdown>
-                </div>
-              )
-            })}
-          </div>
-        )
-      } else {
-        return (
-          <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}></div>
-
-        )
-      }
-    }
-
     return (
       <div style={{ background: '#f8f5e4' }}>
         <div style={{
@@ -821,7 +811,7 @@ class UserProfile extends Component {
                 {threadHorizontal(this.state.favThreadslist)}
               </TabPane>
               <TabPane tab="Recently Viewed" key="3">
-                {recentlyTap()}
+                {threadHorizontalRecently(this.state.recentlylist)}
               </TabPane>
             </Tabs>
           </div>
