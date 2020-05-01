@@ -83,7 +83,8 @@ button.ant-btn.login-form-button:disabled {
 
 .login-form-button span {
   font-weight: bold;
-  font-size: 18px;}
+  font-size: 18px;
+}
 
 .form-submit .ant-form-item-control {
   text-align: left;

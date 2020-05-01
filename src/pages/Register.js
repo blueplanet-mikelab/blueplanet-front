@@ -2,15 +2,13 @@ import React, { Component, useContext } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import { AuthContext, signUpWithEmailAndPassword } from '../auth/Auth';
 
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Form, Input, Divider, Button } from 'antd';
+import 'antd/dist/antd.css';
+import '../css/register.css';
+import { Row, Col, Form, Input, Button } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import * as ROUTES from '../constants/routes';
 
-import "../css/register.css";
-
-// import { LogInLink } from './LogIn';
 import LogInFacebook from '../components/login/LogInFacebook';
 import LogInGoogle from '../components/login/LogInGoogle';
 
@@ -21,23 +19,24 @@ const RegisterPage = () => {
   };
 
   return (
-    <div>
-      <h1 id="head-create">Create your Account</h1>
-      <RegisterForm />
-      {/* <LogInLink /> */}
-      <LogInFacebook />
-      <LogInGoogle />
+    <div className='container bg'>
+      <div className='container form-box' id='register-box'>
+        <Row className='form-header'>
+          <p>Create your Account</p>
+          <hr id='devider-hr' />
+        </Row>
+        <Row className='form-content'>
+          <RegisterForm />
+          <hr id='devider-hr' />
+        </Row>
+        <Row className='form-social'>
+          <LogInFacebook />
+          <LogInGoogle />
+        </Row>
+      </div>
     </div>
   );
 }
-
-const RegisterLink = () => (
-  <p id="register">
-    Don't have an account? <Link id="link-regis" to={ROUTES.REGISTER}>Register</Link>
-    <Divider />
-  </p>
-
-);
 
 const INITIAL_STATE = {
   displayName: '',
@@ -56,7 +55,7 @@ class RegisterFormBase extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    const { z, email, password } = this.state;
+    const { displayName, email, password } = this.state;
     const newUser = {
       displayName: this.state.displayName,
       email: this.state.email,
@@ -78,74 +77,78 @@ class RegisterFormBase extends Component {
   };
 
   render() {
-    const {
-      displayName,
-      email,
-      password,
-      confirmPassword,
-      error
-    } = this.state;
-
+    const { displayName, email, password, confirmPassword, error } = this.state;
     const isInvalid = password !== confirmPassword || password === '' || email === '' || displayName === '';
 
     return (
-      <div id="background-regis" style={{ width: "302px" }}>
-        <Form onSubmit={this.onSubmit}>
-          <Form.Item name="displayName" id="displayName" style={{ left: "390px" }}>
+      <Form
+        className='register-form'
+        onSubmit={this.onSubmit}
+      >
+        <Row>
+          <Form.Item
+            name='displayName' rules={[{ required: true, message: 'Full Name is required.' }]}
+          >
             <Input
-              id="input-displayname"
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              name="displayName"
+              name='displayName'
               value={displayName}
+              prefix={<UserOutlined className='site-form-item-icon' />}
+              type='text'
+              placeholder='Full Name'
               onChange={this.onChange}
-              type="text"
-              placeholder="Full Name" />
+            />
           </Form.Item>
-          <Form.Item name="email" id="email" style={{ left: "390px" }}>
+          <Form.Item
+            name='email' rules={[{ required: true, message: 'E-Mail is required.' }]}
+          >
             <Input
-              id="input-email"
-              prefix={<MailOutlined className="site-form-item-icon" />}
-              name="email"
+              name='email'
               value={email}
+              prefix={<MailOutlined className='site-form-item-icon' />}
+              type='email'
+              placeholder='E - Mail'
               onChange={this.onChange}
-              type="text"
-              placeholder="E-mail" />
+            />
           </Form.Item>
-          <Form.Item name="password">
-            <Input.Password
-              id="input-password"
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              name="password"
+          <Form.Item
+            name='password' rules={[{ required: true, message: 'Password is required.' }]}
+          >
+            <Input
+              name='password'
               value={password}
+              prefix={<LockOutlined className='site-form-item-icon' />}
+              type='password'
+              placeholder='Password'
               onChange={this.onChange}
-              type="password"
-              placeholder="Password"
             />
           </Form.Item>
-          <Form.Item name="confirmPassword">
-            <Input.Password
-              id="input-confirmpassword"
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              name="confirmPassword"
+          <Form.Item
+            name='confirmPassword' rules={[{ required: true, message: 'Confirm Password is required.' }]}
+          >
+            <Input
+              name='confirmPassword'
               value={confirmPassword}
+              prefix={<LockOutlined className='site-form-item-icon' />}
+              type='password'
+              placeholder='Confirm Password'
               onChange={this.onChange}
-              type="password"
-              placeholder="Confirm Password"
             />
           </Form.Item>
-
-          <Form.Item>
-            <Button
-              id="register-btn"
-              lassName="login-form-button"
-              disabled={isInvalid}
-              htmlType="submit"
-              type="submit">REGISTER
-            </Button>
-          </Form.Item>
-          {error && <p>{error.message}</p>}
-        </Form>
-      </div>
+        </Row>
+        <Form.Item className='form-submit'>
+          <Col span={24}>
+            <Button htmlType='submit' className='register-form-button' disabled={isInvalid}>
+              REGISTER
+              </Button>
+          </Col>
+          <Col span={24}>
+            <p id='login-link'>
+              Already have an Account? <Link id='link-login' to={ROUTES.LOGIN}>Sign In</Link>
+            </p>
+          </Col>
+        </Form.Item>
+        {error && <p>{error.message}</p>}
+      </Form>
     );
   }
 }
@@ -153,4 +156,4 @@ class RegisterFormBase extends Component {
 const RegisterForm = withRouter(RegisterFormBase);
 
 export default RegisterPage;
-export { RegisterForm, RegisterLink };
+export { RegisterForm };
