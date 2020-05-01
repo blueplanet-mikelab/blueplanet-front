@@ -510,8 +510,8 @@ class Forums extends Component {
             <Content className='forum-content'>
               <Row className='forum-row'>
                 {this.getForumThreads()}
-                {/* <Pagination current={this.state.current} onChange={this.onChangePage} total={100}
-                  style={{ backgroundColor: '#FFF' }} /> */}
+                <Pagination current={this.state.current} onChange={this.onChangePage} total={100}
+                  style={{ backgroundColor: '#FFF' }} />
               </Row>
             </Content>
           </Layout>
