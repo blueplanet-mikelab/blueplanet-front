@@ -1,83 +1,42 @@
-#head-create {
-    height: 42px;
-    margin-left: 370px;
-    margin-top: 50px;
-    
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 42px;
-    color: #0E3047;
+#register-box {
+  height: 743px;
 }
 
-#register {
-    width: 438px;
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 21px;
-    /* identical to box height */
-    color: rgba(78, 78, 78, 0.5);
-
-    margin-left: 390px;
+.register-form input.ant-input {
+  height: 46px;
 }
 
-#link-regis {
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 21px;
-    /* identical to box height */
-    color: #10828C;
+.register-form .ant-input-affix-wrapper .ant-input:not(:first-child) {
+  padding-left: 50px;
 }
 
-#register-btn.ant-btn {
-    left: 380px;
-    width: 67px;
-    height: 27px;
-    background: transparent !important;
-    color: #10828C;
-    /* width: 100%; */
-    border: transparent;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
-    line-height: 27px;
+.register-form .ant-input-affix-wrapper .ant-input-prefix {
+  left: 20px
 }
 
-#register-btn.ant-btn:hover, 
-#register-btn.ant-btn:focus, 
-#register-btn.ant-btn:active, 
-#register-btn.ant-btn.active {
-    width: 67px;
-    height: 27px;
-    left: 380px;
-    background: transparent !important;
-    color: rgba(78, 78, 78, 0.5);
-    /* width: 100%; */
-    border: transparent;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
-    line-height: 27px;
+.register-form-button, .register-form-button:hover, .register-form-button:active {
+  border-color: transparent;
+  color: #10828C;
+  padding: 0;
 }
 
+button.ant-btn.register-form-button:disabled {
+  border-color: transparent;
+  background-color: white;
+}
 
-#input-displayname {
-    width: 398px;
-    height: 48px;
-/* top: 317px; */
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    box-sizing: border-box;
-    border-radius: 5px;
+.register-form-button span {
+  font-weight: bold;
+  font-size: 18px;
+}
 
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
-    color: rgba(0, 0, 0, 0.15);
+#login-link {
+  font-weight: 300;
+  color: rgba(78, 78, 78, 0.5);
+}
+
+a#link-login {
+  margin-left: 10px;
+  font-weight: 600;
+  color: #10828C;
 }
