@@ -1,4 +1,4 @@
-#forgot-your-pass{
+/* #forgot-your-pass{
     width: 324px;
     height: 42px;
     margin-left: 501px;
@@ -72,4 +72,43 @@
     color: #FF3E30;
     background: rgba(0, 0, 0, 0.15)!important;
     border-radius: 5px;
+} */
+
+#forgot-box {
+  height: 450px;
+}
+
+.forgot-form input.ant-input, .forgot-button {
+  height: 46px;
+}
+
+.forgot-form .ant-input-affix-wrapper .ant-input:not(:first-child) {
+  padding-left: 50px;
+}
+
+.forgot-form .ant-input-affix-wrapper .ant-input-prefix {
+  left: 20px
+}
+
+#inform {
+  color: #4E4E4E;
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.forgot-button, 
+.forgot-button:disabled,
+.forgot-button:hover,
+.forgot-button:focus,
+.forgot-button:active {
+  width: 100%;
+  background: linear-gradient(270deg, #10828C 0%, #0E3047 100%);
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.forgot-button span {
+  font-weight: 500;
+  color: white;
 }

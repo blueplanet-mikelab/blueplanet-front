@@ -6,7 +6,7 @@ import firebase from '../firebase/config';
 
 import 'antd/dist/antd.css';
 import { Layout, Menu, Icon, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
-import "../css/forum.css";
+import '../css/forum.css';
 
 import { AuthContext } from '../auth/Auth';
 import * as ROUTES from '../constants/routes';
@@ -100,12 +100,10 @@ class Forums extends Component {
   };
 
   onChangePage = (page) => {
-    console.log(page);
     this.setState({
       current: page,
     });
     current = page;
-    console.log("current: " + current)
     const query = this.state.query;
     this.updateThreads(query, page)
   };
@@ -157,20 +155,6 @@ class Forums extends Component {
     this.getThreads(query, 1);
   }
 
-  // onChangePage = page => {
-  //   console.log(page);
-  //   this.setState({
-  //     currentPage: page,
-  //   });
-  // };
-
-  // handleChangePage = value => {
-  //   this.setState({
-  //     minValue: (value - 1) * num_of_threads_each_page,
-  //     maxValue: value * num_of_threads_each_page
-  //   });
-  // };
-
   handleSortBy = (sortBy, sortThread) => {
     const query = this.state.query;
     query.sortby = sortBy
@@ -193,8 +177,6 @@ class Forums extends Component {
             'Authorization': idToken
           }
         })
-        console.log("fav ed")
-        console.log(idToken)
       }).catch(function (error) {
         console.log(error)
       });
@@ -207,14 +189,12 @@ class Forums extends Component {
   }
 
   getThreads = async (query, current) => {
-    console.log("current in getThreads" + current)
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
     this.props.history.push(`/forums${q}`);
 
     try {
       response = await axios.get(`http://${backend_url}/api/forums/${current}/filter${q}`)
-      console.log(response)
     } catch (error) {
       console.log(error);
     }
@@ -248,7 +228,6 @@ class Forums extends Component {
       heartRecentlyViews: threadProperties.map(() => 'outlined'),
       // heartFavorites: threadProperties.map(() => 'outlined'),
     })
-    console.log(this.state.threadProperties)
   }
 
   componentDidMount() {
@@ -273,6 +252,12 @@ class Forums extends Component {
       .catch(err => console.log(err));
 
     const query = this.getQueryParams();
+    if (!query.type) {
+      query.type = 'review';
+    }
+    if (!query.duration_type) {
+      query.duration_type = 1;
+    }
     if (!query.budget_min & !query.budget_max) {
       query.budget_min = 0;
       query.budget_max = 50000;
@@ -339,11 +324,6 @@ class Forums extends Component {
       return <SpinLoading />
     }
 
-    // const threadList = [
-    //   this.state.threadProperties[0],
-    //   this.state.threadProperties[1]
-    // ]
-
     const menu = (
       <Menu>
         <SubMenu title='Add to My Triplist'>
@@ -355,9 +335,9 @@ class Forums extends Component {
       </Menu>
     )
 
-    return this.state.threadProperties.map(thread => {
+    return this.state.threadProperties.map((thread, index) => {
       return (
-        <Row key={thread.topic_id} className='thread-row'>
+        <Row key={index} className='thread-row'>
           <Col span={4} className='forum-thread-img'>
             <img alt={thread.topic_id} src={thread.thumbnail} />
           </Col>
@@ -396,18 +376,6 @@ class Forums extends Component {
 
   render() {
     return (
-      //           <Pagination
-      //             style={{ backgroundColor: "#FFF", textAlign: 'center' }}
-      //             defaultCurrent={1}
-      //             defaultPageSize={num_of_threads_each_page} //default size of page
-      //             onChange={this.handleChangePage}
-      //             total={100} //total number of card data available
-      //           />
-      //         </Content>
-      //       </Layout>
-      //     </Layout>
-      //   </Layout>
-      // </div>
       <div className='container forum-layout'>
         <Layout>
           <Sider className='sider' width='300'>
@@ -426,7 +394,7 @@ class Forums extends Component {
                   onClick={this.handleClick}
                   defaultSelectedKeys={['1']}
                   defaultOpenKeys={['country', 'duration', 'budget', 'month', 'theme']}
-                  mode="inline"
+                  mode='inline'
                 >
                   <SubMenu
                     key='country'
@@ -436,7 +404,7 @@ class Forums extends Component {
                     <Select
                       mode='multiple'
                       value={this.state.query.countries}
-                      placeholder="Please select"
+                      placeholder='Please select'
                       onChange={this.onChangeCountry}
                       id='select-box'
                     >
@@ -451,7 +419,7 @@ class Forums extends Component {
                   >
                     <Radio.Group
                       onChange={this.onChangeDuration}
-                      value={this.state.query.duration_type ? this.state.query.duration_type : 1}
+                      value={this.state.query.duration_type}
                       className='radio-box'
                     >
                       <Radio value={1}>&nbsp;1 - 3 Days</Radio>
@@ -499,7 +467,7 @@ class Forums extends Component {
                   </SubMenu>
                   <hr id='devider-line' />
                   <SubMenu
-                    key="month"
+                    key='month'
                     title={<span>Month</span>}
                     className='sub-menu'
                   >
@@ -515,7 +483,7 @@ class Forums extends Component {
                   </SubMenu>
                   <hr id='devider-line' />
                   <SubMenu
-                    key="theme"
+                    key='theme'
                     title={<span>Theme</span>}
                     className='sub-menu'
                   >
@@ -542,8 +510,8 @@ class Forums extends Component {
             <Content className='forum-content'>
               <Row className='forum-row'>
                 {this.getForumThreads()}
-                <Pagination current={this.state.current} onChange={this.onChangePage} total={100}
-                  style={{ backgroundColor: '#FFF' }} />
+                {/* <Pagination current={this.state.current} onChange={this.onChangePage} total={100}
+                  style={{ backgroundColor: '#FFF' }} /> */}
               </Row>
             </Content>
           </Layout>

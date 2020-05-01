@@ -1,132 +1,102 @@
-#welcome-login{
-    height: 42px;
-    margin-left: 370px;
-    margin-top: 50px;
-    
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 42px;
-    color: #0E3047;
+.bg {
+  width: 100%;
+  text-align: center;
+  background-image: url('../images/login-bg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;   
 }
 
-#login {
-    width: 438px;
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 21px;
-    /* identical to box height */
-    color: rgba(78, 78, 78, 0.5);
-
-    margin-left: 390px;
+.form-box {
+  display: inline-block;
+  margin: 120px auto;
+  border-radius: 5px;
+  background: white;
+  width: 502px;
+  height: 646px;
+  padding: 35px 30px;
 }
 
-#link-login {
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 21px;
-    /* identical to box height */
-    color: #10828C;
+.form-header {
+  font-weight: 600;
+  font-size: 26px;
+  color: #0E3047;
+  text-align: left;
 }
 
-#input-email {
-    width: 398px;
-    height: 48px;
-/* top: 317px; */
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    box-sizing: border-box;
-    border-radius: 5px;
-
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
-    color: rgba(0, 0, 0, 0.15);
+#devider-hr {
+  color: rgba(196, 196, 196, 0.5);
+  background-color: rgba(196, 196, 196, 0.5);
+  height: 1px;
+  border: 0.5px;
 }
 
-.ant-input-password.ant-input-affix-wrapper {
-    width: 398px;
-    height: 48px;
-    left: 390px;
-/* top: 317px; */
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    box-sizing: border-box;
-    border-radius: 5px;
-
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
-    color: rgba(0, 0, 0, 0.15);
+.form-content {
+  padding: 25px 20px;
 }
 
-#sign-in.ant-btn {
-    left: 380px;
-    width: 67px;
-    height: 27px;
-    background: transparent !important;
-    color: #10828C;
-    /* width: 100%; */
-    border: transparent;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
-    line-height: 27px;
+.login-form input.ant-input {
+  height: 46px;
 }
 
-#sign-in.ant-btn:hover, 
-#sign-in.ant-btn:focus, 
-#sign-in.ant-btn:active, 
-#sign-in.ant-btn.active {
-    width: 67px;
-    height: 27px;
-    left: 380px;
-    background: transparent !important;
-    color: rgba(78, 78, 78, 0.5);
-    /* width: 100%; */
-    border: transparent;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 18px;
-    line-height: 27px;
+.login-form .ant-input-affix-wrapper .ant-input:not(:first-child) {
+  padding-left: 50px;
 }
 
-.ant-checkbox-checked .ant-checkbox-inner {
-    background: #10828C !important;
-    color: #10828C;
+.login-form .ant-input-affix-wrapper .ant-input-prefix {
+  left: 20px
 }
 
-.ant-checkbox-wrapper:hover .ant-checkbox-inner, 
-.ant-checkbox:hover .ant-checkbox-inner, 
-.ant-checkbox-input:focus + .ant-checkbox-inner {
-    border-color:#10828C;
+#remember-col div.ant-row.ant-form-item {
+  text-align: left;
+  margin-bottom: 0px;
 }
 
-h1#welcome-login {
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 42px;
-    color: #0E3047;
-}
-#label-remember {
-    color: #10828C;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    /* line-height: 21px; */
-    font-family: Poppins;
+#forget-col {
+  text-align: right;
+  text-decoration: underline;
 }
 
-#remember-forget{
-    display: flex;
-    justify-content: space-between;  
+#remember-col div.ant-row.ant-form-item span,
+#forget-col a {
+  color: #10828C;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner, span.ant-checkbox-inner::after {
+  background-color: #10828C; 
+}
+
+.ant-checkbox-checked::after {
+  border: 1px solid #10828C;
+}
+
+.login-form-button, .login-form-button:hover, .login-form-button:active {
+  border-color: transparent;
+  color: #10828C;
+  padding: 0;
+}
+
+button.ant-btn.login-form-button:disabled {
+  border-color: transparent;
+  background-color: white;
+}
+
+.login-form-button span {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.form-submit .ant-form-item-control {
+  text-align: left;
+}
+
+#register-link {
+  font-weight: 300;
+  color: rgba(78, 78, 78, 0.5);
+}
+
+a#link-register {
+  margin-left: 10px;
+  font-weight: 600;
+  color: #10828C;
 }
