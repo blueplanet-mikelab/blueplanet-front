@@ -10,7 +10,7 @@ import * as ROUTES from '../constants/routes';
 
 import "../css/register.css";
 
-import { LogInLink } from './LogIn';
+// import { LogInLink } from './LogIn';
 import LogInFacebook from '../components/login/LogInFacebook';
 import LogInGoogle from '../components/login/LogInGoogle';
 
@@ -24,7 +24,7 @@ const RegisterPage = () => {
     <div>
       <h1 id="head-create">Create your Account</h1>
       <RegisterForm />
-      <LogInLink />
+      {/* <LogInLink /> */}
       <LogInFacebook />
       <LogInGoogle />
     </div>

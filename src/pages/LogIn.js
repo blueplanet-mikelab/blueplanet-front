@@ -2,16 +2,13 @@ import React, { Component, useContext } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import { AuthContext, signInWithEmailAndPassword } from '../auth/Auth';
 
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Form, Input, Button, Checkbox, Divider } from 'antd';
+import 'antd/dist/antd.css';
+import '../css/login.css';
+import { Row, Col, Form, Input, Button, Checkbox } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
-
-import "../css/login.css";
 
 import * as ROUTES from '../constants/routes';
 
-import { RegisterLink } from './Register';
-import { PasswordForgetLink } from './PasswordForget';
 import LogInFacebook from '../components/login/LogInFacebook';
 import LogInGoogle from '../components/login/LogInGoogle';
 
@@ -22,22 +19,24 @@ const LogInPage = () => {
   }
 
   return (
-    <div>
-      <h1 id="welcome-login">Welcome Back</h1>
-      <LogInForm />
-      <RegisterLink />
-      <LogInFacebook />
-      <LogInGoogle />
+    <div className='container bg'>
+      <div className='container form-box'>
+        <Row className='form-header'>
+          <p>Welcome Back!</p>
+          <hr id='devider-hr' />
+        </Row>
+        <Row className='form-content'>
+          <LogInForm />
+          <hr id='devider-hr' />
+        </Row>
+        <Row className='form-social'>
+          <LogInFacebook />
+          <LogInGoogle />
+        </Row>
+      </div>
     </div>
   );
 };
-
-const LogInLink = () => (
-  <p id="login">
-    Already have an account? <Link id="link-login" to={ROUTES.LOGIN}>Sign In</Link>
-    <Divider />
-  </p>
-);
 
 const INITIAL_STATE = {
   email: '',
@@ -71,58 +70,68 @@ class LogInFormBase extends Component {
 
   render() {
     const { email, password, error } = this.state;
-
     const isInvalid = password === '' || email === '';
-    return (<div>
-      <div id="background-login" style={{ width: "302px" }}>
-        <Form
-          onSubmit={this.onSubmit}
-          name="normal_login"
-          className="login-form">
-          <Form.Item name="email" id="email" style={{ left: "390px" }}>
+
+    return (
+      <Form
+        name='normal_login'
+        className='login-form'
+        onSubmit={this.onSubmit}
+      >
+        <Row>
+          <Form.Item
+            name='email' rules={[{ required: true, message: 'E-Mail is required.' }]}
+          >
             <Input
-              id="input-email"
-              prefix={<MailOutlined className="site-form-item-icon" />}
-              name="email"
+              name='email'
               value={email}
+              prefix={<MailOutlined className='site-form-item-icon' />}
+              type='email'
+              placeholder='E - Mail'
               onChange={this.onChange}
-              type="text"
-              placeholder="E-mail" />
-          </Form.Item>
-          <Form.Item name="password">
-            <Input.Password
-              id="input-password"
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              name="password"
-              value={password}
-              onChange={this.onChange}
-              type="password"
-              placeholder="Password"
             />
           </Form.Item>
-          <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle style={{ left: "370px" }}>
-              <div id="remember-forget">
-                <Checkbox
-                  id="remember">
-                  <span id="label-remember" >Remember me</span></Checkbox>
-                <PasswordForgetLink />
-              </div>
-            </Form.Item>
+          <Form.Item
+            name='password' rules={[{ required: true, message: 'Password is required.' }]}
+          >
+            <Input
+              name='password'
+              value={password}
+              prefix={<LockOutlined className='site-form-item-icon' />}
+              type='password'
+              placeholder='Password'
+              onChange={this.onChange}
+            />
           </Form.Item>
+        </Row>
+        <Row>
           <Form.Item>
-            <Button
-              id="sign-in"
-              lassName="login-form-button"
-              disabled={isInvalid}
-              htmlType="submit"
-              type="submit">SIGN IN
-            </Button>
+            <Col span={12} id='remember-col'>
+              <Form.Item name='remember' value='checked'>
+                <Checkbox>Remember me</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col span={12} id='forget-col'>
+              <Link className='login-form-forgot' to={ROUTES.PASSWORD_FORGET}>
+                Forgot password
+              </Link>
+            </Col>
           </Form.Item>
-          {error && <p>{error.message}</p>}
-        </Form>
-      </div>
-    </div>
+        </Row>
+        <Form.Item className='form-submit'>
+          <Col span={24}>
+            <Button htmlType='submit' className='login-form-button' disabled={isInvalid}>
+              SIGN IN
+              </Button>
+          </Col>
+          <Col span={24}>
+            <p id='register-link'>
+              Don’t have an Account? <Link id='link-register' to={ROUTES.REGISTER}>Register</Link>
+            </p>
+          </Col>
+        </Form.Item>
+        {error && <p>{error.message}</p>}
+      </Form>
     );
   }
 }
@@ -130,4 +139,4 @@ class LogInFormBase extends Component {
 const LogInForm = withRouter(LogInFormBase)
 
 export default LogInPage;
-export { LogInForm, LogInLink };
+export { LogInForm };
