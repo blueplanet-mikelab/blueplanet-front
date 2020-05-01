@@ -147,7 +147,6 @@ class RegisterFormBase extends Component {
             </p>
           </Col>
         </Form.Item>
-        {error && <p>{error.message}</p>}
       </Form>
     );
   }

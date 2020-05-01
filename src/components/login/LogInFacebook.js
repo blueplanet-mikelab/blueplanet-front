@@ -6,7 +6,7 @@ import '../../css/loginSocial.css';
 import { Button } from 'antd';
 import { createFromIconfontCN } from '@ant-design/icons';
 
-import { signInWithFacebook } from '../../firebase/actions';
+import { signInWithFacebook } from '../../auth/Auth';
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',

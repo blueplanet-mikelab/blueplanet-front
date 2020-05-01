@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import '../../css/loginSocial.css';
 import { Button } from 'antd';
 
-import { signInWithGoogle } from '../../firebase/actions';
+import { signInWithGoogle } from '../../auth/Auth';
 
 const onClick = (event) => {
   event.preventDefault();

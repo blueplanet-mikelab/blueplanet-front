@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { sendPasswordResetEmail } from '../auth/Auth';
 
-import "../css/passforget.css";
-
+import '../css/passforget.css';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import { Form, Input, Divider, Button } from 'antd';
+import { Row, Col, Form, Input, Button } from 'antd';
 import { MailOutlined } from '@ant-design/icons';
 
-import firebase from '../firebase/config';
 import * as ROUTES from '../constants/routes';
 
 const PasswordForgetPage = () => (
-  <div>
-    <h1 id="forgot-your-pass">Forget your Password?</h1>
-    <PasswordForgetForm />
+  <div className='container bg'>
+    <div className='container form-box' id='forgot-box'>
+      <Row className='form-header'>
+        <p>Forgot your Password?</p>
+        <hr id='devider-hr' />
+      </Row>
+      <Row className='form-content'>
+        <PasswordForgetForm />
+      </Row>
+    </div>
   </div>
-)
-
-const PasswordForgetLink = () => (
-  <p id="form-forgot">
-    <Link style={{ color: '#10828C' }} to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
-  </p>
 )
 
 const INITIAL_STATE = {
@@ -40,10 +40,10 @@ class PasswordForgetForm extends Component {
 
     const { email } = this.state;
 
-    firebase.auth()
-      .sendPasswordResetEmail(email)
+    sendPasswordResetEmail(email)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
+        this.props.history.push(ROUTES.HOME);
       })
       .catch((error) => {
         this.setState({ error });
@@ -59,35 +59,46 @@ class PasswordForgetForm extends Component {
     const isInvalid = email === '';
 
     return (
-      <div id="background-passForget" style={{ width: "302px" }}>
-        <Form onSubmit={this.onSubmit}>
-          <div id="inform">
-            <p>Don’t worry,</p>
-            <p>we will send you and email allowing you to reset it.</p>
-          </div>
-          <Form.Item name="email" id="email" style={{ left: "521px" }}>
+      <Form
+        className='forgot-form'
+        onSubmit={this.onSubmit}
+      >
+        <p id='inform'>
+          Don’t worry,<br />
+          we will send you and email allowing you to reset it.
+        </p>
+        <Row>
+          <Form.Item
+            name='email' rules={[{ required: true, message: 'E-Mail is required.' }]}
+          >
             <Input
-              id="input-email"
-              prefix={<MailOutlined className="site-form-item-icon" />}
-              name="email"
-              value={this.state.email}
+              name='email'
+              value={email}
+              prefix={<MailOutlined className='site-form-item-icon' />}
+              type='email'
+              placeholder='E - Mail'
               onChange={this.onChange}
-              type="text"
-              placeholder="E-mail" />
+            />
           </Form.Item>
-          <Button
-            id="reset-btn"
-            disabled={isInvalid}
-            htmlType="submit"
-            type="submit">Reset My Password
-        </Button>
-          {error && <p>{error.message}</p>}
-        </Form>
-      </div>
+        </Row>
+        <Form.Item className='form-submit'>
+          <Col span={24}>
+            <Button htmlType='submit' className='forgot-button' disabled={isInvalid}>
+              Reset my Password
+              </Button>
+          </Col>
+          <Col span={24}>
+            <p id='login-link'>
+              Remember your Password? <Link id='link-login' to={ROUTES.LOGIN}>Sign In</Link>
+            </p>
+          </Col>
+        </Form.Item>
+        {error && <p>{error.message}</p>}
+      </Form>
     )
   }
 }
 
 export default PasswordForgetPage;
 
-export { PasswordForgetForm, PasswordForgetLink };
+export { PasswordForgetForm };

@@ -51,8 +51,29 @@ export const signUpWithEmailAndPassword = async (newUser) => {
     })
 }
 
+export const signInWithFacebook = async () => {
+  return await auth.signInWithPopup(providers.facebook)
+    .then((socialAuthUser) => {
+      // var token = socialAuthUser.credential.accessToken;
+      // auth
+      //   .user(socialAuthUser.user.uid)
+      //   .set({
+      //     username: socialAuthUser.additionalUserInfo.profile.name,
+      //     email: socialAuthUser.additionalUserInfo.profile.email
+      //   })
+    })
+}
+
+export const signInWithGoogle = async () => {
+  return await auth.signInWithPopup(providers.google)
+}
+
 export const signInWithEmailAndPassword = async (email, password) => {
   return await auth.signInWithEmailAndPassword(email, password)
+}
+
+export const sendPasswordResetEmail = async (email) => {
+  return await auth.sendPasswordResetEmail(email)
 }
 
 export const signOut = async () => {
