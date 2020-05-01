@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, Dropdown } from 'antd'
 
-const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, onHeartFavoriteClick, handleFavDropDown, favMenu, addRecentlyView }) => {
+const ThreadHorizontalItem = ({ item, i, imgStyle, imgHandleSize, heartState, onHeartFavoriteClick, handleFavDropDown, favMenu, addRecentlyView}) => {
 
   return (
     <div className="thread-hori">
