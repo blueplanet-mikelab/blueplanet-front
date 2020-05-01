@@ -6,7 +6,7 @@ import firebase from '../firebase/config';
 
 import 'antd/dist/antd.css';
 import { Layout, Menu, Icon, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
-import "../css/forum.css";
+import '../css/forum.css';
 
 import { AuthContext } from '../auth/Auth';
 import * as ROUTES from '../constants/routes';
@@ -394,7 +394,7 @@ class Forums extends Component {
                   onClick={this.handleClick}
                   defaultSelectedKeys={['1']}
                   defaultOpenKeys={['country', 'duration', 'budget', 'month', 'theme']}
-                  mode="inline"
+                  mode='inline'
                 >
                   <SubMenu
                     key='country'
@@ -404,7 +404,7 @@ class Forums extends Component {
                     <Select
                       mode='multiple'
                       value={this.state.query.countries}
-                      placeholder="Please select"
+                      placeholder='Please select'
                       onChange={this.onChangeCountry}
                       id='select-box'
                     >
@@ -467,7 +467,7 @@ class Forums extends Component {
                   </SubMenu>
                   <hr id='devider-line' />
                   <SubMenu
-                    key="month"
+                    key='month'
                     title={<span>Month</span>}
                     className='sub-menu'
                   >
@@ -483,7 +483,7 @@ class Forums extends Component {
                   </SubMenu>
                   <hr id='devider-line' />
                   <SubMenu
-                    key="theme"
+                    key='theme'
                     title={<span>Theme</span>}
                     className='sub-menu'
                   >
