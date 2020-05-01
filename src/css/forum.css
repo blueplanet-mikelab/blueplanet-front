@@ -231,7 +231,7 @@ button#sort-btn.ant-btn.sort-btn.ant-btn-lg {
 }
 
 .forum-row {
-  margin: 0 20px;
+  margin: 0 20px 20px 20px;
   padding: 10px 0;
   background: white;
   border-radius: 5px;
@@ -290,4 +290,21 @@ i#icon-heart.anticon.anticon-heart {
 
 .forum-pop p {
   margin: 0 10px;
+}
+
+.ant-pagination {
+  margin: 20px;
+}
+
+.ant-pagination-item-active,
+.ant-pagination-item:hover,
+.ant-pagination-item:focus {
+  border-color: #10828C;
+}
+
+.ant-pagination-item-active a,
+.ant-pagination-item:hover a,
+.ant-pagination-item:focus a {
+  color: #10828C;
+  font-weight: bold;
 }

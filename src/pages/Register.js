@@ -57,9 +57,9 @@ class RegisterFormBase extends Component {
 
     const { displayName, email, password } = this.state;
     const newUser = {
-      displayName: this.state.displayName,
-      email: this.state.email,
-      password: this.state.password
+      displayName: displayName,
+      email: email,
+      password: password
     };
 
     signUpWithEmailAndPassword(newUser)
@@ -147,6 +147,7 @@ class RegisterFormBase extends Component {
             </p>
           </Col>
         </Form.Item>
+        {error && <p>{error.message}</p>}
       </Form>
     );
   }

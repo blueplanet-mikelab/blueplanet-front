@@ -36,38 +36,31 @@ class Forums extends Component {
       threadProperties: [],
       query: {},
       sortBy: 'popular',
-      // minValue: 0,
-      // maxValue: num_of_threads_each_page,
       typeThread: 1,
       sortThread: 1,
       heartFavorites: 'outlined',
       current: 1,
+      pages: 1,
     };
   }
 
   updateThreads = (query, current) => {
     this.setState({
+      current: current,
       query: query,
     });
-
     this.getThreads(query, current);
   }
 
   onChangeCountry = (value) => {
     const query = this.state.query;
     query.countries = value;
-    this.setState({
-      current: 1,
-    });
     this.updateThreads(query, 1)
   };
 
   onChangeDuration = (e) => {
     const query = this.state.query;
     query.duration_type = e.target.value;
-    this.setState({
-      current: 1,
-    });
     this.updateThreads(query, 1)
   }
 
@@ -75,37 +68,23 @@ class Forums extends Component {
     const query = this.state.query;
     query.budget_min = value[0];
     query.budget_max = value[1];
-    this.setState({
-      current: 1,
-    });
     this.updateThreads(query, 1)
   }
 
   onChangeMin = (value) => {
     const query = this.state.query;
     query.budget_min = value;
-    this.setState({
-      current: 1,
-    });
     this.updateThreads(query, 1)
   };
 
   onChangeMax = (value) => {
     const query = this.state.query;
     query.budget_max = value;
-    this.setState({
-      current: 1,
-    });
     this.updateThreads(query, 1)
   };
 
   onChangePage = (page) => {
-    this.setState({
-      current: page,
-    });
-    current = page;
-    const query = this.state.query;
-    this.updateThreads(query, page)
+    this.updateThreads(this.state.query, page)
   };
 
   getSelection = () => {
@@ -118,9 +97,6 @@ class Forums extends Component {
   onChangeMonth = (value) => {
     const query = this.state.query;
     query.months = value;
-    this.setState({
-      current: 1,
-    });
     this.updateThreads(query, 1)
   }
 
@@ -129,7 +105,6 @@ class Forums extends Component {
       'Mountain', 'Sea', 'Religion', 'Historical', 'Entertainment', 'Festival', 'Eating', 'Night Lifestyle', 'Photography', 'Sightseeing'
     ]; // fixed bugs in mongo
     return themes.map(theme => {
-      var themeTrimed = theme.trim()
       return <Checkbox key={theme} value={theme.trim()}>&nbsp;{theme}</Checkbox>
     })
   }
@@ -137,9 +112,6 @@ class Forums extends Component {
   onChangeTheme = (checked) => {
     const query = this.state.query;
     query.themes = checked
-    this.setState({
-      current: 1,
-    });
     this.updateThreads(query, 1)
   }
 
@@ -224,6 +196,8 @@ class Forums extends Component {
     });
 
     this.setState({
+      current: response.data.current_page,
+      pages: response.data.total_page * 10,
       threadProperties: threadProperties,
       heartRecentlyViews: threadProperties.map(() => 'outlined'),
       // heartFavorites: threadProperties.map(() => 'outlined'),
@@ -337,44 +311,49 @@ class Forums extends Component {
 
     return this.state.threadProperties.map((thread, index) => {
       return (
-        <Row key={index} className='thread-row'>
-          <Col span={4} className='forum-thread-img'>
-            <img alt={thread.topic_id} src={thread.thumbnail} />
-          </Col>
-          <Col span={18} className='forum-thread-info'>
-            <Row className='forum-title'>
-              <a href={thread.link} target='_blank' rel='noopener noreferrer'>
-                {thread.title}
-              </a>
-            </Row>
-            <Row className='forum-tag'>
-              {thread.day !== 'Not Define' ? <Tag>{thread.day}</Tag> : ''}&nbsp;&nbsp;
-              {thread.budget != '฿฿' ? <Tag>{thread.budget}</Tag> : ''}
-            </Row>
-            <Row className='forum-pop'>
-              <Icon type='plus' />
-              <p>{thread.vote}&nbsp;&nbsp;upvoted</p>
-              <Icon type='fire' theme='filled' />
-              <p>{thread.popular}&nbsp;&nbsp;popular</p>
-            </Row>
-          </Col>
-          <Col span={2} className='forum-option'>
-            <Icon
-              type='heart'
-              theme={this.state.heartFavorites}
-              onClick={this.onHeartFavoriteClick}
-              id='icon-heart'
-            />
-            <Dropdown overlay={menu} id='icon'>
-              <Icon type='more' id='icon-more' />
-            </Dropdown>
-          </Col>
-        </Row>
+        <div key={index}>
+          <Row className='thread-row'>
+            <Col span={4} className='forum-thread-img'>
+              <img alt={thread.topic_id} src={thread.thumbnail} />
+            </Col>
+            <Col span={18} className='forum-thread-info'>
+              <Row className='forum-title'>
+                <a href={thread.link} target='_blank' rel='noopener noreferrer'>
+                  {thread.title}
+                </a>
+              </Row>
+              <Row className='forum-tag'>
+                {thread.day !== 'Not Define' ? <Tag>{thread.day}</Tag> : ''}&nbsp;&nbsp;
+              {thread.budget !== '฿฿' ? <Tag>{thread.budget}</Tag> : ''}
+              </Row>
+              <Row className='forum-pop'>
+                <Icon type='plus' />
+                <p>{thread.vote}&nbsp;&nbsp;upvoted</p>
+                <Icon type='fire' theme='filled' />
+                <p>{thread.popular}&nbsp;&nbsp;popular</p>
+              </Row>
+            </Col>
+            <Col span={2} className='forum-option'>
+              <Icon
+                type='heart'
+                theme={this.state.heartFavorites}
+                onClick={this.onHeartFavoriteClick}
+                id='icon-heart'
+              />
+              <Dropdown overlay={menu} id='icon'>
+                <Icon type='more' id='icon-more' />
+              </Dropdown>
+            </Col>
+          </Row>
+          <hr id='devider-line' />
+        </div>
       )
     })
   }
 
   render() {
+    const { query } = this.state;
+    
     return (
       <div className='container forum-layout'>
         <Layout>
@@ -403,7 +382,7 @@ class Forums extends Component {
                   >
                     <Select
                       mode='multiple'
-                      value={this.state.query.countries}
+                      value={query.countries}
                       placeholder='Please select'
                       onChange={this.onChangeCountry}
                       id='select-box'
@@ -419,7 +398,7 @@ class Forums extends Component {
                   >
                     <Radio.Group
                       onChange={this.onChangeDuration}
-                      value={this.state.query.duration_type}
+                      value={query.duration_type}
                       className='radio-box'
                     >
                       <Radio value={1}>&nbsp;1 - 3 Days</Radio>
@@ -449,7 +428,7 @@ class Forums extends Component {
                           min={0}
                           max={50000}
                           defaultValue={0}
-                          value={this.state.query.budget_min}
+                          value={query.budget_min}
                           onChange={this.onChangeMin}
                         />
                       </div>
@@ -459,7 +438,7 @@ class Forums extends Component {
                           min={0}
                           max={50000}
                           defaultValue={50000}
-                          value={this.state.query.budget_max}
+                          value={query.budget_max}
                           onChange={this.onChangeMax}
                         />
                       </div>
@@ -472,9 +451,8 @@ class Forums extends Component {
                     className='sub-menu'
                   >
                     <Select
-                      defaultValue='January'
                       placeholder='Month'
-                      value={this.state.query.months}
+                      value={query.months}
                       onChange={this.onChangeMonth}
                       className='select-month'
                     >
@@ -500,7 +478,7 @@ class Forums extends Component {
           <Layout>
             <Header className='forum-header'>
               <Row>
-                <p>{this.state.query.countries}</p>
+                <p>{query.countries}</p>
                 {this.getTypeButtons()}
               </Row>
               <Row className='sort-row'>
@@ -510,8 +488,12 @@ class Forums extends Component {
             <Content className='forum-content'>
               <Row className='forum-row'>
                 {this.getForumThreads()}
-                <Pagination current={this.state.current} onChange={this.onChangePage} total={100}
-                  style={{ backgroundColor: '#FFF' }} />
+                <Pagination
+                  id='pagination'
+                  current={this.state.current}
+                  onChange={this.onChangePage}
+                  total={this.state.pages}
+                />
               </Row>
             </Content>
           </Layout>
