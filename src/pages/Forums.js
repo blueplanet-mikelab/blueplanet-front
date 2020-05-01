@@ -57,18 +57,18 @@ class Forums extends Component {
     const query = this.state.query;
     query.countries = value;
     this.setState({
-      current: '1',
+      current: 1,
     });
-    this.updateThreads(query, '1')
+    this.updateThreads(query, 1)
   };
 
   onChangeDuration = (e) => {
     const query = this.state.query;
     query.duration_type = e.target.value;
     this.setState({
-      current: '1',
+      current: 1,
     });
-    this.updateThreads(query, '1')
+    this.updateThreads(query, 1)
   }
 
   onChangeBudget = (value) => {
@@ -76,27 +76,27 @@ class Forums extends Component {
     query.budget_min = value[0];
     query.budget_max = value[1];
     this.setState({
-      current: '1',
+      current: 1,
     });
-    this.updateThreads(query, '1')
+    this.updateThreads(query, 1)
   }
 
   onChangeMin = (value) => {
     const query = this.state.query;
     query.budget_min = value;
     this.setState({
-      current: '1',
+      current: 1,
     });
-    this.updateThreads(query, '1')
+    this.updateThreads(query, 1)
   };
 
   onChangeMax = (value) => {
     const query = this.state.query;
     query.budget_max = value;
     this.setState({
-      current: '1',
+      current: 1,
     });
-    this.updateThreads(query, '1')
+    this.updateThreads(query, 1)
   };
 
   onChangePage = (page) => {
@@ -121,9 +121,9 @@ class Forums extends Component {
     const query = this.state.query;
     query.months = value;
     this.setState({
-      current: '1',
+      current: 1,
     });
-    this.updateThreads(query, '1')
+    this.updateThreads(query, 1)
   }
 
   getCheckBox = () => {
@@ -140,9 +140,9 @@ class Forums extends Component {
     const query = this.state.query;
     query.themes = checked
     this.setState({
-      current: '1',
+      current: 1,
     });
-    this.updateThreads(query, '1')
+    this.updateThreads(query, 1)
   }
 
   handleType = (type, typeThread) => {
@@ -152,9 +152,9 @@ class Forums extends Component {
     this.setState({
       query: query,
       typeThread,
-      current: '1'
+      current: 1
     });
-    this.getThreads(query, '1');
+    this.getThreads(query, 1);
   }
 
   // onChangePage = page => {
@@ -178,9 +178,9 @@ class Forums extends Component {
     this.setState({
       query: query,
       sortThread,
-      current: '1'
+      current: 1
     });
-    this.getThreads(query, '1');
+    this.getThreads(query, 1);
   }
 
   onHeartFavoriteClick = (i, id) => {
