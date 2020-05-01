@@ -183,8 +183,6 @@ class UserProfile extends Component {
   }
 
   editTriplist = (id, thumbnail) => {
-    console.log(this.state.inputEditTitle)
-    console.log(this.state.inputEditShortDes)
     this.props.currentUser.getIdToken(true)
       .then((idToken) => {
         axios.put(`http://${backend_url}/api/my-triplist/triplists/${id}`,
@@ -204,7 +202,6 @@ class UserProfile extends Component {
   }
 
   addRecentlyView = (id) => {
-    console.log(id)
     this.props.currentUser.getIdToken(true)
       .then((idToken) => {
         axios.put(`http://${backend_url}/api/my-triplist/recently-viewed/${id}`, {}, {
@@ -219,11 +216,9 @@ class UserProfile extends Component {
   }
 
   addThreadIntoTrip = (trip, id) => {
-    const tripId = trip;
-    const threadId = id;
     this.props.currentUser.getIdToken(true)
       .then((idToken) => {
-        axios.put(`http://${backend_url}/api/my-triplist/triplists/${tripId}/add/${threadId}`, {}, {
+        axios.put(`http://${backend_url}/api/my-triplist/triplists/${trip}/add/${id}`, {}, {
           headers: {
             'Authorization': idToken
           }
@@ -238,14 +233,12 @@ class UserProfile extends Component {
     this.setState({
       titleTripByFav: input.target.value,
     });
-    console.log('changed', input.target.value);
   }
 
   inputShortDesByFav = (input) => {
     this.setState({
       shortDescByFav: input.target.value,
     });
-    console.log('changed', input.target.value);
   }
 
   showModal = (id, thumbnail) => {
@@ -257,8 +250,6 @@ class UserProfile extends Component {
   };
 
   handleOk = e => {
-    console.log(this.state.idThread)
-    console.log(this.state.thumbnailThread)
     this.createTriplistByThread(this.state.idThread, this.state.thumbnailThread)
     this.setState({
       visible: false,
@@ -276,14 +267,12 @@ class UserProfile extends Component {
     this.setState({
       inputEditTitle: input.target.value,
     });
-    console.log('changed', input.target.value);
   }
 
   inputEditShortDes = (input) => {
     this.setState({
       inputEditShortDes: input.target.value,
     });
-    console.log('changed', input.target.value);
   }
 
   showEditTripModal = (id, thumbnail) => {
@@ -295,8 +284,6 @@ class UserProfile extends Component {
   };
 
   handleCompleteEditTrip = e => {
-    console.log(this.state.idThread)
-    console.log(this.state.thumbnailThread)
     this.editTriplist(this.state.idThread, this.state.thumbnailThread)
     this.setState({
       editVisible: false,
@@ -311,10 +298,9 @@ class UserProfile extends Component {
   };
 
   deleteFavorite = (id) => {
-    const favId = id
     this.props.currentUser.getIdToken(true)
       .then((idToken) => {
-        axios.delete(`http://${backend_url}/api/my-triplist/favorites/${favId}`, {
+        axios.delete(`http://${backend_url}/api/my-triplist/favorites/${id}`, {
           headers: {
             'Authorization': idToken
           }
@@ -327,10 +313,9 @@ class UserProfile extends Component {
   }
 
   deleteTriplist = (id) => {
-    const tripId = id
     this.props.currentUser.getIdToken(true)
       .then((idToken) => {
-        axios.delete(`http://${backend_url}/api/my-triplist/triplists/${tripId}`, {
+        axios.delete(`http://${backend_url}/api/my-triplist/triplists/${id}`, {
           headers: {
             'Authorization': idToken
           }
@@ -531,7 +516,6 @@ class UserProfile extends Component {
     });
     tripPagination = page;
     console.log(tripPagination)
-    // console.log(favPagination)
   };
 
   onChangeFavPage = (page) => {
