@@ -1,0 +1,52 @@
+#login-facebook {
+  margin-bottom: 20px;
+}
+
+button#login-facebook.ant-btn.ant-btn-submit {
+  width: 322px;
+  height: 48px;
+  border-color: #2B5998;
+}
+
+#login-facebook div {
+  margin-top: 5px;
+  display: inline-flex;
+}
+
+#icon-facebook {
+  color: #2B5998;
+}
+
+span#icon-facebook.anticon {
+  font-size: 28px;
+}
+
+#login-facebook p {
+  margin: 4px 0px 0px 20px;
+  color: #2B5998;
+  font-weight: 500;
+}
+
+#icon-google {
+  width: 28px;
+  height: 28px;
+}
+
+button#login-google.ant-btn.ant-btn-submit {
+  width: 322px;
+  height: 48px;
+  border-color: #FF3E30;
+}
+
+#login-google div {
+  margin-top: 5px;
+  display: inline-flex;
+}
+
+#login-google p {
+  margin: 4px 0px 0px 20px;
+  color: #FF3E30;
+  font-weight: 500;
+}
+
+
