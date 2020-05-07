@@ -76,6 +76,71 @@ class UserProfile extends Component {
     }
   }
 
+  updateThreads = (query, sort) => {
+    this.setState({
+      query: query,
+    });
+    this.getThreads(query, sort);
+  }
+
+  getThreads = async (query,sort) => {
+    let response = null;
+    const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
+    // this.props.history.push(`/profile${q}`);
+    try {
+      if(sort === 'fav') {
+        // Get favorite list
+        await this.props.currentUser.getIdToken(true)
+        .then((idToken) => {
+          response = axios.get(`http://${backend_url}/api/my-triplist/favorites/${favPagination}${q}`, {
+            headers: {
+            'Authorization': idToken
+            }
+          })
+          response.then((result) => {
+            console.log("result fav")
+            console.log(result)
+            this.setState({
+              favoritelist: result.data,
+              favThreadslist: result.data.favorite.threads,
+            });
+          })
+        }).catch(function (error) {
+          console.log(error)
+        });
+       }
+
+       if(sort === 'trip') {
+// Get favorite list
+        await this.props.currentUser.getIdToken(true)
+        .then((idToken) => {
+           //Get trip list
+        response = axios.get(`http://${backend_url}/api/my-triplist/triplists${q}`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        response.then((result) => {
+          // console.log(idToken)
+          console.log("result trip")
+          console.log(result)
+          this.setState({
+            triplist: result.data,
+          });
+          })
+        }).catch(function (error) {
+          console.log(error)
+        });
+       }
+      } catch (error) {
+      console.log(error);
+    }
+  }
+
+  getQueryParams() {
+    return qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
+  }
+
   componentDidMount() {
     this.props.currentUser.getIdToken(/* forceRefresh */ true)
       .then((idToken) => {
@@ -95,16 +160,18 @@ class UserProfile extends Component {
           var hasThreads = "true";
           for (var i = 0; i < this.state.triplist.length; i++) {
             if (this.state.triplist[i].threads.length === 0) {
+              console.log(this.state.triplist[i].threads.length)
               console.log("No any thread in trip")
               hasThreads = "false";
             }
           }
-          if (this.state.triplist === "" || this.state.triplist == null || this.state.triplist.length === 0 || hasThreads === "false") {
+          if (this.state.triplist === "" || this.state.triplist == null || hasThreads === "false") {
             console.log("null")
           }
           else {
             console.log("title " + this.state.triplist[0].title)
             console.log("threads " + this.state.triplist[0].threads[0].title)
+            console.log(this.state.triplist[0].num_threads)
           }
         })
 
@@ -129,6 +196,7 @@ class UserProfile extends Component {
             console.log(" favoritelist" + this.state.favThreadslist[0].title)
           }
         })
+
         // Get recently-view list
         var recently = axios.get(`http://${backend_url}/api/my-triplist/recently-viewed`, {
           headers: {
@@ -153,13 +221,13 @@ class UserProfile extends Component {
       }).catch(function (error) {
         console.log(error)
       });
-    // if (this.props.location != null) {
-    //   const q = this.getQueryParams(this.props.location.search);
-    //   this.setState({
-    //     query: q
-    //   })
-    //   this.getInformation(q);
+    
+    //   const query = this.getQueryParams();
+    //   if (!query.sortby) {
+    //   query.sortby = 'latest';
     // }
+    //   this.updateThreads(query)
+   
   }
 
   createTriplistByThread = (id, thumbnail) => {
@@ -216,6 +284,8 @@ class UserProfile extends Component {
   }
 
   addThreadIntoTrip = (trip, id) => {
+    console.log(trip)
+    console.log(id)
     this.props.currentUser.getIdToken(true)
       .then((idToken) => {
         axios.put(`http://${backend_url}/api/my-triplist/triplists/${trip}/add/${id}`, {}, {
@@ -240,7 +310,6 @@ class UserProfile extends Component {
       shortDescByFav: input.target.value,
     });
   }
-
   showModal = (id, thumbnail) => {
     this.setState({
       visible: true,
@@ -527,16 +596,29 @@ class UserProfile extends Component {
   };
 
   handleType = (type, value) => {
-    // const query = this.state.query;
-    // query.sortby = type
+    const query = this.state.query;
+    query.sortby = type
     this.setState({
-      // query: query,
+      query: query,
       tripListSortType: value,
     });
-    // this.getInformation(query)
+    this.getThreads(query, 'trip')
+  }
+
+  handleSort = (type, value) => {
+    const query = this.state.query;
+    query.sortby = type
+    console.log(query.sortby)
+    this.setState({
+      query: query,
+      subtabSortType: value,
+    });
+    this.getThreads(query, 'fav')
   }
 
   render() {
+    const { query } = this.state;
+
     const uploadButton = (
       <div>
         {this.state.loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -556,21 +638,27 @@ class UserProfile extends Component {
         </div>
         <Button type="link"
           className={`subtab-btn ${this.state.subtabSortType === 1 ? 'active' : ''}`}
-          onClick={() => this.setState({ subtabSortType: 1 })}
+          // onClick={() => this.setState({ subtabSortType: 1 })}
+          onClick={() => this.handleSort('popular', 1)}
+          value={this.state.query.sortby}
           icon="fire"
           size="large"
           style={{ width: `19%`, margin: `auto 0 auto 5%` }}
         >Most Popular</Button>
         <Button type="link"
           className={`subtab-btn ${this.state.subtabSortType === 2 ? 'active' : ''}`}
-          onClick={() => this.setState({ subtabSortType: 2 })}
+          // onClick={() => this.setState({ subtabSortType: 2 })}
+          onClick={() => this.handleSort('vote', 2)}
+          value={this.state.query.sortby}
           icon="plus"
           size="large"
           style={{ width: `19%`, margin: 'auto' }}
         >Most Upvoted</Button>
         <Button type="link"
           className={`subtab-btn ${this.state.subtabSortType === 3 ? 'active' : ''}`}
-          onClick={() => this.setState({ subtabSortType: 3 })}
+          // onClick={() => this.setState({ subtabSortType: 3 })}
+          onClick={() => this.handleSort('latest', 3)}
+          value={this.state.query.sortby}
           size="large"
           style={{ width: `19%`, margin: 'auto' }}
         >Recently Added</Button>
@@ -627,7 +715,7 @@ class UserProfile extends Component {
                   i={i}
                   heartState={this.state.heartRecentlyViews[i]}
                   onHeartFavoriteClick={this.onHeartFavoriteClick}
-                  handleFavDropDown={this.handleRecentlyViewDropDown}
+                  handleRecentlyViewDropDown={this.handleRecentlyViewDropDown}
                   recentlyMenu={this.state.recentlyMenu}
                 />
               )
@@ -660,7 +748,7 @@ class UserProfile extends Component {
                     </a>
                   </Dropdown>
                 </h1>
-                <span>{this.state.triplist[selectedIndex].numThreads} Threads</span>
+                <span>{this.state.triplist[selectedIndex].num_threads} Threads</span>
                 <p></p>
                 <p>{this.state.triplist[selectedIndex].description}</p>
               </div>
@@ -718,7 +806,7 @@ class UserProfile extends Component {
                     <div style={{ display: 'flex' }}>
                       <div>
                         <h2 onClick={() => this.setState({ selectedTripList: i })} style={{ cursor: 'pointer' }}>{item.title}</h2>
-                        <p>{item.numThreads} Threads</p>
+                        <p>{item.num_threads} Threads</p>
                       </div>
                     </div>
                   </div>
