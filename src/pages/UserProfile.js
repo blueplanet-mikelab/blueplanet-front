@@ -83,56 +83,56 @@ class UserProfile extends Component {
     this.getThreads(query, sort);
   }
 
-  getThreads = async (query,sort) => {
+  getThreads = async (query, sort) => {
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
     // this.props.history.push(`/profile${q}`);
     try {
-      if(sort === 'fav') {
+      if (sort === 'fav') {
         // Get favorite list
         await this.props.currentUser.getIdToken(true)
-        .then((idToken) => {
-          response = axios.get(`http://${backend_url}/api/my-triplist/favorites/${favPagination}${q}`, {
-            headers: {
-            'Authorization': idToken
-            }
-          })
-          response.then((result) => {
-            console.log("result fav")
-            console.log(result)
-            this.setState({
-              favoritelist: result.data,
-              favThreadslist: result.data.favorite.threads,
-            });
-          })
-        }).catch(function (error) {
-          console.log(error)
-        });
-       }
-
-       if(sort === 'trip') {
-// Get favorite list
-        await this.props.currentUser.getIdToken(true)
-        .then((idToken) => {
-           //Get trip list
-        response = axios.get(`http://${backend_url}/api/my-triplist/triplists${q}`, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-        response.then((result) => {
-          // console.log(idToken)
-          console.log("result trip")
-          console.log(result)
-          this.setState({
-            triplist: result.data,
+          .then((idToken) => {
+            response = axios.get(`http://${backend_url}/api/my-triplist/favorites/${favPagination}${q}`, {
+              headers: {
+                'Authorization': idToken
+              }
+            })
+            response.then((result) => {
+              console.log("result fav")
+              console.log(result)
+              this.setState({
+                favoritelist: result.data,
+                favThreadslist: result.data.favorite.threads,
+              });
+            })
+          }).catch(function (error) {
+            console.log(error)
           });
-          })
-        }).catch(function (error) {
-          console.log(error)
-        });
-       }
-      } catch (error) {
+      }
+
+      if (sort === 'trip') {
+        // Get favorite list
+        await this.props.currentUser.getIdToken(true)
+          .then((idToken) => {
+            //Get trip list
+            response = axios.get(`http://${backend_url}/api/my-triplist/triplists${q}`, {
+              headers: {
+                'Authorization': idToken
+              }
+            })
+            response.then((result) => {
+              // console.log(idToken)
+              console.log("result trip")
+              console.log(result)
+              this.setState({
+                triplist: result.data,
+              });
+            })
+          }).catch(function (error) {
+            console.log(error)
+          });
+      }
+    } catch (error) {
       console.log(error);
     }
   }
@@ -221,13 +221,14 @@ class UserProfile extends Component {
       }).catch(function (error) {
         console.log(error)
       });
-    
-    //   const query = this.getQueryParams();
+
+    //   const query = this.state.query;
     //   if (!query.sortby) {
     //   query.sortby = 'latest';
     // }
-    //   this.updateThreads(query)
-   
+    //   this.getThreads(query,'trip')
+    //   this.getThreads(query,'fav')
+
   }
 
   createTriplistByThread = (id, thumbnail) => {
@@ -477,17 +478,17 @@ class UserProfile extends Component {
     const threadId = id;
     var allTrip = this.state.triplist.map(thread => {
       return (
-        <Menu.Item><Button onClick={() => this.addThreadIntoTrip(thread._id, threadId)}>{thread.title}</Button></Menu.Item>
+        <Menu.Item onClick={() => this.addThreadIntoTrip(thread._id, threadId)}>{thread.title}</Menu.Item>
       )
     })
     var menuThreadInTrip = (
       <Menu>
         <SubMenu title="Add to My Triplist">
-          <Menu.Item><Button onClick={() => this.showModal(threadId, thumbnail)}>New Triplist</Button></Menu.Item>
+          <Menu.Item onClick={() => this.showModal(threadId, thumbnail)}>New Triplist</Menu.Item>
           {allTrip}
         </SubMenu>
-        <Menu.Item>Save to My Favorite</Menu.Item>
-        <Menu.Item><Button onClick={() => this.deleteThreadInTriplist(threadId, this.state.triplist[this.state.selectedTripList]._id)}>Delete</Button></Menu.Item>
+        {/* <Menu.Item>Save to My Favorite</Menu.Item> */}
+        <Menu.Item onClick={() => this.deleteThreadInTriplist(threadId, this.state.triplist[this.state.selectedTripList]._id)}>Delete</Menu.Item>
       </Menu>
     );
     this.setState({
@@ -500,16 +501,16 @@ class UserProfile extends Component {
     const favId = id;
     var allTrip = this.state.triplist.map(thread => {
       return (
-        <Menu.Item><Button onClick={() => this.addThreadIntoTrip(thread._id, favId)}>{thread.title}</Button></Menu.Item>
+        <Menu.Item onClick={() => this.addThreadIntoTrip(thread._id, favId)}>{thread.title}</Menu.Item>
       )
     })
     var menuInFav = (
       <Menu>
         <SubMenu title="Add to My Triplist">
-          <Menu.Item><Button onClick={() => this.showModal(favId, thumbnail)}>New Triplist</Button></Menu.Item>
+          <Menu.Item onClick={() => this.showModal(favId, thumbnail)}>New Triplist</Menu.Item>
           {allTrip}
         </SubMenu>
-        <Menu.Item><Button onClick={() => this.deleteFavorite(favId)}>Delete</Button></Menu.Item>
+        <Menu.Item onClick={() => this.deleteFavorite(favId)}>Delete</Menu.Item>
       </Menu>
     );
     this.setState({
@@ -517,16 +518,16 @@ class UserProfile extends Component {
     })
   }
 
-  handleRecentlyViewDropDown = (id) => {
+  handleRecentlyViewDropDown = (id, thumbnail) => {
     var allTrip = this.state.triplist.map(thread => {
       return (
-        <Menu.Item><Button onClick={() => this.addThreadIntoTrip(thread._id, id)}>{thread.title}</Button></Menu.Item>
+        <Menu.Item onClick={() => this.addThreadIntoTrip(thread._id, id)}>{thread.title}</Menu.Item>
       )
     })
     var menuThreadInRecently = (
       <Menu>
         <SubMenu title="Add to My Triplist">
-          {/* <Menu.Item><Button onClick={() => this.showModal(id)}>New Triplist</Button></Menu.Item> */}
+          <Menu.Item onClick={() => this.showModal(id, thumbnail)}>New Triplist</Menu.Item>
           {allTrip}
         </SubMenu>
         {/* <Menu.Item>Save to My Favorite</Menu.Item> */}
@@ -638,7 +639,6 @@ class UserProfile extends Component {
         </div>
         <Button type="link"
           className={`subtab-btn ${this.state.subtabSortType === 1 ? 'active' : ''}`}
-          // onClick={() => this.setState({ subtabSortType: 1 })}
           onClick={() => this.handleSort('popular', 1)}
           value={this.state.query.sortby}
           icon="fire"
@@ -647,7 +647,6 @@ class UserProfile extends Component {
         >Most Popular</Button>
         <Button type="link"
           className={`subtab-btn ${this.state.subtabSortType === 2 ? 'active' : ''}`}
-          // onClick={() => this.setState({ subtabSortType: 2 })}
           onClick={() => this.handleSort('vote', 2)}
           value={this.state.query.sortby}
           icon="plus"
@@ -656,7 +655,6 @@ class UserProfile extends Component {
         >Most Upvoted</Button>
         <Button type="link"
           className={`subtab-btn ${this.state.subtabSortType === 3 ? 'active' : ''}`}
-          // onClick={() => this.setState({ subtabSortType: 3 })}
           onClick={() => this.handleSort('latest', 3)}
           value={this.state.query.sortby}
           size="large"
@@ -730,7 +728,7 @@ class UserProfile extends Component {
       if (selectedIndex != null) {
         return (
           <>
-            {sorter}
+            {/* {sorter} */}
             <p style={{ margin: '30px 0 0 0' }}><span style={{ color: '#10828C', cursor: 'pointer', fontWeight: 'bold' }}
               onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {this.state.triplist[selectedIndex].title}</p>
             <div style={{ display: 'flex', paddingBottom: '40px', margin: '20px 20px 0 0', borderBottom: '0.5px solid rgba(130, 142, 180, 0.5)' }}>

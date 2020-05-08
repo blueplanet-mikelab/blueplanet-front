@@ -17,7 +17,7 @@ const ThreadHorizontalRecentlyItem = ({ item, i, heartState, onHeartFavoriteClic
                     <Icon
                         type="more"
                         style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }}
-                        onClick={() => handleRecentlyViewDropDown(item._id)} />
+                        onClick={() => handleRecentlyViewDropDown(item._id, item.thumbnail)} />
                 </a>
             </Dropdown>
         </div>
