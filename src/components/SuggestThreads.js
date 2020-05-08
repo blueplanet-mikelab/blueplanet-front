@@ -7,13 +7,12 @@ import * as ROUTES from '../constants/routes';
 
 import 'antd/dist/antd.css';
 import "../css/suggest.css";
-import { Carousel, Col, Row, Tag, Button, Icon, Dropdown } from 'antd';
-import SpinLoading from './SpinLoading';
-import IndexDropdown from './IndexDropdown';
+import { Col, Row, Button, Icon } from 'antd';
 
 import SuggestDuration from "../components/SuggestDuration";
 import SuggestMonth from "../components/SuggestMonth";
 import SuggestTheme from "../components/Theme";
+import IndexCarousel from './IndexCarousel';
 
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010';
 
@@ -88,81 +87,16 @@ class SuggestThreads extends Component {
     })
   }
 
-  getCarousel = () => {
-    const carouselIndex = [0, 3, 6, 9]
-    return carouselIndex.map(index => {
-      return (
-        <div key={index}>{this.createSuggestion(index)}</div>
-      )
-    })
-  }
-
-  createSuggestion = (startIndex) => {
-    if (this.state.threadProperties < 1) {
-      return <SpinLoading />
-    }
-
-    const threadList = [
-      this.state.threadProperties[startIndex],
-      this.state.threadProperties[startIndex + 1],
-      this.state.threadProperties[startIndex + 2]
-    ]
-
-    const menu = (
-      this.state.currentUser
-        ? <IndexDropdown currentUser={this.state.currentUser} />
-        : <IndexDropdown currentUser={null} />
-    )
-
-    return threadList.map(thread => {
-      return (
-        <Col span={8} className='thread-card' key={thread.title}>
-          <Col span={12}>
-            <img src={thread.thumbnail} alt='Thumbnail' />
-          </Col>
-          <Col span={12} className='thread-info'>
-            <Row className='thread-title'>
-              <Col>
-                <a
-                  href={thread.link}
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  {thread.title}
-                </a>
-              </Col>
-            </Row>
-            <Row className='thread-option'>
-              <Col span={12} id='tag'>
-                <Tag>{thread.country[0]}</Tag>
-              </Col>
-              <Col span={12} id='icon'>
-                <Icon
-                  type='heart'
-                  theme={this.state.heartFavorites}
-                  onClick={this.onHeartFavoriteClick}
-                />
-                <Dropdown overlay={menu} trigger={['click']}>
-                  <Icon type='more'
-                   onClick={() => IndexDropdown.handleThreadInTripDropDown(thread._id, thread.thumbnail)} /> />
-                </Dropdown>
-              </Col>
-            </Row>
-          </Col>
-        </Col>
-      )
-    })
-  }
-
   render() {
+    const { withThread, query, currentUser, threadProperties } = this.state;
     return (
       <div className='container' id='suggest-box'>
         <Row className='bound-btn'>
           <Button
             size='large'
             onClick={() => { this.onBoundClinked('1', 1) }}
-            value={this.state.query.within_th}
-            className={`type-btn ${this.state.withThread === 1 ? 'active' : ''}`}
+            value={query.within_th}
+            className={`type-btn ${withThread === 1 ? 'active' : ''}`}
             id='select-btn'
           >
             Within Thailand
@@ -170,8 +104,8 @@ class SuggestThreads extends Component {
           <Button
             size='large'
             onClick={() => { this.onBoundClinked('0', 2) }}
-            value={this.state.query.within_th}
-            className={`type-btn ${this.state.withThread === 2 ? 'active' : ''}`}
+            value={query.within_th}
+            className={`type-btn ${withThread === 2 ? 'active' : ''}`}
             id='select-btn'
           >
             International Countries
@@ -191,14 +125,12 @@ class SuggestThreads extends Component {
             </Link>
           </Col>
           <Col span={24} className='carousel-box'>
-            <Carousel autoplay>
-              {this.getCarousel()}
-            </Carousel>
+            <IndexCarousel threadProperties={threadProperties} currentUser={currentUser} />
           </Col>
         </Row>
-        <SuggestDuration within={this.state.query.within_th} currentUser={this.state.currentUser}/>
-        <SuggestMonth within={this.state.query.within_th} currentUser={this.state.currentUser}/>
-        <SuggestTheme within={this.state.query.within_th} />
+        <SuggestDuration within={query.within_th} currentUser={currentUser} />
+        <SuggestMonth within={query.within_th} currentUser={currentUser} />
+        <SuggestTheme within={query.within_th} />
       </div>
     )
   }
