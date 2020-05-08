@@ -142,8 +142,9 @@ class SuggestThreads extends Component {
                   theme={this.state.heartFavorites}
                   onClick={this.onHeartFavoriteClick}
                 />
-                <Dropdown overlay={menu}>
-                  <Icon type='more' />
+                <Dropdown overlay={menu} trigger={['click']}>
+                  <Icon type='more'
+                   onClick={() => IndexDropdown.handleThreadInTripDropDown(thread._id, thread.thumbnail)} /> />
                 </Dropdown>
               </Col>
             </Row>
