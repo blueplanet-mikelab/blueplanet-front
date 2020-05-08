@@ -118,8 +118,13 @@ div#icon.ant-col.ant-col-12 {
   width: 100%;
 }
 
-.ant-dropdown, .ant-dropdown-menu-item {
+.ant-dropdown, .ant-dropdown-menu-item ,
+.ant-menu-vertical.ant-menu-sub > .ant-menu-item {
   font-family: Poppins;
+}
+
+.ant-menu-vertical .ant-menu-submenu-title {
+  width: 200px
 }
 
 #select-btn {

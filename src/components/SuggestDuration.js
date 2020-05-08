@@ -6,16 +6,17 @@ import * as ROUTES from '../constants/routes';
 
 import 'antd/dist/antd.css';
 import "../css/suggest.css";
-import { Radio, Carousel, Row, Col, Tag, Menu, Icon, Dropdown } from 'antd';
+import { Radio, Carousel, Row, Col, Tag, Icon, Dropdown } from 'antd';
 import SpinLoading from './SpinLoading';
+import IndexDropdown from './IndexDropdown';
 
-const { SubMenu } = Menu;
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 class SuggestDuration extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser: null,
       threadProperties: [],
       query: {},
       q: ''
@@ -84,7 +85,8 @@ class SuggestDuration extends Component {
     const query = this.state.query;
     query.within_th = nextProps.within
     this.setState({
-      query: query
+      query: query,
+      currentUser: nextProps.currentUser
     });
     this.getThreads(query);
   }
@@ -110,14 +112,9 @@ class SuggestDuration extends Component {
     ]
 
     const menu = (
-      <Menu>
-        <SubMenu title='Add to My Triplist'>
-          <Menu.Item>New Triplist</Menu.Item>
-          {/* <Menu.Item>Japan Trip</Menu.Item> */}
-        </SubMenu>
-        <Menu.Item>Save to My Favorite</Menu.Item>
-        <Menu.Item>Share</Menu.Item>
-      </Menu>
+      this.state.currentUser
+        ? <IndexDropdown currentUser={this.state.currentUser} />
+        : <IndexDropdown currentUser={null} />
     )
 
     return threadList.map(thread => {
