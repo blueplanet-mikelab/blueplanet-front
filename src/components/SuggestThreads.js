@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
+
 import * as ROUTES from '../constants/routes';
+import { getTriplists } from '../auth/Auth';
 
 import 'antd/dist/antd.css';
 import "../css/suggest.css";
@@ -20,9 +22,11 @@ class SuggestThreads extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser: null,
       threadProperties: [],
       query: {},
-      withThread: 2
+      withThread: 2,
+      menu: []
     };
   }
 
@@ -36,8 +40,16 @@ class SuggestThreads extends Component {
     this.setState({
       query: query
     })
-
     this.getThreads(query)
+    console.log(this.state.currentUser)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      currentUser: nextProps.currentUser
+    }, () => {
+      this.getMenu()
+    })
   }
 
   onBoundClinked = (type, thread) => {
@@ -64,6 +76,19 @@ class SuggestThreads extends Component {
 
     if (response) {
       this.mapData(response);
+    }
+  }
+
+  getMenu = async () => {
+    if (this.state.currentUser) {
+      const triplists = await getTriplists()
+      this.setState({
+        menu: triplists.map((triplist, i) => (
+          <Menu.Item key={i}>{triplist.title}</Menu.Item>
+        ))
+      })
+    } else {
+      // if not have current user
     }
   }
 
@@ -105,10 +130,8 @@ class SuggestThreads extends Component {
       <Menu>
         <SubMenu title='Add to My Triplist'>
           <Menu.Item>New Triplist</Menu.Item>
-          {/* <Menu.Item>Japan Trip</Menu.Item> */}
+          {this.state.menu}
         </SubMenu>
-        <Menu.Item>Save to My Favorite</Menu.Item>
-        <Menu.Item>Share</Menu.Item>
       </Menu>
     )
 

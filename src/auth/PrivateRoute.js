@@ -4,21 +4,32 @@ import { AuthContext } from './Auth';
 
 import * as ROUTES from '../constants/routes';
 
-const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
+export const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
   const { currentUser } = useContext(AuthContext);
-  
+
   return (
     <Route
       {...rest}
       render={routeProps =>
-        !!currentUser ? (
-          <RouteComponent {...routeProps} />
-        ) : (
-            <Redirect to={ROUTES.LOGIN} />
-          )
+        !!currentUser
+          ? (<RouteComponent {...routeProps} />)
+          : (<Redirect to={ROUTES.LOGIN} />)
       }
     />
   );
 };
 
-export default PrivateRoute;
+export const AuthRoute = ({ component: RouteComponent, ...rest }) => {
+  const { currentUser } = useContext(AuthContext);
+
+  return (
+    <Route
+      {...rest}
+      render={routeProps =>
+        !!currentUser
+          ? (<RouteComponent {...routeProps} currentUser={currentUser} />)
+          : (<RouteComponent {...routeProps} />)
+      }
+    />
+  );
+};
