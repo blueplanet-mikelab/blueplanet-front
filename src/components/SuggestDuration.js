@@ -5,10 +5,10 @@ import qs from 'qs';
 import * as ROUTES from '../constants/routes';
 
 import 'antd/dist/antd.css';
-import "../css/suggest.css";
-import { Radio, Carousel, Row, Col, Tag, Icon, Dropdown } from 'antd';
-import SpinLoading from './SpinLoading';
-import IndexDropdown from './IndexDropdown';
+import '../css/suggest.css';
+import { Radio, Row, Col, Icon } from 'antd';
+
+import IndexCarousel from './IndexCarousel';
 
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
@@ -58,8 +58,8 @@ class SuggestDuration extends Component {
     const threadProperties = response.data.map(item => {
       return {
         ...item,
-        link: "https://pantip.com/topic/" + item.topic_id,
-        con: item.countries.map(c => c.nameEnglish + ""),
+        link: 'https://pantip.com/topic/' + item.topic_id,
+        con: item.countries.map(c => c.nameEnglish + ''),
       };
     });
     this.setState({
@@ -91,72 +91,8 @@ class SuggestDuration extends Component {
     this.getThreads(query);
   }
 
-  getCarousel = () => {
-    const carouselIndex = [0, 3, 6, 9]
-    return carouselIndex.map(index => {
-      return (
-        <div key={index}>{this.createSuggestion(index)}</div>
-      )
-    })
-  }
-
-  createSuggestion = (startIndex) => {
-    if (this.state.threadProperties < 1) {
-      return <SpinLoading />
-    }
-
-    const threadList = [
-      this.state.threadProperties[startIndex],
-      this.state.threadProperties[startIndex + 1],
-      this.state.threadProperties[startIndex + 2]
-    ]
-
-    const menu = (
-      this.state.currentUser
-        ? <IndexDropdown currentUser={this.state.currentUser} />
-        : <IndexDropdown currentUser={null} />
-    )
-
-    return threadList.map(thread => {
-      return (
-        <Col span={8} className='thread-card' key={thread.topic_id}>
-          <Col span={12}>
-            <img src={thread.thumbnail} alt='Thumbnail' />
-          </Col>
-          <Col span={12} className='thread-info'>
-            <Row className='thread-title'>
-              <Col>
-                <a
-                  href={thread.link}
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  {thread.title}
-                </a>
-              </Col>
-            </Row>
-            <Row className='thread-option'>
-              <Col span={12} id='tag'>
-                <Tag>{thread.countries[0].nameEnglish}</Tag>
-              </Col>
-              <Col span={12} id='icon'>
-                <Icon
-                  type='heart'
-                  theme={this.state.heartFavorites}
-                  onClick={this.onHeartFavoriteClick}
-                />
-                <Dropdown overlay={menu}>
-                  <Icon type='more' />
-                </Dropdown>
-              </Col>
-            </Row>
-          </Col>
-        </Col>
-      )
-    })
-  }
-
   render() {
+    const { query, threadProperties, currentUser } = this.state
     return (
       <div className='container'>
         <Row className='suggestion-threads'>
@@ -168,7 +104,7 @@ class SuggestDuration extends Component {
             <p>&nbsp;&nbsp; Popular threads based on your <span>Duration</span></p>
           </Col>
           <Col span={12} className='see-more'>
-            <Link to={ROUTES.FORUMS + '?duration_type=' + this.state.query.duration_type}>
+            <Link to={ROUTES.FORUMS + '?duration_type=' + query.duration_type}>
               See more
             </Link>
           </Col>
@@ -176,7 +112,7 @@ class SuggestDuration extends Component {
             <Radio.Group
               name='radiogroup'
               onChange={this.onChangeDuration}
-              value={this.state.query.duration_type ? this.state.query.duration_type : 1}
+              value={query.duration_type ? query.duration_type : 1}
               className='radio-style'
               size='large'
             >
@@ -186,9 +122,7 @@ class SuggestDuration extends Component {
               <Radio value={'4'}>10 - 12 Days</Radio>
               <Radio value={'5'} id='last'>More than 12 Days</Radio>
             </Radio.Group>
-            <Carousel autoplay>
-              {this.getCarousel()}
-            </Carousel>
+            <IndexCarousel threadProperties={threadProperties} currentUser={currentUser} />
           </Col>
         </Row>
       </div>
