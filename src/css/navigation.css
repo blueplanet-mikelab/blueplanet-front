@@ -1,15 +1,17 @@
-.header-container .ant-menu-item .logo {
+.header-container .logo {
+  padding-left: 15px;
   border-color: white !important;
   font-weight: bold;
   font-size: 16px;
   text-align: left;
 }
 
-.header-container .ant-menu-item .logo a {
+.header-container .logo a {
   color: white !important;
   font-weight: bold;
   font-size: 16px;
 }
+
 
 .header-container .logo img {
   max-width: 30px;
@@ -35,11 +37,22 @@
   font-family: 'Poppins', sans-serif;
 }
 
-.ant-menu-horizontal > .ant-menu-item-selected a, 
+.ant-menu-horizontal > .ant-menu-item:hover,
+.ant-menu-horizontal > .ant-menu-item-selected {
+  color: #F97300;
+  border-bottom: 2px solid #F97300;
+}
+
+.ant-menu-submenu:hover > a,
+.ant-menu-horizontal > .ant-menu-item-selected > a {
+  font-weight: 500;
+  color: #F97300 !important;
+}
+/* .ant-menu-horizontal > .ant-menu-item-selected a, 
 .ant-menu-horizontal > .ant-menu-item-active a,
 .ant-menu-horizontal > .ant-menu-item:hover,
 .ant-menu-submenu:hover, .ant-menu-item-selected {
   font-weight: 500;
   color: #F97300 !important;
   border-color: #F97300 !important;
-}
+} */

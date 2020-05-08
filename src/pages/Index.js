@@ -11,9 +11,10 @@ import "../css/index.css";
 import { Row, Col, Select, Button } from 'antd';
 
 import axios from 'axios';
-const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
+const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 const { Option } = Select;
+
 const Tooltip = () => {
   const [content, setContent] = useState('');
   return (
@@ -28,8 +29,9 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser: null,
       countrySelected: null,
-      value: 1,
+      value: 1
     };
   }
 
@@ -47,7 +49,13 @@ class Index extends Component {
           )
         })
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err));   
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      currentUser: nextProps.currentUser
+    })
   }
 
   onChangeCountry = (country) => {
@@ -110,7 +118,7 @@ class Index extends Component {
         </Row>
         <Row>
           <Col span={24} id='suggest'>
-            <SuggestThreads />
+            <SuggestThreads currentUser={this.state.currentUser}/>
           </Col>
         </Row>
       </div>

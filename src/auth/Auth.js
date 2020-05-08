@@ -53,15 +53,6 @@ export const signUpWithEmailAndPassword = async (newUser) => {
 
 export const signInWithFacebook = async () => {
   return await auth.signInWithPopup(providers.facebook)
-    .then((socialAuthUser) => {
-      // var token = socialAuthUser.credential.accessToken;
-      // auth
-      //   .user(socialAuthUser.user.uid)
-      //   .set({
-      //     username: socialAuthUser.additionalUserInfo.profile.name,
-      //     email: socialAuthUser.additionalUserInfo.profile.email
-      //   })
-    })
 }
 
 export const signInWithGoogle = async () => {
@@ -78,4 +69,20 @@ export const sendPasswordResetEmail = async (email) => {
 
 export const signOut = async () => {
   return await auth.signOut()
+}
+
+export const getTriplists = async () => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .get(`http://${backend_url}/api/my-triplist/triplists`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        .then((result) => {
+          return result.data
+        })
+    })
 }

@@ -12,7 +12,7 @@ import Login from './pages/LogIn';
 import PasswordForget from './pages/PasswordForget';
 
 import * as ROUTES from './constants/routes';
-import PrivateRoute from './auth/PrivateRoute';
+import { PrivateRoute, AuthRoute } from './auth/PrivateRoute';
 
 import { AuthProvider } from './auth/Auth';
 
@@ -30,7 +30,7 @@ const App = () => (
         </Header>
 
         <Content className='content'>
-          <Route exact path={ROUTES.HOME} component={Index} />
+          <AuthRoute exact path={ROUTES.HOME} component={Index} />
           <Route path={ROUTES.FORUMS} component={Forums} />
           <PrivateRoute exact path={ROUTES.PROFILE} component={UserProfile} />
           <Route path={ROUTES.REGISTER} component={Register} />
