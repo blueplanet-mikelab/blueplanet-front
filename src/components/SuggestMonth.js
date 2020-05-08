@@ -5,10 +5,10 @@ import qs from 'qs';
 import * as ROUTES from '../constants/routes';
 
 import 'antd/dist/antd.css';
-import "../css/suggest.css";
-import { Carousel, Col, Select, Row, Tag, Icon, Dropdown } from 'antd';
-import SpinLoading from './SpinLoading';
-import IndexDropdown from './IndexDropdown';
+import '../css/suggest.css';
+import { Col, Select, Row, Icon } from 'antd';
+
+import IndexCarousel from './IndexCarousel';
 
 const { Option } = Select;
 
@@ -58,7 +58,7 @@ class SuggestMonth extends Component {
       return {
         ...item,
         link: 'https://pantip.com/topic/' + item.topic_id,
-        country: item.countries.map(c => c.nameEnglish + " "),
+        country: item.countries.map(c => c.nameEnglish + ' '),
       };
     });
 
@@ -98,72 +98,8 @@ class SuggestMonth extends Component {
     })
   }
 
-  getCarousel = () => {
-    const carouselIndex = [0, 3, 6, 9]
-    return carouselIndex.map(index => {
-      return (
-        <div key={index}>{this.createSuggestion(index)}</div>
-      )
-    })
-  }
-
-  createSuggestion = (startIndex) => {
-    if (this.state.threadProperties < 1) {
-      return <SpinLoading />
-    }
-
-    const threadList = [
-      this.state.threadProperties[startIndex],
-      this.state.threadProperties[startIndex + 1],
-      this.state.threadProperties[startIndex + 2]
-    ]
-
-    const menu = (
-      this.state.currentUser
-        ? <IndexDropdown currentUser={this.state.currentUser} />
-        : <IndexDropdown currentUser={null} />
-    )
-
-    return threadList.map(thread => {
-      return (
-        <Col span={8} className='thread-card' key={thread.topic_id}>
-          <Col span={12}>
-            <img src={thread.thumbnail} alt='Thumbnail' />
-          </Col>
-          <Col span={12} className='thread-info'>
-            <Row className='thread-title'>
-              <Col>
-                <a
-                  href={thread.link}
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  {thread.title}
-                </a>
-              </Col>
-            </Row>
-            <Row className='thread-option'>
-              <Col span={12} id='tag'>
-                <Tag>{thread.countries[0].nameEnglish}</Tag>
-              </Col>
-              <Col span={12} id='icon'>
-                <Icon
-                  type='heart'
-                  theme={this.state.heartFavorites}
-                  onClick={this.onHeartFavoriteClick}
-                />
-                <Dropdown overlay={menu}>
-                  <Icon type='more' />
-                </Dropdown>
-              </Col>
-            </Row>
-          </Col>
-        </Col>
-      )
-    })
-  }
-
   render() {
+    const { query, threadProperties, currentUser } = this.state
     return (
       <div className='container'>
         <Row className='suggestion-threads'>
@@ -175,7 +111,7 @@ class SuggestMonth extends Component {
             <p>&nbsp;&nbsp; Popular threads based on your <span>Month</span></p>
           </Col>
           <Col span={12} className='see-more'>
-            <Link to={ROUTES.FORUMS + '?months=' + this.state.query.month}>
+            <Link to={ROUTES.FORUMS + '?months=' + query.month}>
               See more
             </Link>
           </Col>
@@ -183,21 +119,18 @@ class SuggestMonth extends Component {
             <Select
               defaultValue='January'
               placeholder='Month'
-              value={this.state.query.month}
+              value={query.month}
               onChange={this.onChangeMonth}
               className='select-option'
             >
               {this.getSelection()}
             </Select>
-            <Carousel autoplay>
-              {this.getCarousel()}
-            </Carousel>
+            <IndexCarousel threadProperties={threadProperties} currentUser={currentUser} />
           </Col>
         </Row>
       </div>
     )
   }
-
 }
 
 export default withRouter(SuggestMonth);
