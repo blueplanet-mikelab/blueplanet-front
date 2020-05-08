@@ -4,18 +4,17 @@ import axios from 'axios';
 import qs from 'qs';
 
 import * as ROUTES from '../constants/routes';
-import { getTriplists } from '../auth/Auth';
 
 import 'antd/dist/antd.css';
 import "../css/suggest.css";
-import { Carousel, Col, Row, Tag, Button, Menu, Icon, Dropdown } from 'antd';
+import { Carousel, Col, Row, Tag, Button, Icon, Dropdown } from 'antd';
 import SpinLoading from './SpinLoading';
+import IndexDropdown from './IndexDropdown';
 
 import SuggestDuration from "../components/SuggestDuration";
 import SuggestMonth from "../components/SuggestMonth";
 import SuggestTheme from "../components/Theme";
 
-const { SubMenu } = Menu;
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010';
 
 class SuggestThreads extends Component {
@@ -26,7 +25,6 @@ class SuggestThreads extends Component {
       threadProperties: [],
       query: {},
       withThread: 2,
-      menu: []
     };
   }
 
@@ -41,14 +39,11 @@ class SuggestThreads extends Component {
       query: query
     })
     this.getThreads(query)
-    console.log(this.state.currentUser)
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       currentUser: nextProps.currentUser
-    }, () => {
-      this.getMenu()
     })
   }
 
@@ -76,19 +71,6 @@ class SuggestThreads extends Component {
 
     if (response) {
       this.mapData(response);
-    }
-  }
-
-  getMenu = async () => {
-    if (this.state.currentUser) {
-      const triplists = await getTriplists()
-      this.setState({
-        menu: triplists.map((triplist, i) => (
-          <Menu.Item key={i}>{triplist.title}</Menu.Item>
-        ))
-      })
-    } else {
-      // if not have current user
     }
   }
 
@@ -127,12 +109,9 @@ class SuggestThreads extends Component {
     ]
 
     const menu = (
-      <Menu>
-        <SubMenu title='Add to My Triplist'>
-          <Menu.Item>New Triplist</Menu.Item>
-          {this.state.menu}
-        </SubMenu>
-      </Menu>
+      this.state.currentUser
+        ? <IndexDropdown currentUser={this.state.currentUser} />
+        : <IndexDropdown currentUser={null} />
     )
 
     return threadList.map(thread => {
@@ -216,8 +195,8 @@ class SuggestThreads extends Component {
             </Carousel>
           </Col>
         </Row>
-        <SuggestDuration within={this.state.query.within_th} />
-        <SuggestMonth within={this.state.query.within_th} />
+        <SuggestDuration within={this.state.query.within_th} currentUser={this.state.currentUser}/>
+        <SuggestMonth within={this.state.query.within_th} currentUser={this.state.currentUser}/>
         <SuggestTheme within={this.state.query.within_th} />
       </div>
     )
