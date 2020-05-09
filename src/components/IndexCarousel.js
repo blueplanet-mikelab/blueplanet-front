@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { getTriplists, addThreadIntoTrip, onHeartFavoriteClick } from '../auth/Auth';
+import { getTriplists, addThreadIntoTrip, onHeartFavoriteClick, addRecentlyView } from '../auth/Auth';
 
 import { Carousel, Col, Menu, Row, Tag, Icon, Dropdown } from 'antd';
 import '../css/suggest.css';
@@ -130,6 +130,7 @@ class IndexCarousel extends Component {
                   href={thread.link}
                   rel='noopener noreferrer'
                   target='_blank'
+                  onClick={() => addRecentlyView(thread._id)}
                 >
                   {thread.title}
                 </a>

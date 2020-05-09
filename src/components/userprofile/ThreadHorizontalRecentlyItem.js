@@ -1,12 +1,20 @@
 import React from 'react'
 import { Icon, Dropdown } from 'antd'
 
-const ThreadHorizontalRecentlyItem = ({ item, i, heartState, onHeartFavoriteClick, handleRecentlyViewDropDown, recentlyMenu }) => {
+const ThreadHorizontalRecentlyItem = ({ item, i, heartState, onHeartFavoriteClick, handleRecentlyViewDropDown, recentlyMenu, addRecentlyView }) => {
 
     return (
         <div className="thread-hori" style={{ padding: '5px 0' }}>
             <div style={{ width: `90%` }}>
-                <h3 style={{ margin: 'auto 0', color: '#0E3047' }}>{item.title}</h3>
+                <h3 style={{ margin: 'auto 0', color: '#0E3047' }}>
+                    <a href={`https://pantip.com/topic/${item.topic_id}`}
+                        onClick={() => addRecentlyView(item._id)}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        style={{ color: '#0E3047' }}>
+                        {item.title}
+                    </a>
+                </h3>
             </div>
             <Icon type="heart"
                 theme={heartState}

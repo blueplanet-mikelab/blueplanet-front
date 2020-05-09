@@ -117,3 +117,18 @@ export const onHeartFavoriteClick = async (id) => {
       console.log(error)
     });
 }
+
+export const addRecentlyView = async (id) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .put(`http://${backend_url}/api/my-triplist/recently-viewed/${id}`, {}, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+    }).catch(function (error) {
+      console.log(error)
+    });
+}

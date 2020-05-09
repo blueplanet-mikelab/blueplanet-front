@@ -617,6 +617,18 @@ class UserProfile extends Component {
     this.getThreads(query, 'fav')
   }
 
+  resetPage = () => {
+    const query = this.state.query;
+    query.sortby = 'latest'
+    this.setState({
+      query: query,
+      subtabSortType: 1,
+      tripListSortType: 1,
+    });
+    this.getThreads(query, 'trip')
+    this.getThreads(query, 'fav')
+  }
+
   render() {
     const { query } = this.state;
 
@@ -676,6 +688,7 @@ class UserProfile extends Component {
               onHeartFavoriteClick={this.onHeartFavoriteClick}
               handleThreadInTripDropDown={this.handleThreadInTripDropDown}
               threadIntripMenu={this.state.threadIntripMenu}
+              addRecentlyView={this.addRecentlyView}
             />
           )
         })}
@@ -715,6 +728,7 @@ class UserProfile extends Component {
                   onHeartFavoriteClick={this.onHeartFavoriteClick}
                   handleRecentlyViewDropDown={this.handleRecentlyViewDropDown}
                   recentlyMenu={this.state.recentlyMenu}
+                  addRecentlyView={this.addRecentlyView}
                 />
               )
             })}
