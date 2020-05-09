@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
-import { getTriplists, getFavoriteBool, putFavorite, deleteFavorite } from '../auth/Auth';
+import { getTriplists, getFavoriteBool, putFavorite, deleteFavorite, addThreadIntoTrip } from '../auth/Auth';
 
 import 'antd/dist/antd.css';
 import '../css/forum.css';
@@ -30,7 +30,9 @@ class Forums extends Component {
       heartFavorites: [],
       current: 1,
       pages: 1,
-      menu: []
+      menuDropdown: (
+        <Menu></Menu>
+      )
     };
   }
 
@@ -129,6 +131,36 @@ class Forums extends Component {
     this.getThreads(query, 1);
   }
 
+  handleDropDown = async (thread) => {
+    if (this.state.currentUser) {
+      const triplists = await getTriplists()
+      var dropdown = triplists.map((triplist, i) => {
+        return (
+          <Menu.Item key={i} onClick={
+            async () => {
+              const response = await addThreadIntoTrip(triplist._id, thread._id)
+              console.log(response)
+            }
+          }>
+            {triplist.title}
+          </Menu.Item>
+        )
+      })
+      this.setState({
+        menuDropdown: (
+          <Menu>
+            <SubMenu title="Add to My Triplist">
+              <Menu.Item >New Triplist</Menu.Item>
+              {dropdown}
+            </SubMenu>
+          </Menu>
+        )
+      })
+    } else {
+      // if not have current user
+    }
+  }
+
   onHeartFavoriteClick = async (threadId) => {
     if (this.state.currentUser) {
       var response = '';
@@ -224,22 +256,8 @@ class Forums extends Component {
     this.setState({
       currentUser: nextProps.currentUser
     }, () => {
-      this.getMenu()
       this.updateFav()
     })
-  }
-
-  getMenu = async () => {
-    if (this.state.currentUser) {
-      const triplists = await getTriplists()
-      this.setState({
-        menu: triplists.map((triplist, i) => (
-          <Menu.Item key={i}>{triplist.title}</Menu.Item>
-        ))
-      })
-    } else {
-      // if not have current user
-    }
   }
 
   updateFav = async () => {
@@ -317,15 +335,6 @@ class Forums extends Component {
       return <SpinLoading />
     }
 
-    const menu = (
-      <Menu className='dropdown-menu'>
-        <SubMenu title='Add to My Triplist'>
-          <Menu.Item>New Triplist</Menu.Item>
-          {this.state.menu}
-        </SubMenu>
-      </Menu>
-    )
-
     return this.state.threadProperties.map((thread, i) => {
       return (
         <div key={i}>
@@ -357,9 +366,10 @@ class Forums extends Component {
                 onClick={() => this.onHeartFavoriteClick(thread.id)}
                 id='icon-heart'
               />
-              <Dropdown overlay={menu} id='icon'>
-                <Icon type='more' id='icon-more' />
-              </Dropdown>
+              <Dropdown key={i} overlay={this.state.menuDropdown} trigger={['click']}>
+                  <Icon type='more'
+                    onClick={() => this.handleDropDown(thread)} />
+                </Dropdown>
             </Col>
           </Row>
           <hr id='devider-line' />
