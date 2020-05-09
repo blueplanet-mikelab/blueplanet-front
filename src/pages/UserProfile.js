@@ -1,13 +1,13 @@
-import React, { Component, useContext } from 'react';
-import { withRouter, Redirect } from 'react-router-dom';
-
-import { AuthContext } from '../auth/Auth';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import axios from 'axios';
 import qs from 'qs';
 
 import {
-  getTriplists, getFavorite, getRecentlyViewed, createTriplistByThread, deleteFavorite, deleteTriplist, addThreadIntoTrip
+  getTriplists, getFavorite, getRecentlyViewed,
+  createTriplistByThread, deleteFavorite, deleteTriplist,
+  addThreadIntoTrip, addRecentlyView
 } from '../auth/Auth';
 
 import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal, Pagination } from 'antd';
@@ -216,18 +216,14 @@ class UserProfile extends Component {
       });
   }
 
-  addRecentlyView = (id) => {
-    this.props.currentUser.getIdToken(true)
-      .then((idToken) => {
-        axios.put(`http://${backend_url}/api/my-triplist/recently-viewed/${id}`, {}, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-        console.log("add recently")
-      }).catch(function (error) {
-        console.log(error)
-      });
+  handleAddRecentlyView = async (id) => {
+    return await addRecentlyView(id)
+      .then(async () => {
+        const recently = await getRecentlyViewed()
+        this.setState({
+          recentlylist: recently,
+        });
+      })
   }
 
   handleAddThreadIntoTrip = async (trip, id) => {
@@ -560,7 +556,7 @@ class UserProfile extends Component {
               onHeartFavoriteClick={this.onHeartFavoriteClick}
               handleThreadInTripDropDown={this.handleThreadInTripDropDown}
               threadIntripMenu={this.state.threadIntripMenu}
-              addRecentlyView={this.addRecentlyView}
+              addRecentlyView={this.handleAddRecentlyView}
             />
           )
         })}
@@ -580,7 +576,7 @@ class UserProfile extends Component {
               onHeartFavoriteClick={this.onHeartFavoriteClick}
               handleFavDropDown={this.handleFavDropDown}
               favMenu={this.state.favMenu}
-              addRecentlyView={this.addRecentlyView}
+              addRecentlyView={this.handleAddRecentlyView}
             />
           )
         })}
@@ -600,7 +596,7 @@ class UserProfile extends Component {
                   onHeartFavoriteClick={this.onHeartFavoriteClick}
                   handleRecentlyViewDropDown={this.handleRecentlyViewDropDown}
                   recentlyMenu={this.state.recentlyMenu}
-                  addRecentlyView={this.addRecentlyView}
+                  addRecentlyView={this.handleAddRecentlyView}
                 />
               )
             })}
