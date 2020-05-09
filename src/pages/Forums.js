@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
-import { getTriplists, getFavoriteBool, putFavorite, deleteFavorite, addThreadIntoTrip } from '../auth/Auth';
+import {
+  getTriplists, getFavoriteBool, putFavorite, deleteFavorite, addThreadIntoTrip, createTriplistByThread
+} from '../auth/Auth';
 
 import 'antd/dist/antd.css';
 import '../css/forum.css';
-import { Layout, Menu, Icon, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
+import {
+  Layout, Menu, Icon, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination, Modal, Input, message
+} from 'antd';
 
 import SpinLoading from '../components/SpinLoading';
 
@@ -30,6 +34,9 @@ class Forums extends Component {
       heartFavorites: [],
       current: 1,
       pages: 1,
+      visible: false,
+      titleTrip: '',
+      shortDesc: '',
       menuDropdown: (
         <Menu></Menu>
       )
@@ -140,6 +147,7 @@ class Forums extends Component {
             async () => {
               const response = await addThreadIntoTrip(triplist._id, thread._id)
               console.log(response)
+              message.success(response);
             }
           }>
             {triplist.title}
@@ -150,7 +158,7 @@ class Forums extends Component {
         menuDropdown: (
           <Menu>
             <SubMenu title="Add to My Triplist">
-              <Menu.Item >New Triplist</Menu.Item>
+              <Menu.Item onClick={() => this.showModal(thread._id, thread.thumbnail)}>New Triplist</Menu.Item>
               {dropdown}
             </SubMenu>
           </Menu>
@@ -161,13 +169,49 @@ class Forums extends Component {
     }
   }
 
+  showModal = (id, thumbnail) => {
+    this.setState({
+      visible: true,
+      idThread: id,
+      thumbnailThread: thumbnail
+    });
+  };
+
+  handleOk = e => {
+    createTriplistByThread(this.state.idThread, this.state.thumbnailThread, this.state.titleTrip, this.state.shortDesc)
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  inputTitle = (input) => {
+    this.setState({
+      titleTrip: input.target.value,
+    });
+  }
+
+  inputShortDes = (input) => {
+    this.setState({
+      shortDesc: input.target.value,
+    });
+  }
+
   onHeartFavoriteClick = async (threadId) => {
     if (this.state.currentUser) {
       var response = '';
       if (await getFavoriteBool(threadId) !== true) {
         response = await putFavorite(threadId)
+        message.success(response);
       } else {
         response = await deleteFavorite(threadId)
+        message.success(response);
       }
       console.log(response) // response for alert
       this.updateFav()
@@ -513,6 +557,21 @@ class Forums extends Component {
               </Row>
             </Header>
             <Content className='forum-content'>
+              <Modal id="create-trip"
+                title="Create Your Trip"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+              >
+                <p>Name
+                  <Input type="text"
+                    onChange={this.inputTitle}
+                    placeholder="input title" /></p>
+                <p>Description
+                  <Input type="text"
+                    onChange={this.inputShortDes}
+                    placeholder="input descriotion" /></p>
+              </Modal>
               <Row className='forum-row'>
                 {this.getForumThreads()}
                 <Pagination
