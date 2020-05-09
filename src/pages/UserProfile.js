@@ -7,7 +7,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 import {
-  getTriplists, getFavorite, getRecentlyViewed
+  getTriplists, getFavorite, getRecentlyViewed, createTriplistByThread, deleteFavorite, deleteTriplist, addThreadIntoTrip
 } from '../auth/Auth';
 
 import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal, Pagination } from 'antd';
@@ -53,8 +53,8 @@ class UserProfile extends Component {
       selectedTripList: null,
       visible: false,
       editVisible: false,
-      titleTripByFav: "",
-      shortDescByFav: "",
+      titleTrip: "",
+      shortDesc: "",
       inputEditTitle: "",
       inputEditShortDes: "",
       loading: false,
@@ -182,33 +182,19 @@ class UserProfile extends Component {
     }
   }
 
-  createTriplistByThread = (id, thumbnail) => {
-    const ThreadId = id
-    this.props.currentUser.getIdToken(true)
-      .then((idToken) => {
-        axios.post(`http://${backend_url}/api/my-triplist/triplists/add/${ThreadId}`,
-          {
-            "title": this.state.titleTripByFav,
-            "description": this.state.shortDescByFav,
-            "thumbnail": thumbnail,
-          }, {
-          headers: {
-            'Authorization': idToken
-          }
-        }).then(() => {
-          console.log("add")
-          const query = this.state.query;
-          query.sortby = 'latest'
-          this.setState({
-            query: query,
-            tripListSortType: 1,
-          });
-          this.getThreads(query, 'trip')
-        })
+  handleTriplistByThread = async () => {
+    return await createTriplistByThread(this.state.idThread, this.state.thumbnailThread, this.state.titleTrip, this.state.shortDesc)
+      .then(() => {
+        console.log("add")
+        const query = this.state.query;
+        query.sortby = 'latest'
+        this.setState({
+          query: query,
+          tripListSortType: 1,
+        });
+        this.getThreads(query, 'trip')
         console.log("created by thread")
-      }).catch(function (error) {
-        console.log(error)
-      });
+      })
   }
 
   editTriplist = (id, thumbnail) => {
@@ -244,39 +230,31 @@ class UserProfile extends Component {
       });
   }
 
-  addThreadIntoTrip = (trip, id) => {
-    console.log(trip)
-    console.log(id)
-    this.props.currentUser.getIdToken(true)
-      .then((idToken) => {
-        axios.put(`http://${backend_url}/api/my-triplist/triplists/${trip}/add/${id}`, {}, {
-          headers: {
-            'Authorization': idToken
-          }
-        }).then(() => {
-          console.log("add")
-          const query = this.state.query;
-          query.sortby = 'latest'
-          this.setState({
-            query: query,
-            tripListSortType: 1,
-          });
-          this.getThreads(query, 'trip')
-        })
-      }).catch(function (error) {
-        console.log(error)
-      });
+  handleAddThreadIntoTrip = async (trip, id) => {
+    return await addThreadIntoTrip(trip, id)
+      .then(() => {
+        console.log("add")
+        const query = this.state.query;
+        query.sortby = 'latest'
+        this.setState({
+          query: query,
+          tripListSortType: 1,
+        });
+        this.getThreads(query, 'trip')
+        message.success('Your Triplist has been updated')
+      })
+
   }
 
-  inputTitleByFav = (input) => {
+  inputTitle = (input) => {
     this.setState({
-      titleTripByFav: input.target.value,
+      titleTrip: input.target.value,
     });
   }
 
-  inputShortDesByFav = (input) => {
+  inputShortDes = (input) => {
     this.setState({
-      shortDescByFav: input.target.value,
+      shortDesc: input.target.value,
     });
   }
 
@@ -289,7 +267,7 @@ class UserProfile extends Component {
   };
 
   handleOk = e => {
-    this.createTriplistByThread(this.state.idThread, this.state.thumbnailThread)
+    this.handleTriplistByThread()
     this.setState({
       visible: false,
     });
@@ -336,34 +314,17 @@ class UserProfile extends Component {
     });
   };
 
-  deleteFavorite = (id) => {
-    this.props.currentUser.getIdToken(true)
-      .then((idToken) => {
-        axios.delete(`http://${backend_url}/api/my-triplist/favorites/${id}`, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-        console.log("delete")
-      }).catch(function (error) {
-        console.log(error)
-      });
-    message.success('Your Favorite has been deleted.');
-  }
-
-  deleteTriplist = (id) => {
-    this.props.currentUser.getIdToken(true)
-      .then((idToken) => {
-        axios.delete(`http://${backend_url}/api/my-triplist/triplists/${id}`, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-        console.log("delete")
-      }).catch(function (error) {
-        console.log(error)
-      });
-    message.success('Your Triplist has been deleted.');
+  handleDeleteTriplist = async (id) => {
+    return await deleteTriplist(id)
+      .then(() => {
+        const query = this.state.query;
+        query.sortby = 'most'
+        this.setState({
+          query: query,
+          tripListSortType: 2,
+        });
+        this.getThreads(query, 'trip')
+      })
   }
 
   deleteThreadInTriplist = (id, tripId) => {
@@ -434,8 +395,8 @@ class UserProfile extends Component {
     const tripId = id;
     var menuToDelete = (
       <Menu>
-        <Menu.Item><Button onClick={() => this.showEditTripModal(tripId, thumbnail)}>Edit details</Button></Menu.Item>
-        <Menu.Item><Button onClick={() => this.deleteTriplist(tripId)}>Delete</Button></Menu.Item>
+        <Menu.Item onClick={() => this.showEditTripModal(tripId, thumbnail)}>Edit details</Menu.Item>
+        <Menu.Item onClick={() => this.handleDeleteTriplist(tripId)}>Delete</Menu.Item>
       </Menu>
     );
     this.setState({
@@ -447,7 +408,7 @@ class UserProfile extends Component {
     const threadId = id;
     var allTrip = this.state.triplist.map(thread => {
       return (
-        <Menu.Item onClick={() => this.addThreadIntoTrip(thread._id, threadId)}>{thread.title}</Menu.Item>
+        <Menu.Item onClick={() => this.handleAddThreadIntoTrip(thread._id, threadId)}>{thread.title}</Menu.Item>
       )
     })
     var menuThreadInTrip = (
@@ -470,7 +431,7 @@ class UserProfile extends Component {
     const favId = id;
     var allTrip = this.state.triplist.map(thread => {
       return (
-        <Menu.Item onClick={() => this.addThreadIntoTrip(thread._id, favId)}>{thread.title}</Menu.Item>
+        <Menu.Item onClick={() => this.handleAddThreadIntoTrip(thread._id, favId)}>{thread.title}</Menu.Item>
       )
     })
     var menuInFav = (
@@ -479,7 +440,7 @@ class UserProfile extends Component {
           <Menu.Item onClick={() => this.showModal(favId, thumbnail)}>New Triplist</Menu.Item>
           {allTrip}
         </SubMenu>
-        <Menu.Item onClick={() => this.deleteFavorite(favId)}>Delete</Menu.Item>
+        <Menu.Item onClick={() => deleteFavorite(favId)}>Delete</Menu.Item>
       </Menu>
     );
     this.setState({
@@ -490,7 +451,7 @@ class UserProfile extends Component {
   handleRecentlyViewDropDown = (id, thumbnail) => {
     var allTrip = this.state.triplist.map(thread => {
       return (
-        <Menu.Item onClick={() => this.addThreadIntoTrip(thread._id, id)}>{thread.title}</Menu.Item>
+        <Menu.Item onClick={() => this.handleAddThreadIntoTrip(thread._id, id)}>{thread.title}</Menu.Item>
       )
     })
     var menuThreadInRecently = (
@@ -764,11 +725,11 @@ class UserProfile extends Component {
               >
                 <p>Name
                   <Input type="text"
-                    onChange={this.inputTitleByFav}
+                    onChange={this.inputTitle}
                     placeholder="input title" /></p>
                 <p>Description
                   <Input type="text"
-                    onChange={this.inputShortDesByFav}
+                    onChange={this.inputShortDes}
                     placeholder="input descriotion" /></p>
               </Modal>
             </div>

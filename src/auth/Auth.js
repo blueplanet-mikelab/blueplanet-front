@@ -235,3 +235,18 @@ export const createTriplistByThread = async (id, thumbnail, title, desc) => {
       console.log(error)
     });
 }
+
+export const deleteTriplist = async (id) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .delete(`http://${backend_url}/api/my-triplist/triplists/${id}`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+    }).catch(function (error) {
+      console.log(error)
+    });
+}
