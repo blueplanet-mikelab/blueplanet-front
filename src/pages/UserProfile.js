@@ -311,6 +311,7 @@ class UserProfile extends Component {
       shortDescByFav: input.target.value,
     });
   }
+  
   showModal = (id, thumbnail) => {
     this.setState({
       visible: true,

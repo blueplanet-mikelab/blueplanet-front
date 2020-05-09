@@ -177,3 +177,23 @@ export const addRecentlyView = async (id) => {
       console.log(error)
     });
 }
+
+export const createTriplistByThread = async (id, thumbnail, title, desc) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .post(`http://${backend_url}/api/my-triplist/triplists/add/${id}`,
+          {
+            "title": title,
+            "description": desc,
+            "thumbnail": thumbnail,
+          }, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+    }).catch(function (error) {
+      console.log(error)
+    });
+}

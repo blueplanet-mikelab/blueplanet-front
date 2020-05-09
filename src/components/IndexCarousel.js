@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
   getTriplists, addThreadIntoTrip, addRecentlyView,
-  getFavoriteBool, putFavorite, deleteFavorite
+  getFavoriteBool, putFavorite, deleteFavorite, createTriplistByThread
 } from '../auth/Auth';
 
-import { Carousel, Col, Menu, Row, Tag, Icon, Dropdown, message } from 'antd';
+import { Carousel, Col, Menu, Row, Tag, Icon, Dropdown, message, Modal, Input } from 'antd';
 import '../css/suggest.css';
 import SpinLoading from './SpinLoading';
 
@@ -18,6 +18,9 @@ class IndexCarousel extends Component {
       currentUser: null,
       threadProperties: [],
       heartFavorites: [],
+      visible: false,
+      titleTrip: '',
+      shortDesc: '',
       menuDropdown: (
         <Menu></Menu>
       )
@@ -62,7 +65,7 @@ class IndexCarousel extends Component {
         menuDropdown: (
           <Menu>
             <SubMenu title="Add to My Triplist">
-              <Menu.Item >New Triplist</Menu.Item>
+              <Menu.Item onClick={() => this.showModal(thread._id, thread.thumbnail)}>New Triplist</Menu.Item>
               {dropdown}
             </SubMenu>
           </Menu>
@@ -71,6 +74,40 @@ class IndexCarousel extends Component {
     } else {
       // if not have current user
     }
+  }
+
+  showModal = (id, thumbnail) => {
+    this.setState({
+      visible: true,
+      idThread: id,
+      thumbnailThread: thumbnail
+    });
+  };
+
+  handleOk = e => {
+    createTriplistByThread(this.state.idThread, this.state.thumbnailThread, this.state.titleTrip, this.state.shortDesc)
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  inputTitle = (input) => {
+    this.setState({
+      titleTrip: input.target.value,
+    });
+  }
+
+  inputShortDes = (input) => {
+    this.setState({
+      shortDesc: input.target.value,
+    });
   }
 
   onHeartFavoriteClick = async (threadId) => {
@@ -160,9 +197,29 @@ class IndexCarousel extends Component {
 
   render() {
     return (
-      <Carousel >
-        {this.getCarousel()}
-      </Carousel>
+      <div>
+        {/* My Triplist options create by thread details */}
+        <div>
+          <Modal id="create-trip"
+            title="Create Your Trip"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            <p>Name
+                  <Input type="text"
+                onChange={this.inputTitle}
+                placeholder="input title" /></p>
+            <p>Description
+                  <Input type="text"
+                onChange={this.inputShortDes}
+                placeholder="input descriotion" /></p>
+          </Modal>
+        </div>
+        <Carousel >
+          {this.getCarousel()}
+        </Carousel>
+      </div>
     )
   }
 }
