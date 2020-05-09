@@ -217,6 +217,13 @@ class UserProfile extends Component {
             console.log("recentThreadslist" + this.state.recentlylist[0].title)
           }
         })
+        const query = this.state.query;
+        query.sortby = 'most'
+        this.setState({
+          query: query,
+          tripListSortType: 2,
+        });
+        this.getThreads(query, 'trip')
 
       }).catch(function (error) {
         console.log(error)
