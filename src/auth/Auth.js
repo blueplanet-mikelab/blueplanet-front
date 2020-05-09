@@ -86,3 +86,60 @@ export const getTriplists = async () => {
         })
     })
 }
+
+export const getFavoriteBool = async (threadId) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .get(`http://${backend_url}/api/my-triplist/favorites/check/${threadId}`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        .then((response) => {
+          return response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    })
+}
+
+export const putFavorite = async (threadId) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .put(`http://${backend_url}/api/my-triplist/favorites/${threadId}`, {}, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        .then((response) => {
+          return response.data.message
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    })
+}
+
+export const deleteFavorite = async (threadId) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .delete(`http://${backend_url}/api/my-triplist/favorites/${threadId}`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        .then((response) => {
+          return response.data.message
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    })
+}

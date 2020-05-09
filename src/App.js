@@ -31,7 +31,7 @@ const App = () => (
 
         <Content className='content'>
           <AuthRoute exact path={ROUTES.HOME} component={Index} />
-          <Route path={ROUTES.FORUMS} component={Forums} />
+          <AuthRoute path={ROUTES.FORUMS} component={Forums} />
           <PrivateRoute exact path={ROUTES.PROFILE} component={UserProfile} />
           <Route path={ROUTES.REGISTER} component={Register} />
           <Route path={ROUTES.LOGIN} component={Login} />
