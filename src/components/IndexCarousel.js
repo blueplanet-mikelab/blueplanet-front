@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { getTriplists } from '../auth/Auth';
+import { getTriplists, addThreadIntoTrip } from '../auth/Auth';
 
 import { Carousel, Col, Menu, Row, Tag, Icon, Dropdown } from 'antd';
 import '../css/suggest.css';
@@ -8,13 +8,22 @@ import SpinLoading from './SpinLoading';
 
 const { SubMenu } = Menu;
 
+var menuBefore = (
+  <Menu className='dropdown-menu'>
+    <SubMenu title='Add to My Triplist'>
+      <Menu.Item>New Triplist</Menu.Item>
+    </SubMenu>
+  </Menu>
+)
+
 class IndexCarousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentUser: null,
       menu: [],
-      threadProperties: []
+      threadProperties: [],
+      menuDrop: menuBefore
     }
   }
 
@@ -49,6 +58,32 @@ class IndexCarousel extends Component {
     })
   }
 
+  handleRecentlyViewDropDown = async (id, thumbnail) => {
+    if (this.state.currentUser) {
+      const triplists = await getTriplists()
+      var allTrip = triplists.map((thread, i) => {
+        return (
+          <Menu.Item key={thread._id} onClick={() => addThreadIntoTrip(thread._id, id)}>{thread.title}</Menu.Item>
+        )
+      })
+      var menuSuggest = (
+        <Menu>
+          <SubMenu title="Add to My Triplist">
+            <Menu.Item >New Triplist</Menu.Item>
+            {allTrip}
+          </SubMenu>
+          {/* <Menu.Item onClick={() => this.deleteFavorite(favId)}>Delete</Menu.Item> */}
+        </Menu>
+      );
+      this.setState({
+        menuDrop: menuSuggest
+      })
+    } else {
+      // if not have current user
+    }
+    console.log('click drop', id);
+  }
+
   createSuggestion = (startIndex) => {
     if (this.state.threadProperties < 1) {
       return <SpinLoading />
@@ -60,14 +95,14 @@ class IndexCarousel extends Component {
       this.state.threadProperties[startIndex + 2]
     ]
 
-    const menu = (
-      <Menu className='dropdown-menu'>
-        <SubMenu title='Add to My Triplist'>
-          <Menu.Item>New Triplist</Menu.Item>
-          {this.state.menu}
-        </SubMenu>
-      </Menu>
-    )
+    // const menu = (
+    //   <Menu className='dropdown-menu'>
+    //     <SubMenu title='Add to My Triplist'>
+    //       <Menu.Item>New Triplist</Menu.Item>
+    //       {this.state.menu}
+    //     </SubMenu>
+    //   </Menu>
+    // )
 
     return threadList.map((thread, i) => {
       return (
@@ -97,8 +132,9 @@ class IndexCarousel extends Component {
                   theme={this.state.heartFavorites}
                 // onClick={this.onHeartFavoriteClick}
                 />
-                <Dropdown overlay={menu}>
-                  <Icon type='more' />
+                <Dropdown key={i} overlay={this.state.menuDrop} trigger={['click']}>
+                  <Icon type='more'
+                    onClick={() => this.handleRecentlyViewDropDown(thread._id, thread.thumbnail)} />
                 </Dropdown>
               </Col>
             </Row>

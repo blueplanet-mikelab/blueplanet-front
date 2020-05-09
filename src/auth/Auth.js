@@ -86,3 +86,20 @@ export const getTriplists = async () => {
         })
     })
 }
+
+export const addThreadIntoTrip = async (trip, id) => {
+  console.log(trip)
+  console.log(id)
+  return await auth.currentUser
+  .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+      .put(`http://${backend_url}/api/my-triplist/triplists/${trip}/add/${id}`, {}, {
+        headers: {
+          'Authorization': idToken
+        }
+      })
+    }).catch(function (error) {
+      console.log(error)
+    });
+}
