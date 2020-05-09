@@ -1,30 +1,26 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { getTriplists, addThreadIntoTrip, onHeartFavoriteClick, addRecentlyView } from '../auth/Auth';
+import {
+  getTriplists, addThreadIntoTrip, addRecentlyView,
+  getFavoriteBool, putFavorite, deleteFavorite
+} from '../auth/Auth';
 
 import { Carousel, Col, Menu, Row, Tag, Icon, Dropdown } from 'antd';
 import '../css/suggest.css';
 import SpinLoading from './SpinLoading';
 
 const { SubMenu } = Menu;
-var triplists = []
-
-var menuBefore = (
-  <Menu className='dropdown-menu'>
-    <SubMenu title='Add to My Triplist'>
-      <Menu.Item>New Triplist</Menu.Item>
-    </SubMenu>
-  </Menu>
-)
 
 class IndexCarousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentUser: null,
-      menu: [],
       threadProperties: [],
-      menuDrop: menuBefore,
+      heartFavorites: [],
+      menuDropdown: (
+        <Menu></Menu>
+      )
     }
   }
 
@@ -32,23 +28,9 @@ class IndexCarousel extends Component {
     this.setState({
       currentUser: nextProps.currentUser,
       threadProperties: nextProps.threadProperties,
-      heartFavorites: nextProps.threadProperties.map(() => "outlined"),
     }, () => {
-      this.getMenu()
+      this.updateFav()
     })
-  }
-
-  getMenu = async () => {
-    if (this.state.currentUser) {
-      const triplists = await getTriplists()
-      this.setState({
-        menu: triplists.map((triplist, i) => (
-          <Menu.Item key={i}>{triplist.title}</Menu.Item>
-        ))
-      })
-    } else {
-      // if not have current user
-    }
   }
 
   getCarousel = () => {
@@ -60,42 +42,66 @@ class IndexCarousel extends Component {
     })
   }
 
-  handleDropDown = async (id, thumbnail) => {
+  handleDropDown = async (thread) => {
     if (this.state.currentUser) {
       const triplists = await getTriplists()
-      var allTrip = triplists.map((thread, i) => {
+      var dropdown = triplists.map((triplist, i) => {
         return (
-          <Menu.Item key={thread._id} onClick={() => addThreadIntoTrip(thread._id, id)}>{thread.title}</Menu.Item>
+          <Menu.Item key={i} onClick={
+            async () => {
+              const response = await addThreadIntoTrip(triplist._id, thread._id)
+              console.log(response)
+            }
+          }>
+            {triplist.title}
+          </Menu.Item>
         )
       })
-      var menuSuggest = (
-        <Menu>
-          <SubMenu title="Add to My Triplist">
-            <Menu.Item >New Triplist</Menu.Item>
-            {allTrip}
-          </SubMenu>
-        </Menu>
-      );
       this.setState({
-        menuDrop: menuSuggest
+        menuDropdown: (
+          <Menu>
+            <SubMenu title="Add to My Triplist">
+              <Menu.Item >New Triplist</Menu.Item>
+              {dropdown}
+            </SubMenu>
+          </Menu>
+        )
       })
     } else {
       // if not have current user
     }
-    console.log('click drop', id);
   }
 
-  heart = (i, id) => {
+  onHeartFavoriteClick = async (threadId) => {
     if (this.state.currentUser) {
-      onHeartFavoriteClick(id)
+      var response = '';
+      if (await getFavoriteBool(threadId) !== true) {
+        response = await putFavorite(threadId)
+      } else {
+        response = await deleteFavorite(threadId)
+      }
+      console.log(response) // response for alert
+      this.updateFav()
+    } else {
+      // in case no user signed in
     }
-    const newThemes = this.state.heartFavorites
-    newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
-    this.setState({
-      heartFavorites: newThemes
-    })
   }
 
+  updateFav = async () => {
+    const { threadProperties, heartFavorites } = this.state;
+    var favtemp = heartFavorites;
+    if (this.state.currentUser) {
+      var thread = threadProperties
+      for (var i = 0; i < thread.length; i++) {
+        favtemp[i] = await getFavoriteBool(thread[i]._id)
+        this.setState({
+          heartFavorites: favtemp
+        })
+      }
+    } else {
+      // if not have current user
+    }
+  }
 
   createSuggestion = (startIndex) => {
     if (this.state.threadProperties < 1) {
@@ -107,15 +113,6 @@ class IndexCarousel extends Component {
       this.state.threadProperties[startIndex + 1],
       this.state.threadProperties[startIndex + 2]
     ]
-
-    // const menu = (
-    //   <Menu className='dropdown-menu'>
-    //     <SubMenu title='Add to My Triplist'>
-    //       <Menu.Item>New Triplist</Menu.Item>
-    //       {this.state.menu}
-    //     </SubMenu>
-    //   </Menu>
-    // )
 
     return threadList.map((thread, i) => {
       return (
@@ -143,12 +140,12 @@ class IndexCarousel extends Component {
               <Col span={12} id='icon'>
                 <Icon
                   type='heart'
-                  theme={this.state.heartFavorites[i]}
-                  onClick={() => this.heart(i, thread._id)}
+                  theme={this.state.heartFavorites[i] === true ? 'filled' : 'outlined'}
+                  onClick={() => this.onHeartFavoriteClick(thread._id)}
                 />
-                <Dropdown key={i} overlay={this.state.menuDrop} trigger={['click']}>
+                <Dropdown key={i} overlay={this.state.menuDropdown} trigger={['click']}>
                   <Icon type='more'
-                    onClick={() => this.handleDropDown(thread._id, thread.thumbnail)} />
+                    onClick={() => this.handleDropDown(thread)} />
                 </Dropdown>
               </Col>
             </Row>
@@ -160,7 +157,7 @@ class IndexCarousel extends Component {
 
   render() {
     return (
-      <Carousel autoplay>
+      <Carousel >
         {this.getCarousel()}
       </Carousel>
     )

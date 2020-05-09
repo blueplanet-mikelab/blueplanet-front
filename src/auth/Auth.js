@@ -144,35 +144,23 @@ export const deleteFavorite = async (threadId) => {
     })
 }
 
-export const addThreadIntoTrip = async (trip, id) => {
+export const addThreadIntoTrip = async (triplsitId, threadId) => {
   return await auth.currentUser
     .getIdToken(true)
     .then(async (idToken) => {
       return await axios
-        .put(`http://${backend_url}/api/my-triplist/triplists/${trip}/add/${id}`, {}, {
+        .put(`http://${backend_url}/api/my-triplist/triplists/${triplsitId}/add/${threadId}`, {}, {
           headers: {
             'Authorization': idToken
           }
         })
-    }).catch(function (error) {
-      console.log(error)
-    });
-}
-
-export const onHeartFavoriteClick = async (id) => {
-  console.log("id in trip: " + id)
-  return await auth.currentUser
-    .getIdToken(true)
-    .then(async (idToken) => {
-      return await axios
-        .put(`http://${backend_url}/api/my-triplist/favorites/${id}`, {}, {
-          headers: {
-            'Authorization': idToken
-          }
+        .then((response) => {
+          return response.data.message
         })
-    }).catch(function (error) {
-      console.log(error)
-    });
+        .catch((error) => {
+          console.log(error)
+        })
+    })
 }
 
 export const addRecentlyView = async (id) => {
