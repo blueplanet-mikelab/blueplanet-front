@@ -6,6 +6,10 @@ import { AuthContext } from '../auth/Auth';
 import axios from 'axios';
 import qs from 'qs';
 
+import {
+  getTriplists, getFavorite, getRecentlyViewed
+} from '../auth/Auth';
+
 import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal, Pagination } from 'antd';
 
 import "../css/userprofile.css";
@@ -31,19 +35,6 @@ var menu = (
   </Menu>
 );
 
-const TriplistPage = () => {
-  const { currentUser } = useContext(AuthContext);
-  if (!currentUser) {
-    return <Redirect to={ROUTES.HOME} />;
-  }
-  console.log(currentUser)
-  return (
-    <div>
-      <UserProfile currentUser={currentUser} />
-    </div>
-  );
-}
-
 class UserProfile extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +44,6 @@ class UserProfile extends Component {
       favoritelist: [],
       favThreadslist: [],
       recentlylist: [],
-      recentThreadslist: [],
       menu: menu,
       favMenu: menu,
       threadIntripMenu: menu,
@@ -70,6 +60,7 @@ class UserProfile extends Component {
       loading: false,
       tripPagination: 1,
       favPagination: 1,
+      defaultPage: 1
     }
   }
 
@@ -141,93 +132,54 @@ class UserProfile extends Component {
     return qs.parse(this.props.location.search, { ignoreQueryPrefix: true })
   }
 
-  componentDidMount() {
-    this.props.currentUser.getIdToken(/* forceRefresh */ true)
-      .then((idToken) => {
-        //Get trip list
-        var res = axios.get(`http://${backend_url}/api/my-triplist/triplists`, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-        res.then((result) => {
-          // console.log(idToken)
-          console.log("result trip")
-          console.log(result)
-          this.setState({
-            triplist: result.data,
-          });
-          var hasThreads = "true";
-          for (var i = 0; i < this.state.triplist.length; i++) {
-            if (this.state.triplist[i].threads.length === 0) {
-              console.log(this.state.triplist[i].threads.length)
-              console.log("No any thread in trip")
-              hasThreads = "false";
-            }
-          }
-          if (this.state.triplist === "" || this.state.triplist == null || hasThreads === "false") {
-            console.log("null")
-          }
-          else {
-            console.log("title " + this.state.triplist[0].title)
-            console.log("threads " + this.state.triplist[0].threads[0].title)
-            console.log(this.state.triplist[0].num_threads)
-          }
-        })
+  componentDidMount = async () => {
+    const triplists = await getTriplists()
+    const favorites = await getFavorite(this.state.defaultPage)
+    const recently = await getRecentlyViewed()
+    this.setState({
+      triplist: triplists,
+      favoritelist: favorites,
+      favThreadslist: favorites.favorite.threads,
+      heartFavorites: this.state.favoritelist.map(() => "outlined"),
+      favor_imgs: this.state.favoritelist.map(e => ({ thumbnail: e.thumbnail })),
+      recentlylist: recently,
+      recentThreadslist: recently.recentThreads,
+      heartRecentlyViews: recently.map(() => "outlined"),
+    })
+    const query = this.state.query;
+    query.sortby = 'most'
+    this.setState({
+      query: query,
+      tripListSortType: 2,
+    });
+    this.getThreads(query, 'trip')
 
-        // Get favorite list
-        var fav = axios.get(`http://${backend_url}/api/my-triplist/favorites/${favPagination}`, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-        fav.then((result) => {
-          console.log("result fav")
-          console.log(result)
-          this.setState({
-            favoritelist: result.data,
-            favThreadslist: result.data.favorite.threads,
-            heartFavorites: this.state.favoritelist.map(() => "outlined"),
-            favor_imgs: this.state.favoritelist.map(e => ({ thumbnail: e.thumbnail })),
-          });
-          if (this.state.favoritelist === "" || this.state.favoritelist == null || this.state.favThreadslist.length === 0) {
-            console.log("null")
-          } else {
-            console.log(" favoritelist" + this.state.favThreadslist[0].title)
-          }
-        })
-
-        // Get recently-view list
-        var recently = axios.get(`http://${backend_url}/api/my-triplist/recently-viewed`, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-        recently.then((result) => {
-          console.log("result recent")
-          console.log(result)
-          this.setState({
-            recentlylist: result.data,
-            recentThreadslist: result.data.recentThreads,
-            heartRecentlyViews: this.state.recentlylist.map(() => "outlined"),
-          });
-          if (this.state.recentlylist === "" || this.state.recentlylist == null || this.state.recentlylist.length === 0) {
-            console.log("null")
-          } else {
-            console.log("recentThreadslist" + this.state.recentlylist[0].title)
-          }
-        })
-        const query = this.state.query;
-        query.sortby = 'most'
-        this.setState({
-          query: query,
-          tripListSortType: 2,
-        });
-        this.getThreads(query, 'trip')
-
-      }).catch(function (error) {
-        console.log(error)
-      });
+    var hasThreads = "true";
+    for (var i = 0; i < this.state.triplist.length; i++) {
+      if (this.state.triplist[i].threads.length === 0) {
+        console.log(this.state.triplist[i].threads.length)
+        console.log("No any thread in trip")
+        hasThreads = "false";
+      }
+    }
+    if (this.state.triplist === "" || this.state.triplist == null || hasThreads === "false") {
+      console.log("null trip")
+    }
+    else {
+      console.log("title " + this.state.triplist[0].title)
+      console.log("threads " + this.state.triplist[0].threads[0].title)
+      console.log(this.state.triplist[0].num_threads)
+    }
+    if (this.state.favoritelist === "" || this.state.favoritelist == null || this.state.favThreadslist.length === 0) {
+      console.log("null fav")
+    } else {
+      console.log(" favoritelist" + this.state.favThreadslist[0].title)
+    }
+    if (this.state.recentlylist === "" || this.state.recentlylist == null || this.state.recentlylist.length === 0) {
+      console.log("null recent")
+    } else {
+      console.log("recentThreadslist" + this.state.recentlylist[0].title)
+    }
   }
 
   createTriplistByThread = (id, thumbnail) => {
@@ -243,6 +195,15 @@ class UserProfile extends Component {
           headers: {
             'Authorization': idToken
           }
+        }).then(() => {
+          console.log("add")
+          const query = this.state.query;
+          query.sortby = 'latest'
+          this.setState({
+            query: query,
+            tripListSortType: 1,
+          });
+          this.getThreads(query, 'trip')
         })
         console.log("created by thread")
       }).catch(function (error) {
@@ -850,4 +811,4 @@ class UserProfile extends Component {
   }
 }
 
-export default withRouter(TriplistPage, UserProfile);
+export default withRouter(UserProfile);

@@ -87,6 +87,44 @@ export const getTriplists = async () => {
     })
 }
 
+export const getRecentlyViewed = async () => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .get(`http://${backend_url}/api/my-triplist/recently-viewed`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        .then((result) => {
+          return result.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    })
+}
+
+export const getFavorite = async (page) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .get(`http://${backend_url}/api/my-triplist/favorites/${page}`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+        .then((result) => {
+          return result.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    })
+}
+
 export const getFavoriteBool = async (threadId) => {
   return await auth.currentUser
     .getIdToken(true)
