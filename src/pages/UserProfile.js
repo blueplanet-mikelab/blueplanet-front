@@ -107,8 +107,7 @@ class UserProfile extends Component {
             console.log(error)
           });
       }
-
-      if (sort === 'trip') {
+      else if (sort === 'trip') {
         console.log("in trip")
         // Get favorite list
         this.props.currentUser.getIdToken(true)
@@ -286,18 +285,19 @@ class UserProfile extends Component {
           headers: {
             'Authorization': idToken
           }
+        }).then(() => {
+          console.log("add")
+          const query = this.state.query;
+          query.sortby = 'latest'
+          this.setState({
+            query: query,
+            tripListSortType: 1,
+          });
+          this.getThreads(query, 'trip')
         })
-        console.log("add")
       }).catch(function (error) {
         console.log(error)
       });
-    const query = this.state.query;
-    query.sortby = 'latest'
-    this.setState({
-      query: query,
-      tripListSortType: 1,
-    });
-    this.getThreads(query, 'trip')
   }
 
   inputTitleByFav = (input) => {
@@ -311,7 +311,7 @@ class UserProfile extends Component {
       shortDescByFav: input.target.value,
     });
   }
-  
+
   showModal = (id, thumbnail) => {
     this.setState({
       visible: true,
