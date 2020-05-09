@@ -84,6 +84,7 @@ class UserProfile extends Component {
   }
 
   getThreads = async (query, sort) => {
+    console.log(sort)
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
     // this.props.history.push(`/profile${q}`);
@@ -111,23 +112,26 @@ class UserProfile extends Component {
       }
 
       if (sort === 'trip') {
+        console.log("in trip")
         // Get favorite list
-        await this.props.currentUser.getIdToken(true)
+        this.props.currentUser.getIdToken(true)
           .then((idToken) => {
             //Get trip list
-            response = axios.get(`http://${backend_url}/api/my-triplist/triplists${q}`, {
+            axios.get(`http://${backend_url}/api/my-triplist/triplists${q}`, {
               headers: {
                 'Authorization': idToken
               }
             })
-            response.then((result) => {
-              // console.log(idToken)
-              console.log("result trip")
-              console.log(result)
-              this.setState({
-                triplist: result.data,
+              .then((result) => {
+                // console.log(idToken)
+                console.log("result trip")
+                console.log(result)
+                this.setState({
+                  triplist: result.data,
+                });
+              }).catch(function (error) {
+                console.log(error)
               });
-            })
           }).catch(function (error) {
             console.log(error)
           });
@@ -298,6 +302,13 @@ class UserProfile extends Component {
       }).catch(function (error) {
         console.log(error)
       });
+    const query = this.state.query;
+    query.sortby = 'latest'
+    this.setState({
+      query: query,
+      tripListSortType: 1,
+    });
+    this.getThreads(query, 'trip')
   }
 
   inputTitleByFav = (input) => {
@@ -617,18 +628,6 @@ class UserProfile extends Component {
     this.getThreads(query, 'fav')
   }
 
-  resetPage = () => {
-    const query = this.state.query;
-    query.sortby = 'latest'
-    this.setState({
-      query: query,
-      subtabSortType: 1,
-      tripListSortType: 1,
-    });
-    this.getThreads(query, 'trip')
-    this.getThreads(query, 'fav')
-  }
-
   render() {
     const { query } = this.state;
 
@@ -789,7 +788,7 @@ class UserProfile extends Component {
               >Recently Added</Button>
               <Button type="link"
                 className={`subtab-btn ${this.state.tripListSortType === 2 ? 'active' : ''}`}
-                onClick={() => this.handleType('most', 1)}
+                onClick={() => this.handleType('most', 2)}
                 size="large"
                 style={{ width: `24%`, margin: 'auto' }}
                 value={this.state.query.sortby}
@@ -891,16 +890,16 @@ class UserProfile extends Component {
               </Modal>
             </div>
             <Tabs defaultActiveKey="1" tabBarStyle={{ color: 'black' }}>
-              <TabPane tab="My Triplist" key="1" onClick={() => this.resetPage()}>
+              <TabPane tab="My Triplist" key="1">
                 {tripListTap()}
               </TabPane>
-              <TabPane tab="My Favorite" key="2" onClick={() => this.resetPage()}>
+              <TabPane tab="My Favorite" key="2">
                 {sorter}
                 {threadHorizontal(this.state.favThreadslist)}
                 <Pagination current={favPagination} onChange={this.onChangeFavPage} total={100}
                   style={{ backgroundColor: '#FFF' }} />
               </TabPane>
-              <TabPane tab="Recently Viewed" key="3" onClick={() => this.resetPage()}>
+              <TabPane tab="Recently Viewed" key="3">
                 {threadHorizontalRecently(this.state.recentlylist)}
               </TabPane>
             </Tabs>
@@ -911,4 +910,4 @@ class UserProfile extends Component {
   }
 }
 
-export default withRouter(TriplistPage);
+export default withRouter(TriplistPage, UserProfile);
