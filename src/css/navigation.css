@@ -12,7 +12,6 @@
   font-size: 16px;
 }
 
-
 .header-container .logo img {
   max-width: 30px;
   max-height: 30px;
@@ -48,11 +47,3 @@
   font-weight: 500;
   color: #F97300 !important;
 }
-/* .ant-menu-horizontal > .ant-menu-item-selected a, 
-.ant-menu-horizontal > .ant-menu-item-active a,
-.ant-menu-horizontal > .ant-menu-item:hover,
-.ant-menu-submenu:hover, .ant-menu-item-selected {
-  font-weight: 500;
-  color: #F97300 !important;
-  border-color: #F97300 !important;
-} */
