@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { getTriplists, addThreadIntoTrip } from '../auth/Auth';
+import { getTriplists, addThreadIntoTrip, onHeartFavoriteClick } from '../auth/Auth';
 
 import { Carousel, Col, Menu, Row, Tag, Icon, Dropdown } from 'antd';
 import '../css/suggest.css';
 import SpinLoading from './SpinLoading';
 
 const { SubMenu } = Menu;
+var triplists = []
 
 var menuBefore = (
   <Menu className='dropdown-menu'>
@@ -23,14 +24,15 @@ class IndexCarousel extends Component {
       currentUser: null,
       menu: [],
       threadProperties: [],
-      menuDrop: menuBefore
+      menuDrop: menuBefore,
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       currentUser: nextProps.currentUser,
-      threadProperties: nextProps.threadProperties
+      threadProperties: nextProps.threadProperties,
+      heartFavorites: nextProps.threadProperties.map(() => "outlined"),
     }, () => {
       this.getMenu()
     })
@@ -58,7 +60,7 @@ class IndexCarousel extends Component {
     })
   }
 
-  handleRecentlyViewDropDown = async (id, thumbnail) => {
+  handleDropDown = async (id, thumbnail) => {
     if (this.state.currentUser) {
       const triplists = await getTriplists()
       var allTrip = triplists.map((thread, i) => {
@@ -72,7 +74,6 @@ class IndexCarousel extends Component {
             <Menu.Item >New Triplist</Menu.Item>
             {allTrip}
           </SubMenu>
-          {/* <Menu.Item onClick={() => this.deleteFavorite(favId)}>Delete</Menu.Item> */}
         </Menu>
       );
       this.setState({
@@ -83,6 +84,18 @@ class IndexCarousel extends Component {
     }
     console.log('click drop', id);
   }
+
+  heart = (i, id) => {
+    if (this.state.currentUser) {
+      onHeartFavoriteClick(id)
+    }
+    const newThemes = this.state.heartFavorites
+    newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
+    this.setState({
+      heartFavorites: newThemes
+    })
+  }
+
 
   createSuggestion = (startIndex) => {
     if (this.state.threadProperties < 1) {
@@ -129,12 +142,12 @@ class IndexCarousel extends Component {
               <Col span={12} id='icon'>
                 <Icon
                   type='heart'
-                  theme={this.state.heartFavorites}
-                // onClick={this.onHeartFavoriteClick}
+                  theme={this.state.heartFavorites[i]}
+                  onClick={() => this.heart(i, thread._id)}
                 />
                 <Dropdown key={i} overlay={this.state.menuDrop} trigger={['click']}>
                   <Icon type='more'
-                    onClick={() => this.handleRecentlyViewDropDown(thread._id, thread.thumbnail)} />
+                    onClick={() => this.handleDropDown(thread._id, thread.thumbnail)} />
                 </Dropdown>
               </Col>
             </Row>
