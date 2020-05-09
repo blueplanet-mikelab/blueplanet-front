@@ -6,8 +6,7 @@ import { AuthContext } from '../auth/Auth';
 import axios from 'axios';
 import qs from 'qs';
 
-import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal, Upload, Pagination } from 'antd';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal, Pagination } from 'antd';
 
 import "../css/userprofile.css";
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
@@ -24,8 +23,6 @@ const { Search } = Input;
 const { SubMenu } = Menu;
 
 var tripPagination, favPagination = 1;
-var selectedUserTab = 'favorite';
-var selectedTab = 'favorite';
 
 var menu = (
   <Menu>
@@ -225,14 +222,6 @@ class UserProfile extends Component {
       }).catch(function (error) {
         console.log(error)
       });
-
-    //   const query = this.state.query;
-    //   if (!query.sortby) {
-    //   query.sortby = 'latest';
-    // }
-    //   this.getThreads(query,'trip')
-    //   this.getThreads(query,'fav')
-
   }
 
   createTriplistByThread = (id, thumbnail) => {
@@ -550,42 +539,6 @@ class UserProfile extends Component {
     console.log('click drop', id);
   }
 
-  getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
-
-  beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-  }
-
-  handleChange = info => {
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      this.getBase64(info.file.originFileObj, imageUrl => {
-        this.setState({
-          imageUrl,
-          loading: false,
-        })
-        console.log("img: " + imageUrl)
-        console.log(info.file)
-      });
-    }
-  };
-
   handlePagination = () => {
     return (<Pagination current={tripPagination} onChange={this.onChangePage} total={100}
       style={{ backgroundColor: '#FFF' }} />)
@@ -629,16 +582,6 @@ class UserProfile extends Component {
   }
 
   render() {
-    const { query } = this.state;
-
-    const uploadButton = (
-      <div>
-        {this.state.loading ? <LoadingOutlined /> : <PlusOutlined />}
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
-    const { imageUrl } = this.state;
-
     const sorter = (
       <div id="subtab">
         <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>
@@ -850,17 +793,6 @@ class UserProfile extends Component {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
               >
-                <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  beforeUpload={this.beforeUpload}
-                  onChange={this.handleChange}
-                >
-                  {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                </Upload>
                 <p>Name
                   <Input type="text"
                     onChange={this.inputTitleByFav}

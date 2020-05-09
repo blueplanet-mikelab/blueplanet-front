@@ -5,7 +5,7 @@ import {
   getFavoriteBool, putFavorite, deleteFavorite
 } from '../auth/Auth';
 
-import { Carousel, Col, Menu, Row, Tag, Icon, Dropdown } from 'antd';
+import { Carousel, Col, Menu, Row, Tag, Icon, Dropdown, message } from 'antd';
 import '../css/suggest.css';
 import SpinLoading from './SpinLoading';
 
@@ -51,6 +51,7 @@ class IndexCarousel extends Component {
             async () => {
               const response = await addThreadIntoTrip(triplist._id, thread._id)
               console.log(response)
+              message.success(response);
             }
           }>
             {triplist.title}
@@ -77,8 +78,10 @@ class IndexCarousel extends Component {
       var response = '';
       if (await getFavoriteBool(threadId) !== true) {
         response = await putFavorite(threadId)
+        message.success(response);
       } else {
         response = await deleteFavorite(threadId)
+        message.success(response);
       }
       console.log(response) // response for alert
       this.updateFav()
