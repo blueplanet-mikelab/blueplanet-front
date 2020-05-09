@@ -1,15 +1,13 @@
-import React, { Component, useContext } from 'react';
-import { withRouter, Redirect } from 'react-router-dom';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
-import firebase from '../firebase/config';
+import { getTriplists, getFavoriteBool, putFavorite, deleteFavorite } from '../auth/Auth';
 
 import 'antd/dist/antd.css';
-import { Layout, Menu, Icon, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
 import '../css/forum.css';
+import { Layout, Menu, Icon, Row, Col, Tag, Select, Radio, InputNumber, Slider, Checkbox, Button, Dropdown, Pagination } from 'antd';
 
-import { AuthContext } from '../auth/Auth';
-import * as ROUTES from '../constants/routes';
 import SpinLoading from '../components/SpinLoading';
 
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
@@ -18,29 +16,21 @@ const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const { Option } = Select;
 const country = [];
-var current = 1;
-
-const ForumlistPage = () => {
-  const { currentUser } = useContext(AuthContext);
-  if (!currentUser) {
-    return <Redirect to={ROUTES.HOME} />;
-  }
-
-  return <Forums currentUser={currentUser} />;
-}
 
 class Forums extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser: null,
       threadProperties: [],
       query: {},
       sortBy: 'popular',
       typeThread: 1,
       sortThread: 1,
-      heartFavorites: 'outlined',
+      heartFavorites: [],
       current: 1,
       pages: 1,
+      menu: []
     };
   }
 
@@ -103,7 +93,7 @@ class Forums extends Component {
   getCheckBox = () => {
     const themes = [
       'Mountain', 'Sea', 'Religion', 'Historical', 'Entertainment', 'Festival', 'Eating', 'Night Lifestyle', 'Photography', 'Sightseeing'
-    ]; // fixed bugs in mongo
+    ];
     return themes.map(theme => {
       return <Checkbox key={theme} value={theme.trim()}>&nbsp;{theme}</Checkbox>
     })
@@ -139,25 +129,19 @@ class Forums extends Component {
     this.getThreads(query, 1);
   }
 
-  onHeartFavoriteClick = (i, id) => {
-    const threadId = id;
-    console.log(id)
-    firebase.auth().currentUser.getIdToken(true)
-      .then((idToken) => {
-        axios.put(`http://${backend_url}/api/my-triplist/favorites/${threadId}`, {}, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-      }).catch(function (error) {
-        console.log(error)
-      });
-
-    const newThemes = this.state.heartFavorites
-    newThemes[i] = newThemes[i] !== 'outlined' ? 'outlined' : 'filled'
-    this.setState({
-      heartFavorites: newThemes
-    })
+  onHeartFavoriteClick = async (threadId) => {
+    if (this.state.currentUser) {
+      var response = '';
+      if (await getFavoriteBool(threadId) !== true) {
+        response = await putFavorite(threadId)
+      } else {
+        response = await deleteFavorite(threadId)
+      }
+      console.log(response) // response for alert
+      this.updateFav()
+    } else {
+      // in case no user signed in
+    }
   }
 
   getThreads = async (query, current) => {
@@ -180,27 +164,24 @@ class Forums extends Component {
     const threadProperties = response.data.threads.map(item => {
       return {
         ...item,
+        id: item._id,
         link: 'https://pantip.com/topic/' + item.topic_id,
         day: item.duration.label,
         budget: '฿'.repeat(parseInt(item.floor_budget).toString().length),
         popular: item.popularity,
         country: item.countries.map(c => c.nameEnglish),
-
         country_short: item.countries.map(c => c.country),
         vote: item.vote,
         duration: item.duration.label,
         typeday: item.duration.days,
         theme: item.theme.map(c => c.theme),
-        // fav: waiting for forum route api to send
       };
     });
 
     this.setState({
       current: response.data.current_page,
       pages: response.data.total_page * 10,
-      threadProperties: threadProperties,
-      heartRecentlyViews: threadProperties.map(() => 'outlined'),
-      // heartFavorites: threadProperties.map(() => 'outlined'),
+      threadProperties: threadProperties
     })
   }
 
@@ -236,7 +217,45 @@ class Forums extends Component {
       query.budget_min = 0;
       query.budget_max = 50000;
     }
-    this.updateThreads(query, current)
+    this.updateThreads(query, 1)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      currentUser: nextProps.currentUser
+    }, () => {
+      this.getMenu()
+      this.updateFav()
+    })
+  }
+
+  getMenu = async () => {
+    if (this.state.currentUser) {
+      const triplists = await getTriplists()
+      this.setState({
+        menu: triplists.map((triplist, i) => (
+          <Menu.Item key={i}>{triplist.title}</Menu.Item>
+        ))
+      })
+    } else {
+      // if not have current user
+    }
+  }
+
+  updateFav = async () => {
+    const { threadProperties, heartFavorites } = this.state;
+    var favtemp = heartFavorites;
+    if (this.state.currentUser) {
+      var thread = threadProperties
+      for (var i = 0; i < thread.length; i++) {
+        favtemp[i] = await getFavoriteBool(thread[i].id)
+        this.setState({
+          heartFavorites: favtemp
+        })
+      }
+    } else {
+      // if not have current user
+    }
   }
 
   getQueryParams() {
@@ -299,19 +318,17 @@ class Forums extends Component {
     }
 
     const menu = (
-      <Menu>
+      <Menu className='dropdown-menu'>
         <SubMenu title='Add to My Triplist'>
           <Menu.Item>New Triplist</Menu.Item>
-          {/* <Menu.Item>Japan Trip</Menu.Item> */}
+          {this.state.menu}
         </SubMenu>
-        <Menu.Item>Save to My Favorite</Menu.Item>
-        <Menu.Item>Share</Menu.Item>
       </Menu>
     )
 
-    return this.state.threadProperties.map((thread, index) => {
+    return this.state.threadProperties.map((thread, i) => {
       return (
-        <div key={index}>
+        <div key={i}>
           <Row className='thread-row'>
             <Col span={4} className='forum-thread-img'>
               <img alt={thread.topic_id} src={thread.thumbnail} />
@@ -336,8 +353,8 @@ class Forums extends Component {
             <Col span={2} className='forum-option'>
               <Icon
                 type='heart'
-                theme={this.state.heartFavorites}
-                onClick={this.onHeartFavoriteClick}
+                theme={this.state.heartFavorites[i] === true ? 'filled' : 'outlined'}
+                onClick={() => this.onHeartFavoriteClick(thread.id)}
                 id='icon-heart'
               />
               <Dropdown overlay={menu} id='icon'>
@@ -353,7 +370,7 @@ class Forums extends Component {
 
   render() {
     const { query } = this.state;
-    
+
     return (
       <div className='container forum-layout'>
         <Layout>
@@ -503,4 +520,4 @@ class Forums extends Component {
   }
 }
 
-export default withRouter(Forums, ForumlistPage);
+export default withRouter(Forums);
