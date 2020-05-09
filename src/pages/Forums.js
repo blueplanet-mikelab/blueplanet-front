@@ -367,9 +367,9 @@ class Forums extends Component {
                 id='icon-heart'
               />
               <Dropdown key={i} overlay={this.state.menuDropdown} trigger={['click']}>
-                  <Icon type='more'
-                    onClick={() => this.handleDropDown(thread)} />
-                </Dropdown>
+                <Icon type='more'
+                  onClick={() => this.handleDropDown(thread)} />
+              </Dropdown>
             </Col>
           </Row>
           <hr id='devider-line' />
