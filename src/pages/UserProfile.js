@@ -27,6 +27,7 @@ const { Search } = Input;
 const { SubMenu } = Menu;
 
 var tripPagination, favPagination = 1;
+var tab = 'fav'
 
 var menu = (
   <Menu>
@@ -62,28 +63,31 @@ class UserProfile extends Component {
       favPagination: 1,
       defaultPage: 1,
       heartFavorites: [],
-      favThreadslist: []
+      favThreadslist: [],
+      totalPagesFav: 1,
+      currentPageFav: 1
     }
   }
 
-  updateThreads = (query, sort) => {
+  updateThreads = (query, sort, page) => {
     this.setState({
       query: query,
+      currentPageFav: page,
     });
-    this.getThreads(query, sort);
+    this.getThreads(query, sort, page);
   }
 
-  getThreads = async (query, sort) => {
+  getThreads = async (query, sort, page) => {
     console.log(sort)
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
     // this.props.history.push(`/profile${q}`);
     try {
-      if (sort === 'fav') {
+      if (sort === 'fav' || tab === 'fav') {
         // Get favorite list
         await this.props.currentUser.getIdToken(true)
           .then((idToken) => {
-            response = axios.get(`http://${backend_url}/api/my-triplist/favorites/${favPagination}${q}`, {
+            response = axios.get(`http://${backend_url}/api/my-triplist/favorites/${page}${q}`, {
               headers: {
                 'Authorization': idToken
               }
@@ -147,6 +151,8 @@ class UserProfile extends Component {
       recentlylist: recently,
       recentThreadslist: recently.recentThreads,
       heartRecentlyViews: recently.map(() => "outlined"),
+      totalPagesFav: favorites.total_page * 10,
+      currentPageFav: favorites.current_page
     })
     const query = this.state.query;
     query.sortby = 'most'
@@ -154,7 +160,7 @@ class UserProfile extends Component {
       query: query,
       tripListSortType: 2,
     });
-    this.getThreads(query, 'trip')
+    this.getThreads(query, 'trip', 1)
 
     var hasThreads = "true";
     for (var i = 0; i < this.state.triplist.length; i++) {
@@ -194,7 +200,7 @@ class UserProfile extends Component {
           query: query,
           tripListSortType: 1,
         });
-        this.getThreads(query, 'trip')
+        this.getThreads(query, 'trip', 1)
         message.success('Your Triplist has been created')
         console.log("created by thread")
       })
@@ -209,7 +215,7 @@ class UserProfile extends Component {
           query: query,
           tripListSortType: 2,
         });
-        this.getThreads(query, 'trip')
+        this.getThreads(query, 'trip', 1)
         message.success('Your Triplist has been updated')
       })
   }
@@ -234,7 +240,7 @@ class UserProfile extends Component {
           query: query,
           tripListSortType: 1,
         });
-        this.getThreads(query, 'trip')
+        this.getThreads(query, 'trip', 1)
         message.success('Your Triplist has been updated')
       })
 
@@ -317,7 +323,7 @@ class UserProfile extends Component {
           query: query,
           tripListSortType: 2,
         });
-        this.getThreads(query, 'trip')
+        this.getThreads(query, 'trip', 1)
         message.success('Your trip has been deleted.');
       })
   }
@@ -327,7 +333,7 @@ class UserProfile extends Component {
       .then(() => {
         const query = this.state.query;
         query.sortby = 'most'
-        this.updateThreads(query, 'trip')
+        this.updateThreads(query, 'trip', 1)
         console.log("delete")
         message.success('Your thread has been deleted.');
       })
@@ -335,16 +341,16 @@ class UserProfile extends Component {
 
   onHeartFavoriteClick = async (threadId) => {
     // if (this.state.currentUser) {
-      var response = '';
-      if (await getFavoriteBool(threadId) !== true) {
-        response = await putFavorite(threadId)
-        message.success(response);
-      } else {
-        response = await deleteFavorite(threadId)
-        message.success(response);
-      }
-      console.log(response) // response for alert
-      this.updateFav()
+    var response = '';
+    if (await getFavoriteBool(threadId) !== true) {
+      response = await putFavorite(threadId)
+      message.success(response);
+    } else {
+      response = await deleteFavorite(threadId)
+      message.success(response);
+    }
+    console.log(response) // response for alert
+    this.updateFav()
     // } else {
     //   // in case no user signed in
     // }
@@ -504,12 +510,17 @@ class UserProfile extends Component {
     console.log(tripPagination)
   };
 
+  // onChangeFavPage = (page) => {
+  //   this.setState({
+  //     favPagination: page,
+  //   });
+  //   favPagination = page;
+  //   console.log(favPagination)
+  // };
+
   onChangeFavPage = (page) => {
-    this.setState({
-      favPagination: page,
-    });
-    favPagination = page;
-    console.log(favPagination)
+    tab = 'fav'
+    this.updateThreads(this.state.query, 'popular', page)
   };
 
   handleType = (type, value) => {
@@ -519,7 +530,7 @@ class UserProfile extends Component {
       query: query,
       tripListSortType: value,
     });
-    this.getThreads(query, 'trip')
+    this.getThreads(query, 'trip', 1)
   }
 
   handleSort = (type, value) => {
@@ -530,7 +541,7 @@ class UserProfile extends Component {
       query: query,
       subtabSortType: value,
     });
-    this.getThreads(query, 'fav')
+    this.getThreads(query, 'fav', 1)
   }
 
   render() {
@@ -780,7 +791,7 @@ class UserProfile extends Component {
               <TabPane tab="My Favorite" key="2">
                 {sorter}
                 {threadHorizontal(this.state.favThreadslist)}
-                <Pagination current={favPagination} onChange={this.onChangeFavPage} total={100}
+                <Pagination current={this.state.currentPageFav} onChange={this.onChangeFavPage} total={this.state.totalPagesFav}
                   style={{ backgroundColor: '#FFF' }} />
               </TabPane>
               <TabPane tab="Recently Viewed" key="3">
