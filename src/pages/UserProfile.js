@@ -183,11 +183,13 @@ class UserProfile extends Component {
     })
     const query = this.state.query;
     query.sortby = 'most'
+    this.getThreads(query, 'trip', 1)
     this.setState({
       query: query,
       tripListSortType: 2,
     });
-    this.getThreads(query, 'trip', 1)
+    query.sortby = 'popular'
+    this.getThreads(query, 'fav', 1)
 
     var hasThreads = "true";
     for (var i = 0; i < this.state.triplist.length; i++) {
