@@ -235,6 +235,25 @@ export const createTriplistByThread = async (id, thumbnail, title, desc) => {
       console.log(error)
     });
 }
+export const createTriplist = async (title, desc) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .post(`http://${backend_url}/api/my-triplist/triplists/add`,
+          {
+            "title": title,
+            "description": desc,
+            "thumbnail": 'https://s.isanook.com/tr/0/rp/r/w728/ya0xa0m1w0/aHR0cHM6Ly9zLmlzYW5vb2suY29tL3RyLzAvdWQvMjc5LzEzOTU2ODEvNV9yZWFzb25hYmxlLmpwZw==.jpg',
+          }, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+    }).catch(function (error) {
+      console.log(error)
+    });
+}
 
 export const deleteTriplist = async (id) => {
   return await auth.currentUser
@@ -282,6 +301,26 @@ export const editTriplist = async (id, thumbnail, title, desc) => {
             'Authorization': idToken
           }
         })
+    }).catch(function (error) {
+      console.log(error)
+    });
+}
+
+export const getThreadInTrip = async (id, page) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      //Get trip list
+      return await axios
+        .get(`http://${backend_url}/api/my-triplist/triplists/${id}/${page}`, {
+          headers: {
+            'Authorization': idToken
+          }
+        }).then((result) => {
+          return result.data
+        }).catch(function (error) {
+          console.log(error)
+        });
     }).catch(function (error) {
       console.log(error)
     });

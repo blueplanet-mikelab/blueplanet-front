@@ -5,12 +5,13 @@ import axios from 'axios';
 import qs from 'qs';
 
 import {
-  getTriplists, getFavorite, getRecentlyViewed,
+  getTriplists, getFavorite, getRecentlyViewed, createTriplist,
   createTriplistByThread, deleteFavorite, deleteTriplist,
-  addThreadIntoTrip, addRecentlyView, deleteThreadInTriplist, editTriplist, getFavoriteBool, putFavorite
+  addThreadIntoTrip, addRecentlyView, deleteThreadInTriplist, editTriplist, getFavoriteBool, putFavorite, getThreadInTrip
 } from '../auth/Auth';
 
 import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal, Pagination } from 'antd';
+import { FormOutlined } from '@ant-design/icons';
 
 import "../css/userprofile.css";
 import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalItem';
@@ -26,9 +27,7 @@ const { TabPane } = Tabs
 const { Search } = Input;
 const { SubMenu } = Menu;
 
-var tripPagination, favPagination = 1;
-var tab = 'fav'
-
+var tab;
 var menu = (
   <Menu>
     <Menu.Item>Edit details</Menu.Item>
@@ -54,18 +53,19 @@ class UserProfile extends Component {
       selectedTripList: null,
       visible: false,
       editVisible: false,
+      visibleTrip: false,
       titleTrip: "",
       shortDesc: "",
       inputEditTitle: "",
       inputEditShortDes: "",
       loading: false,
-      tripPagination: 1,
-      favPagination: 1,
       defaultPage: 1,
       heartFavorites: [],
       favThreadslist: [],
       totalPagesFav: 1,
-      currentPageFav: 1
+      totalPagesTrip: 1,
+      currentPageFav: 1,
+      currentPageTrip: 1,
     }
   }
 
@@ -129,6 +129,30 @@ class UserProfile extends Component {
             console.log(error)
           });
       }
+      // else if (tab === 'trip' && sort === 'threadIntrip') {
+      //   this.props.currentUser.getIdToken(true)
+      //     .then((idToken) => {
+      //       //Get trip list
+      //       axios.get(`http://${backend_url}/api/my-triplist/triplists/${this.state.triplist[this.state.selectedTripList]._id}/${page}${q}`, {
+      //         headers: {
+      //           'Authorization': idToken
+      //         }
+      //       })
+      //         .then((result) => {
+      //           // console.log(idToken)
+      //           console.log("result trip")
+      //           console.log(result)
+      //           this.setState({
+      //             threadInTrip: result.data,
+      //           });
+      //         }).catch(function (error) {
+      //           console.log(error)
+      //         });
+      //     }).catch(function (error) {
+      //       console.log(error)
+      //     });
+
+      // }
     } catch (error) {
       console.log(error);
     }
@@ -152,7 +176,9 @@ class UserProfile extends Component {
       recentThreadslist: recently.recentThreads,
       heartRecentlyViews: recently.map(() => "outlined"),
       totalPagesFav: favorites.total_page * 10,
-      currentPageFav: favorites.current_page
+      currentPageFav: favorites.current_page,
+      // totalPagesTrip: triplists.total_page * 10,
+      // currentPageTrip: triplists.current_page,
     })
     const query = this.state.query;
     query.sortby = 'most'
@@ -189,6 +215,21 @@ class UserProfile extends Component {
       console.log("recentThreadslist" + this.state.recentlylist[0].title)
     }
     this.updateFav()
+  }
+
+  handleCreateTriplist = async () => {
+    return await createTriplist(this.state.titleTrip, this.state.shortDesc)
+      .then(() => {
+        const query = this.state.query;
+        query.sortby = 'latest'
+        this.setState({
+          query: query,
+          tripListSortType: 1,
+        });
+        this.getThreads(query, 'trip', 1)
+        message.success('Your Triplist has been created')
+        console.log("created by thread")
+      })
   }
 
   handleTriplistByThread = async () => {
@@ -235,16 +276,34 @@ class UserProfile extends Component {
       .then(() => {
         console.log("add")
         const query = this.state.query;
-        query.sortby = 'latest'
+        query.sortby = 'most'
         this.setState({
           query: query,
-          tripListSortType: 1,
+          tripListSortType: 2,
         });
-        this.getThreads(query, 'trip', 1)
+        this.getThreads(query, 'trip', 'none')
         message.success('Your Triplist has been updated')
       })
-
   }
+  showCreateTripModal = () => {
+    this.setState({
+      visibleTrip: true,
+    });
+  };
+
+  handleCreateOk = e => {
+    this.handleCreateTriplist()
+    this.setState({
+      visibleTrip: false,
+    });
+  };
+
+  handleCreateCancel = e => {
+    console.log(e);
+    this.setState({
+      visibleTrip: false,
+    });
+  };
 
   inputTitle = (input) => {
     this.setState({
@@ -363,7 +422,6 @@ class UserProfile extends Component {
     var thread = this.state.favThreadslist
     for (var i = 0; i < thread.length; i++) {
       favtemp[i] = await getFavoriteBool(thread[i]._id)
-      console.log(favtemp[i])
       this.setState({
         heartFavorites: favtemp
       })
@@ -498,29 +556,21 @@ class UserProfile extends Component {
   }
 
   handlePagination = () => {
-    return (<Pagination current={tripPagination} onChange={this.onChangePage} total={100}
+    return (<Pagination current={this.state.currentPageTrip} onChange={this.onChangePageTrip} total={this.state.totalPagesTrip}
       style={{ backgroundColor: '#FFF' }} />)
   }
 
-  onChangePage = (page) => {
+  onChangePageTrip = (page) => {
     this.setState({
-      tripPagination: page,
+      currentPageTrip: page,
     });
-    tripPagination = page;
-    console.log(tripPagination)
+    tab = 'trip'
+    this.getThreads(this.state.query, 'threadInTrip', page)
   };
-
-  // onChangeFavPage = (page) => {
-  //   this.setState({
-  //     favPagination: page,
-  //   });
-  //   favPagination = page;
-  //   console.log(favPagination)
-  // };
 
   onChangeFavPage = (page) => {
     tab = 'fav'
-    this.updateThreads(this.state.query, 'popular', page)
+    this.updateThreads(this.state.query, 'fav', page)
   };
 
   handleType = (type, value) => {
@@ -544,7 +594,18 @@ class UserProfile extends Component {
     this.getThreads(query, 'fav', 1)
   }
 
+  handleIdTrip = async (selectedIndex) => {
+    const threadTrip = await getThreadInTrip(this.state.triplist[selectedIndex]._id, 1)
+    // console.log(threadTrip)
+    this.setState({
+      totalPagesTrip: threadTrip.total_page * 10,
+      currentPageTrip: threadTrip.current_page,
+    })
+
+  }
   render() {
+    const createTrip = <Button onClick={() => this.showCreateTripModal()} id='create-trip'><FormOutlined />Create a Triplist</Button>;
+
     const sorter = (
       <div id="subtab">
         <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>
@@ -645,6 +706,7 @@ class UserProfile extends Component {
     const tripListTap = () => {
       const selectedIndex = this.state.selectedTripList
       if (selectedIndex != null) {
+        this.handleIdTrip(selectedIndex)
         return (
           <>
             {/* {sorter} */}
@@ -748,6 +810,24 @@ class UserProfile extends Component {
           <h1 style={{ color: 'white' }}>{this.props.currentUser.displayName} <Icon type="edit" /></h1>
           <h4 style={{ color: 'white', marginBottom: '20px' }}>{this.props.currentUser.email} <Icon type="edit" /></h4>
           <div id="userprofile-tabs" style={{ background: 'white', padding: '15px 30px' }}>
+            {/* My Triplist options create*/}
+            <div>
+              <Modal id="create-trip"
+                title="Create Your Trip"
+                visible={this.state.visibleTrip}
+                onOk={this.handleCreateOk}
+                onCancel={this.handleCreateCancel}
+              >
+                <p>Name
+                  <Input type="text"
+                    onChange={this.inputTitle}
+                    placeholder="input title" /></p>
+                <p>Description
+                  <Input type="text"
+                    onChange={this.inputShortDes}
+                    placeholder="input descriotion" /></p>
+              </Modal>
+            </div>
             {/* My Triplist options create by thread details */}
             <div>
               <Modal id="create-trip"
@@ -784,7 +864,7 @@ class UserProfile extends Component {
                     placeholder="input descriotion" /></p>
               </Modal>
             </div>
-            <Tabs defaultActiveKey="1" tabBarStyle={{ color: 'black' }}>
+            <Tabs tabBarExtraContent={createTrip} defaultActiveKey="1" tabBarStyle={{ color: 'black' }}>
               <TabPane tab="My Triplist" key="1">
                 {tripListTap()}
               </TabPane>
