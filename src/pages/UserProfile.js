@@ -175,7 +175,6 @@ class UserProfile extends Component {
       favor_imgs: this.state.favoritelist.map(e => ({ thumbnail: e.thumbnail })),
       recentlylist: recently,
       recentThreadslist: recently.recentThreads,
-      heartRecentlyViews: recently.map(() => "outlined"),
       totalPagesFav: favorites.total_page * 10,
       currentPageFav: favorites.current_page,
       // totalPagesTrip: triplists.total_page * 10,
@@ -553,7 +552,7 @@ class UserProfile extends Component {
     this.getThreads(query, 'trip', 1)
   }
 
-  handleSort = (type, value) => {
+  handleSort = (type, value, tabBar) => {
     const query = this.state.query;
     query.sortby = type
     console.log(query.sortby)
@@ -561,39 +560,47 @@ class UserProfile extends Component {
       query: query,
       subtabSortType: value,
     });
-    this.getThreads(query, 'fav', 1)
+    if (tabBar === 'fav') {
+      tab = 'fav'
+      this.getThreads(query, 'fav', 1)
+    } else if (tabBar === 'trip') {
+      tab = 'trip'
+      this.getThreads(query, 'threadInTrip', 1)
+    }
   }
 
   handleIdTrip = async (selectedIndex) => {
-    console.log('eofj')
     const threadTrip = await getThreadInTrip(this.state.triplist[selectedIndex]._id, 1)
-    console.log(threadTrip)
+    const query = this.state.query;
+    query.sortby = 'popular'
     this.setState({
       threadTrip: threadTrip,
       totalPagesTrip: threadTrip.total_page * 10,
       currentPageTrip: threadTrip.current_page,
       currentThread: threadTrip.triplist.threads,
-      selectedTripList: selectedIndex
+      selectedTripList: selectedIndex,
+      query: query,
+      subtabSortType: 1,
     })
-    console.log('22')
-    console.log(this.state.currentThread)
+    tab = 'trip'
+    this.getThreads(query, 'threadInTrip', 1)
 
   }
   render() {
     const createTrip = <Button onClick={() => this.showCreateTripModal()} id='create-trip'><FormOutlined />Create a Triplist</Button>;
 
-    const sorter = (
+    const sorter = (tab) => (
       <div id="subtab">
         <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>
-          <Search
+          {/* <Search
             placeholder="Search"
             onSearch={value => console.log(value)}
             style={{ width: `100%`, height: '40px' }}
-          />
+          /> */}
         </div>
         <Button type="link"
           className={`subtab-btn ${this.state.subtabSortType === 1 ? 'active' : ''}`}
-          onClick={() => this.handleSort('popular', 1)}
+          onClick={() => this.handleSort('popular', 1, tab)}
           value={this.state.query.sortby}
           icon="fire"
           size="large"
@@ -601,7 +608,7 @@ class UserProfile extends Component {
         >Most Popular</Button>
         <Button type="link"
           className={`subtab-btn ${this.state.subtabSortType === 2 ? 'active' : ''}`}
-          onClick={() => this.handleSort('vote', 2)}
+          onClick={() => this.handleSort('vote', 2, tab)}
           value={this.state.query.sortby}
           icon="plus"
           size="large"
@@ -609,7 +616,7 @@ class UserProfile extends Component {
         >Most Upvoted</Button>
         <Button type="link"
           className={`subtab-btn ${this.state.subtabSortType === 3 ? 'active' : ''}`}
-          onClick={() => this.handleSort('latest', 3)}
+          onClick={() => this.handleSort('latest', 3, tab)}
           value={this.state.query.sortby}
           size="large"
           style={{ width: `19%`, margin: 'auto' }}
@@ -684,7 +691,7 @@ class UserProfile extends Component {
       if (selectedIndex != null) {
         return (
           <>
-            {/* {sorter} */}
+            {sorter('trip')}
             <p style={{ margin: '30px 0 0 0' }}><span style={{ color: '#10828C', cursor: 'pointer', fontWeight: 'bold' }}
               onClick={() => this.setState({ selectedTripList: null })}>My Triplist</span> / {this.state.triplist[selectedIndex].title}</p>
             <div style={{ display: 'flex', paddingBottom: '40px', margin: '20px 20px 0 0', borderBottom: '0.5px solid rgba(130, 142, 180, 0.5)' }}>
@@ -716,11 +723,11 @@ class UserProfile extends Component {
           <>
             <div id="subtab">
               <div style={{ width: `35%`, margin: 'auto 0 auto 10px' }}>
-                <Search
+                {/* <Search
                   placeholder="Search"
                   onSearch={value => console.log(value)}
                   style={{ width: `100%`, height: '40px' }}
-                />
+                /> */}
               </div>
               <Button type="link"
                 className={`subtab-btn ${this.state.tripListSortType === 1 ? 'active' : ''}`}
@@ -844,7 +851,7 @@ class UserProfile extends Component {
                 {tripListTap()}
               </TabPane>
               <TabPane tab="My Favorite" key="2">
-                {sorter}
+                {sorter('fav')}
                 {threadHorizontal(this.state.favThreadslist)}
                 <Pagination current={this.state.currentPageFav} onChange={this.onChangeFavPage} total={this.state.totalPagesFav}
                   style={{ backgroundColor: '#FFF' }} />
