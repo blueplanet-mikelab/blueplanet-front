@@ -7,7 +7,7 @@ import qs from 'qs';
 import {
   getTriplists, getFavorite, getRecentlyViewed,
   createTriplistByThread, deleteFavorite, deleteTriplist,
-  addThreadIntoTrip, addRecentlyView, deleteThreadInTriplist, editTriplist
+  addThreadIntoTrip, addRecentlyView, deleteThreadInTriplist, editTriplist, getFavoriteBool, putFavorite
 } from '../auth/Auth';
 
 import { Tabs, Input, Icon, Button, Menu, Dropdown, message, Modal, Pagination } from 'antd';
@@ -60,7 +60,9 @@ class UserProfile extends Component {
       loading: false,
       tripPagination: 1,
       favPagination: 1,
-      defaultPage: 1
+      defaultPage: 1,
+      heartFavorites: [],
+      favThreadslist: []
     }
   }
 
@@ -140,7 +142,7 @@ class UserProfile extends Component {
       triplist: triplists,
       favoritelist: favorites,
       favThreadslist: favorites.favorite.threads,
-      heartFavorites: this.state.favoritelist.map(() => "outlined"),
+      // heartFavorites: this.state.favoritelist.map(() => "outlined"),
       favor_imgs: this.state.favoritelist.map(e => ({ thumbnail: e.thumbnail })),
       recentlylist: recently,
       recentThreadslist: recently.recentThreads,
@@ -180,6 +182,7 @@ class UserProfile extends Component {
     } else {
       console.log("recentThreadslist" + this.state.recentlylist[0].title)
     }
+    this.updateFav()
   }
 
   handleTriplistByThread = async () => {
@@ -330,34 +333,66 @@ class UserProfile extends Component {
       })
   }
 
-  onHeartFavoriteClick = (i, id, type) => {
-    const threadId = id;
-    console.log("id in trip: " + id)
-    this.props.currentUser.getIdToken(true)
-      .then((idToken) => {
-        axios.put(`http://${backend_url}/api/my-triplist/favorites/${threadId}`, {}, {
-          headers: {
-            'Authorization': idToken
-          }
-        })
-        console.log("fav ed")
-      }).catch(function (error) {
-        console.log(error)
-      });
-    if (type === 'favorite') {
-      const newThemes = this.state.heartFavorites
-      newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
+  onHeartFavoriteClick = async (threadId) => {
+    // if (this.state.currentUser) {
+      var response = '';
+      if (await getFavoriteBool(threadId) !== true) {
+        response = await putFavorite(threadId)
+        message.success(response);
+      } else {
+        response = await deleteFavorite(threadId)
+        message.success(response);
+      }
+      console.log(response) // response for alert
+      this.updateFav()
+    // } else {
+    //   // in case no user signed in
+    // }
+  }
+
+  updateFav = async () => {
+    // const { favoritelist, heartFavorites } = this.state;
+    var favtemp = this.state.heartFavorites;
+
+    var thread = this.state.favThreadslist
+    for (var i = 0; i < thread.length; i++) {
+      favtemp[i] = await getFavoriteBool(thread[i]._id)
+      console.log(favtemp[i])
       this.setState({
-        heartFavorites: newThemes
-      })
-    } else if (type === 'recently') {
-      const newThemes = this.state.heartRecentlyViews
-      newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
-      this.setState({
-        heartRecentlyViews: newThemes
+        heartFavorites: favtemp
       })
     }
+
   }
+
+  // onHeartFavoriteClick = (i, id, type) => {
+  //   const threadId = id;
+  //   console.log("id in trip: " + id)
+  //   this.props.currentUser.getIdToken(true)
+  //     .then((idToken) => {
+  //       axios.put(`http://${backend_url}/api/my-triplist/favorites/${threadId}`, {}, {
+  //         headers: {
+  //           'Authorization': idToken
+  //         }
+  //       })
+  //       console.log("fav ed")
+  //     }).catch(function (error) {
+  //       console.log(error)
+  //     });
+  //   if (type === 'favorite') {
+  //     const newThemes = this.state.heartFavorites
+  //     newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
+  //     this.setState({
+  //       heartFavorites: newThemes
+  //     })
+  //   } else if (type === 'recently') {
+  //     const newThemes = this.state.heartRecentlyViews
+  //     newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
+  //     this.setState({
+  //       heartRecentlyViews: newThemes
+  //     })
+  //   }
+  // }
 
   imgHandleSize = ({ target: img }, item) => {
     const { favor_imgs } = this.state
@@ -583,7 +618,7 @@ class UserProfile extends Component {
                 <ThreadHorizontalRecentlyItem
                   item={item}
                   i={i}
-                  heartState={this.state.heartRecentlyViews[i]}
+                  heartState={this.state.heartFavorites[i]}
                   onHeartFavoriteClick={this.onHeartFavoriteClick}
                   handleRecentlyViewDropDown={this.handleRecentlyViewDropDown}
                   recentlyMenu={this.state.recentlyMenu}

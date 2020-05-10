@@ -29,8 +29,8 @@ const ThreadHorizontalItemOfTriplist = ({ item, i, imgStyle, imgHandleSize, hear
                 </div>
             </div>
             <Icon type="heart"
-                theme={heartState}
-                onClick={() => onHeartFavoriteClick(i, item._id, 'favorite')}
+                theme={heartState === true ? 'filled' : 'outlined'}
+                onClick={() => onHeartFavoriteClick(item._id)}
                 style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
             <Dropdown overlay={threadIntripMenu} trigger={['click']}>
                 <a className="ant-dropdown-link" href="#">
