@@ -132,7 +132,8 @@ class MapChart extends Component {
                   // }}
                   onMouseEnter={() => {
                     const { NAME, POP_EST } = geo.properties;
-                    this.props.setTooltipContent(`${NAME} — ${rounded(POP_EST)}`);
+                    // this.props.setTooltipContent(`${NAME} — ${rounded(POP_EST)}`);
+                    this.props.setTooltipContent(`${NAME}`);
                   }}
                   onMouseLeave={() => {
                     this.props.setTooltipContent('');

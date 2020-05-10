@@ -129,30 +129,31 @@ class UserProfile extends Component {
             console.log(error)
           });
       }
-      // else if (tab === 'trip' && sort === 'threadIntrip') {
-      //   this.props.currentUser.getIdToken(true)
-      //     .then((idToken) => {
-      //       //Get trip list
-      //       axios.get(`http://${backend_url}/api/my-triplist/triplists/${this.state.triplist[this.state.selectedTripList]._id}/${page}${q}`, {
-      //         headers: {
-      //           'Authorization': idToken
-      //         }
-      //       })
-      //         .then((result) => {
-      //           // console.log(idToken)
-      //           console.log("result trip")
-      //           console.log(result)
-      //           this.setState({
-      //             threadInTrip: result.data,
-      //           });
-      //         }).catch(function (error) {
-      //           console.log(error)
-      //         });
-      //     }).catch(function (error) {
-      //       console.log(error)
-      //     });
+      else if (tab === 'trip' && sort === 'threadInTrip') {
+        this.props.currentUser.getIdToken(true)
+          .then((idToken) => {
+            //Get trip list
+            axios.get(`http://${backend_url}/api/my-triplist/triplists/${this.state.triplist[this.state.selectedTripList]._id}/${page}${q}`, {
+              headers: {
+                'Authorization': idToken
+              }
+            })
+              .then((result) => {
+                // console.log(idToken)
+                console.log("result trip")
+                console.log(result)
+                this.setState({
+                  threadTrip: result.data,
+                  currentThread: result.data.triplist.threads
+                });
+              }).catch(function (error) {
+                console.log(error)
+              });
+          }).catch(function (error) {
+            console.log(error)
+          });
 
-      // }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -399,7 +400,6 @@ class UserProfile extends Component {
   }
 
   onHeartFavoriteClick = async (threadId) => {
-    // if (this.state.currentUser) {
     var response = '';
     if (await getFavoriteBool(threadId) !== true) {
       response = await putFavorite(threadId)
@@ -410,9 +410,6 @@ class UserProfile extends Component {
     }
     console.log(response) // response for alert
     this.updateFav()
-    // } else {
-    //   // in case no user signed in
-    // }
   }
 
   updateFav = async () => {
@@ -428,35 +425,6 @@ class UserProfile extends Component {
     }
 
   }
-
-  // onHeartFavoriteClick = (i, id, type) => {
-  //   const threadId = id;
-  //   console.log("id in trip: " + id)
-  //   this.props.currentUser.getIdToken(true)
-  //     .then((idToken) => {
-  //       axios.put(`http://${backend_url}/api/my-triplist/favorites/${threadId}`, {}, {
-  //         headers: {
-  //           'Authorization': idToken
-  //         }
-  //       })
-  //       console.log("fav ed")
-  //     }).catch(function (error) {
-  //       console.log(error)
-  //     });
-  //   if (type === 'favorite') {
-  //     const newThemes = this.state.heartFavorites
-  //     newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
-  //     this.setState({
-  //       heartFavorites: newThemes
-  //     })
-  //   } else if (type === 'recently') {
-  //     const newThemes = this.state.heartRecentlyViews
-  //     newThemes[i] = newThemes[i] !== "outlined" ? "outlined" : "filled"
-  //     this.setState({
-  //       heartRecentlyViews: newThemes
-  //     })
-  //   }
-  // }
 
   imgHandleSize = ({ target: img }, item) => {
     const { favor_imgs } = this.state
@@ -595,12 +563,18 @@ class UserProfile extends Component {
   }
 
   handleIdTrip = async (selectedIndex) => {
+    console.log('eofj')
     const threadTrip = await getThreadInTrip(this.state.triplist[selectedIndex]._id, 1)
-    // console.log(threadTrip)
+    console.log(threadTrip)
     this.setState({
+      threadTrip: threadTrip,
       totalPagesTrip: threadTrip.total_page * 10,
       currentPageTrip: threadTrip.current_page,
+      currentThread: threadTrip.triplist.threads,
+      selectedTripList: selectedIndex
     })
+    console.log('22')
+    console.log(this.state.currentThread)
 
   }
   render() {
@@ -706,7 +680,6 @@ class UserProfile extends Component {
     const tripListTap = () => {
       const selectedIndex = this.state.selectedTripList
       if (selectedIndex != null) {
-        this.handleIdTrip(selectedIndex)
         return (
           <>
             {/* {sorter} */}
@@ -732,7 +705,7 @@ class UserProfile extends Component {
                 <p>{this.state.triplist[selectedIndex].description}</p>
               </div>
             </div>
-            {threadHorizontalInTriplist(this.state.triplist[selectedIndex].threads)}
+            {threadHorizontalInTriplist(this.state.currentThread)}
             {this.handlePagination()}
           </>
         )
@@ -770,7 +743,7 @@ class UserProfile extends Component {
                     <div style={{ width: '200px', height: '200px' }}>
                       <img src={item.thumbnail}
                         alt=""
-                        onClick={() => { this.setState({ selectedTripList: i }) }}
+                        onClick={() => { this.handleIdTrip(i) }}
                         style={{ width: `100%`, height: `100%`, cursor: 'pointer' }} />
                       <Dropdown key={i} overlay={this.state.menu} trigger={['click']}>
                         <a className="ant-dropdown-link" href="#">
@@ -784,7 +757,7 @@ class UserProfile extends Component {
                     </div>
                     <div style={{ display: 'flex' }}>
                       <div>
-                        <h2 onClick={() => this.setState({ selectedTripList: i })} style={{ cursor: 'pointer' }}>{item.title}</h2>
+                        <h2 onClick={() => this.handleIdTrip(i)} style={{ cursor: 'pointer' }}>{item.title}</h2>
                         <p>{item.num_threads} Threads</p>
                       </div>
                     </div>
@@ -807,8 +780,8 @@ class UserProfile extends Component {
           width: `100%`
         }} />
         <div style={{ padding: '0 10%', marginTop: '-250px' }}>
-          <h1 style={{ color: 'white' }}>{this.props.currentUser.displayName} <Icon type="edit" /></h1>
-          <h4 style={{ color: 'white', marginBottom: '20px' }}>{this.props.currentUser.email} <Icon type="edit" /></h4>
+          <h1 style={{ color: 'white' }}>{this.props.currentUser.displayName}</h1>
+          <h4 style={{ color: 'white', marginBottom: '20px' }}>{this.props.currentUser.email}</h4>
           <div id="userprofile-tabs" style={{ background: 'white', padding: '15px 30px' }}>
             {/* My Triplist options create*/}
             <div>
