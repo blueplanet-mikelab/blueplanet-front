@@ -400,13 +400,27 @@ class UserProfile extends Component {
       })
   }
 
+  handleDeleteFavorite = async (id) => {
+    return await deleteFavorite(id)
+      .then(() => {
+        const query = this.state.query;
+        query.sortby = 'popular'
+        this.setState({
+          query: query,
+          subtabSortType: 1,
+        });
+        this.updateThreads(query, 'fav', 1)
+        message.success('Your favorite has been deleted.');
+      })
+  }
+
   onHeartFavoriteClick = async (threadId) => {
     var response = '';
     if (await getFavoriteBool(threadId) !== true) {
       response = await putFavorite(threadId)
       message.success(response);
     } else {
-      response = await deleteFavorite(threadId)
+      response = await this.handleDeleteFavorite(threadId)
       message.success(response);
     }
     console.log(response) // response for alert
