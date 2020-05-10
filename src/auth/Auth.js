@@ -250,3 +250,39 @@ export const deleteTriplist = async (id) => {
       console.log(error)
     });
 }
+
+export const deleteThreadInTriplist = async (id, tripId) => {
+  const threadId = id
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .delete(`http://${backend_url}/api/my-triplist/triplists/${tripId}/remove/${threadId}`, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+    }).catch(function (error) {
+      console.log(error)
+    });
+}
+
+export const editTriplist = async (id, thumbnail, title, desc) => {
+  return await auth.currentUser
+    .getIdToken(true)
+    .then(async (idToken) => {
+      return await axios
+        .put(`http://${backend_url}/api/my-triplist/triplists/${id}`,
+          {
+            "title": title,
+            "description": desc,
+            "thumbnail": thumbnail
+          }, {
+          headers: {
+            'Authorization': idToken
+          }
+        })
+    }).catch(function (error) {
+      console.log(error)
+    });
+}
