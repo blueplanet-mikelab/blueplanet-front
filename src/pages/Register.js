@@ -30,7 +30,7 @@ const RegisterPage = () => {
           <hr id='devider-hr' />
         </Row>
         <Row className='form-social'>
-          <LogInFacebook />
+          {/* <LogInFacebook /> */}
           <LogInGoogle />
         </Row>
       </div>
