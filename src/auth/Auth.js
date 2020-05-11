@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import firebase from '../firebase/config';
 import axios from 'axios';
 
@@ -10,20 +10,37 @@ const providers = {
   google: new firebase.auth.GoogleAuthProvider()
 }
 
-export const AuthContext = React.createContext();
+export const userContext = React.createContext({
+  currentUser: null,
+})
 
-export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+export const useSession = () => {
+  return useContext(userContext)
+}
 
-  useEffect(() => {
-    auth.onAuthStateChanged(setCurrentUser);
-  }, []);
+export const useAuth = () => {
+  const [state, setState] = React.useState(() => {
+    const currentUser = firebase.auth().currentUser
+    return {
+      initializing: !currentUser,
+      currentUser,
+    }
+  })
+  function onChange(currentUser) {
+    setState({
+      initializing: false,
+      currentUser
+    })
+  }
 
-  return (
-    <AuthContext.Provider value={{ currentUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  React.useEffect(() => {
+    // listen for auth state changes
+    const unsubscribe = firebase.auth().onAuthStateChanged(onChange)
+    // unsubscribe to the listener when unmounting
+    return () => unsubscribe()
+  }, [])
+
+  return state
 }
 
 export const signUpWithEmailAndPassword = async (newUser) => {

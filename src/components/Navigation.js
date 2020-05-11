@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import * as ROUTES from '../constants/routes';
-import { AuthContext, signOut } from '../auth/Auth';
+import { useSession, signOut } from '../auth/Auth';
 
 import 'antd/dist/antd.css';
 import '../css/navigation.css';
@@ -10,7 +10,7 @@ import { Menu, Row, Col } from 'antd';
 import logo from "../images/orbit.png";
 
 const Navigation = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useSession()
 
   return (
     <Row className='header-container'>
@@ -30,14 +30,14 @@ const Navigation = () => {
           <Menu.Item>
             <Link to={ROUTES.PROFILE}>My Triplist</Link>
           </Menu.Item>
-          {/* <Menu.Item>
-            {currentUser
-              ? <Link to={ROUTES.HOME} onClick={() => signOut()}>Log Out</Link>
-              : <Link to={ROUTES.LOGIN}>Log In</Link>}
-          </Menu.Item> */}
           <Menu.Item>
             {currentUser
-              ? <Link to={ROUTES.HOME} onClick={async () => { await signOut(); window.location.reload(false); }}>Log Out</Link>
+              ? <Link to={ROUTES.HOME} onClick={async () => {
+                await signOut();
+                window.location.reload(false);
+              }}>
+                Log Out
+                </Link>
               : <Link to={ROUTES.LOGIN}>Log In</Link>}
           </Menu.Item>
           <Menu.Item>

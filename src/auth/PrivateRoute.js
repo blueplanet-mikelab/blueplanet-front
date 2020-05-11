@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { AuthContext } from './Auth';
+import { useSession } from './Auth';
 
 import * as ROUTES from '../constants/routes';
 
 export const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
-  const { currentUser } = useContext(AuthContext);
-
+  const { currentUser } = useSession()
+  
   return (
     <Route
       {...rest}
@@ -20,7 +20,7 @@ export const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
 };
 
 export const AuthRoute = ({ component: RouteComponent, ...rest }) => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useSession()
 
   return (
     <Route

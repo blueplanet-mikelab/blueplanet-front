@@ -9,7 +9,9 @@ const antIcon = <LoadingOutlined
 
 const SpinLoading = () => {
   return (
-    <Spin indicator={antIcon} />
+    <div className='container'>
+      <Spin indicator={antIcon} />
+    </div>
   )
 }
 

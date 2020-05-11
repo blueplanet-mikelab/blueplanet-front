@@ -1,6 +1,6 @@
-import React, { Component, useContext } from 'react';
+import React, { Component } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
-import { AuthContext, signUpWithEmailAndPassword } from '../auth/Auth';
+import { useSession, signUpWithEmailAndPassword } from '../auth/Auth';
 
 import 'antd/dist/antd.css';
 import '../css/register.css';
@@ -13,7 +13,7 @@ import LogInFacebook from '../components/login/LogInFacebook';
 import LogInGoogle from '../components/login/LogInGoogle';
 
 const RegisterPage = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useSession()
   if (currentUser) {
     return <Redirect to={ROUTES.HOME} />;
   };
