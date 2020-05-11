@@ -32,7 +32,7 @@ class IndexCarousel extends Component {
       currentUser: nextProps.currentUser,
       threadProperties: nextProps.threadProperties,
     }, () => {
-      this.updateFav()
+      // this.updateFav()
     })
   }
 
@@ -130,7 +130,7 @@ class IndexCarousel extends Component {
   updateFav = async () => {
     const { threadProperties, heartFavorites } = this.state;
     var favtemp = heartFavorites;
-    if (this.state.currentUser) {
+    if (this.state.currentUser && this.state.currentUser != null) {
       var thread = threadProperties
       for (var i = 0; i < thread.length; i++) {
         favtemp[i] = await getFavoriteBool(thread[i]._id)
