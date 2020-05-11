@@ -300,7 +300,7 @@ class Forums extends Component {
     this.setState({
       currentUser: nextProps.currentUser
     }, () => {
-      // this.updateFav()
+      this.updateFav()
     })
   }
 

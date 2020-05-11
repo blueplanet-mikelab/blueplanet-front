@@ -32,7 +32,7 @@ class IndexCarousel extends Component {
       currentUser: nextProps.currentUser,
       threadProperties: nextProps.threadProperties,
     }, () => {
-      // this.updateFav()
+      this.updateFav()
     })
   }
 

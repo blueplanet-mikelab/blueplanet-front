@@ -30,9 +30,14 @@ const Navigation = () => {
           <Menu.Item>
             <Link to={ROUTES.PROFILE}>My Triplist</Link>
           </Menu.Item>
-          <Menu.Item>
+          {/* <Menu.Item>
             {currentUser
               ? <Link to={ROUTES.HOME} onClick={() => signOut()}>Log Out</Link>
+              : <Link to={ROUTES.LOGIN}>Log In</Link>}
+          </Menu.Item> */}
+          <Menu.Item>
+            {currentUser
+              ? <Link to={ROUTES.HOME} onClick={async () => { await signOut(); window.location.reload(false); }}>Log Out</Link>
               : <Link to={ROUTES.LOGIN}>Log In</Link>}
           </Menu.Item>
           <Menu.Item>
