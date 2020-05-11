@@ -61,6 +61,7 @@ class UserProfile extends Component {
       loading: false,
       defaultPage: 1,
       heartFavorites: [],
+      heartRecently: [],
       favThreadslist: [],
       totalPagesFav: 1,
       totalPagesTrip: 1,
@@ -215,6 +216,7 @@ class UserProfile extends Component {
     //   console.log("recentThreadslist" + this.state.recentlylist[0].title)
     // }
     this.updateFav()
+    this.updateRecentlyFav()
   }
 
   handleCreateTriplist = async () => {
@@ -423,6 +425,7 @@ class UserProfile extends Component {
     }
     console.log(response) // response for alert
     this.updateFav()
+    this.updateRecentlyFav()
   }
 
   updateFav = async () => {
@@ -434,6 +437,19 @@ class UserProfile extends Component {
       favtemp[i] = await getFavoriteBool(thread[i]._id)
       this.setState({
         heartFavorites: favtemp
+      })
+    }
+
+  }
+
+  updateRecentlyFav = async () => {
+    var favtemp = this.state.heartRecently;
+
+    var thread = this.state.recentlylist
+    for (var i = 0; i < thread.length; i++) {
+      favtemp[i] = await getFavoriteBool(thread[i]._id)
+      this.setState({
+        heartRecently: favtemp
       })
     }
 
@@ -686,7 +702,7 @@ class UserProfile extends Component {
                 <ThreadHorizontalRecentlyItem
                   item={item}
                   i={i}
-                  heartState={this.state.heartFavorites[i]}
+                  heartState={this.state.heartRecently[i]}
                   onHeartFavoriteClick={this.onHeartFavoriteClick}
                   handleRecentlyViewDropDown={this.handleRecentlyViewDropDown}
                   recentlyMenu={this.state.recentlyMenu}
