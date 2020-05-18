@@ -18,13 +18,10 @@ import ThreadHorizontalItem from '../components/userprofile/ThreadsHorizontalIte
 import ThreadHorizontalItemOfTriplist from '../components/userprofile/ThreadHorizontalItemOfTriplist';
 import ThreadHorizontalRecentlyItem from '../components/userprofile/ThreadHorizontalRecentlyItem';
 
-
-import * as ROUTES from '../constants/routes';
-
 const backend_url = process.env.REACT_APP_BACKEND_URL || 'localhost:30010'
 
 const { TabPane } = Tabs
-const { Search } = Input;
+// const { Search } = Input;
 const { SubMenu } = Menu;
 
 var tab;
@@ -42,7 +39,6 @@ class UserProfile extends Component {
       query: {},
       triplist: [],
       favoritelist: [],
-      favThreadslist: [],
       recentlylist: [],
       menu: menu,
       favMenu: menu,
@@ -189,32 +185,6 @@ class UserProfile extends Component {
     query.sortby = 'popular'
     this.getThreads(query, 'fav', 1)
 
-    // var hasThreads = "true";
-    // for (var i = 0; i < this.state.triplist.length; i++) {
-    //   if (this.state.triplist[i].threads.length === 0) {
-    //     console.log(this.state.triplist[i].threads.length)
-    //     console.log("No any thread in trip")
-    //     hasThreads = "false";
-    //   }
-    // }
-    // if (this.state.triplist === "" || this.state.triplist == null || hasThreads === "false") {
-    //   console.log("null trip")
-    // }
-    // else {
-    //   console.log("title " + this.state.triplist[0].title)
-    //   console.log("threads " + this.state.triplist[0].threads[0].title)
-    //   console.log(this.state.triplist[0].num_threads)
-    // }
-    // if (this.state.favoritelist === "" || this.state.favoritelist == null || this.state.favThreadslist.length === 0) {
-    //   console.log("null fav")
-    // } else {
-    //   console.log(" favoritelist" + this.state.favThreadslist[0].title)
-    // }
-    // if (this.state.recentlylist === "" || this.state.recentlylist == null || this.state.recentlylist.length === 0) {
-    //   console.log("null recent")
-    // } else {
-    //   console.log("recentThreadslist" + this.state.recentlylist[0].title)
-    // }
     this.updateFav()
     this.updateRecentlyFav()
   }
@@ -694,7 +664,7 @@ class UserProfile extends Component {
 
     const threadHorizontalRecently = (threadlist) => {
       // console.log(this.state.recentlylist)
-      if (this.state.recentlylist.length != 0) {
+      if (this.state.recentlylist.length !== 0) {
         return (
           <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
             {threadlist.map((item, i) => {
