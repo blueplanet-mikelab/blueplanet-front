@@ -75,7 +75,6 @@ class UserProfile extends Component {
   }
 
   getThreads = async (query, sort, page) => {
-    console.log(sort)
     let response = null;
     const q = qs.stringify(query, { addQueryPrefix: true, arrayFormat: 'comma' })
     // this.props.history.push(`/profile${q}`);
@@ -90,8 +89,6 @@ class UserProfile extends Component {
               }
             })
             response.then((result) => {
-              console.log("result fav")
-              console.log(result)
               this.setState({
                 favoritelist: result.data,
                 favThreadslist: result.data.favorite.threads,
@@ -102,7 +99,6 @@ class UserProfile extends Component {
           });
       }
       else if (sort === 'trip') {
-        console.log("in trip")
         // Get favorite list
         this.props.currentUser.getIdToken(true)
           .then((idToken) => {
@@ -113,9 +109,6 @@ class UserProfile extends Component {
               }
             })
               .then((result) => {
-                // console.log(idToken)
-                console.log("result trip")
-                console.log(result)
                 this.setState({
                   triplist: result.data,
                 });
@@ -136,9 +129,6 @@ class UserProfile extends Component {
               }
             })
               .then((result) => {
-                // console.log(idToken)
-                console.log("result trip")
-                console.log(result)
                 this.setState({
                   threadTrip: result.data,
                   currentThread: result.data.triplist.threads
@@ -200,7 +190,6 @@ class UserProfile extends Component {
         });
         this.getThreads(query, 'trip', 1)
         message.success('Your Triplist has been created')
-        console.log("created by thread")
       })
   }
 
@@ -215,7 +204,6 @@ class UserProfile extends Component {
         });
         this.getThreads(query, 'trip', 1)
         message.success('Your Triplist has been created')
-        console.log("created by thread")
       })
   }
 
@@ -246,7 +234,6 @@ class UserProfile extends Component {
   handleAddThreadIntoTrip = async (trip, id) => {
     return await addThreadIntoTrip(trip, id)
       .then(() => {
-        console.log("add")
         const query = this.state.query;
         query.sortby = 'most'
         this.setState({
@@ -271,7 +258,6 @@ class UserProfile extends Component {
   };
 
   handleCreateCancel = e => {
-    console.log(e);
     this.setState({
       visibleTrip: false,
     });
@@ -305,7 +291,6 @@ class UserProfile extends Component {
   };
 
   handleCancel = e => {
-    console.log(e);
     this.setState({
       visible: false,
     });
@@ -339,7 +324,6 @@ class UserProfile extends Component {
   };
 
   handleCancelEditTrip = e => {
-    console.log(e);
     this.setState({
       editVisible: false,
     });
@@ -365,7 +349,6 @@ class UserProfile extends Component {
         const query = this.state.query;
         query.sortby = 'most'
         this.updateThreads(query, 'trip', 1)
-        console.log("delete")
         message.success('Your thread has been deleted.');
       })
   }
@@ -393,7 +376,7 @@ class UserProfile extends Component {
       response = await this.handleDeleteFavorite(threadId)
       message.success(response);
     }
-    console.log(response) // response for alert
+    // response for alert
     this.updateFav()
     this.updateRecentlyFav()
   }
@@ -477,7 +460,6 @@ class UserProfile extends Component {
     this.setState({
       threadIntripMenu: menuThreadInTrip
     })
-    console.log('click drop', id);
   }
 
   handleFavDropDown = (id, thumbnail) => {
@@ -519,7 +501,6 @@ class UserProfile extends Component {
     this.setState({
       recentlyMenu: menuThreadInRecently
     })
-    console.log('click drop', id);
   }
 
   handlePagination = () => {
@@ -553,7 +534,6 @@ class UserProfile extends Component {
   handleSort = (type, value, tabBar) => {
     const query = this.state.query;
     query.sortby = type
-    console.log(query.sortby)
     this.setState({
       query: query,
       subtabSortType: value,
@@ -663,7 +643,6 @@ class UserProfile extends Component {
     )
 
     const threadHorizontalRecently = (threadlist) => {
-      // console.log(this.state.recentlylist)
       if (this.state.recentlylist.length !== 0) {
         return (
           <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
@@ -700,12 +679,10 @@ class UserProfile extends Component {
               <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto 0' }}>
                 <h1>{this.state.triplist[selectedIndex].title}
                   <Dropdown overlay={this.state.menu} trigger={['click']}>
-                    <a className="ant-dropdown-link" href="#">
-                      <Icon
-                        type="more"
-                        className="triplist-more"
-                        onClick={() => this.handleTripDropDown(this.state.triplist[selectedIndex]._id, this.state.triplist[selectedIndex].thumbnail)} />
-                    </a>
+                    <Icon
+                      type="more"
+                      className="triplist-more"
+                      onClick={() => this.handleTripDropDown(this.state.triplist[selectedIndex]._id, this.state.triplist[selectedIndex].thumbnail)} />
                   </Dropdown>
                 </h1>
                 <span>{this.state.triplist[selectedIndex].num_threads} Threads</span>
@@ -754,13 +731,11 @@ class UserProfile extends Component {
                         onClick={() => { this.handleIdTrip(i) }}
                         style={{ width: `100%`, height: `100%`, cursor: 'pointer' }} />
                       <Dropdown key={i} overlay={this.state.menu} trigger={['click']}>
-                        <a className="ant-dropdown-link" href="#">
-                          <Icon
-                            type="more"
-                            style={{ color: "#10828C", padding: '20px 0 0 170px', fontSize: '23px', width: '5%' }}
-                            onClick={() => this.handleTripDropDown(item._id, item.thumbnail)}
-                          />
-                        </a>
+                        <Icon
+                          type="more"
+                          style={{ color: "#10828C", padding: '20px 0 0 170px', fontSize: '23px', width: '5%' }}
+                          onClick={() => this.handleTripDropDown(item._id, item.thumbnail)}
+                        />
                       </Dropdown>
                     </div>
                     <div style={{ display: 'flex' }}>

@@ -9,7 +9,7 @@ import { MailOutlined, LockOutlined } from '@ant-design/icons';
 
 import * as ROUTES from '../constants/routes';
 
-import LogInFacebook from '../components/login/LogInFacebook';
+// import LogInFacebook from '../components/login/LogInFacebook';
 import LogInGoogle from '../components/login/LogInGoogle';
 
 const LogInPage = () => {

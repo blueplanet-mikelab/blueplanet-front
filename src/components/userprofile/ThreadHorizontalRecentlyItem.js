@@ -21,12 +21,10 @@ const ThreadHorizontalRecentlyItem = ({ item, i, heartState, onHeartFavoriteClic
                 onClick={() => onHeartFavoriteClick(item._id)}
                 style={{ width: `5%`, margin: `auto 0 auto 2%`, fontSize: '23px', color: 'red' }} />
             <Dropdown overlay={recentlyMenu} trigger={['click']}>
-                <a className="ant-dropdown-link" href="#">
-                    <Icon
-                        type="more"
-                        style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }}
-                        onClick={() => handleRecentlyViewDropDown(item._id, item.thumbnail)} />
-                </a>
+                <Icon
+                    type="more"
+                    style={{ color: "#10828C", width: `5%`, margin: 'auto', fontSize: '23px' }}
+                    onClick={() => handleRecentlyViewDropDown(item._id, item.thumbnail)} />
             </Dropdown>
         </div>
     )
