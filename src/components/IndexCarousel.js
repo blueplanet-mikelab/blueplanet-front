@@ -84,11 +84,15 @@ class IndexCarousel extends Component {
     });
   };
 
-  handleOk = e => {
-    createTriplistByThread(this.state.idThread, this.state.thumbnailThread, this.state.titleTrip, this.state.shortDesc)
-    this.setState({
-      visible: false,
-    });
+  handleOk = async (e) => {
+    return await createTriplistByThread(this.state.idThread, this.state.thumbnailThread, this.state.titleTrip, this.state.shortDesc)
+      .then(() => {
+        this.setState({
+          visible: false,
+        });
+        message.success('Your Triplist has been created')
+      })
+
   };
 
   handleCancel = e => {
