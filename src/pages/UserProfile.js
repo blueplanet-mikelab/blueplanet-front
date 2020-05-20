@@ -228,6 +228,7 @@ class UserProfile extends Component {
         this.setState({
           recentlylist: recently,
         });
+        this.updateRecentlyFav()
       })
   }
 
