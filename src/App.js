@@ -46,7 +46,7 @@ const App = () => {
           </Content>
 
           <Footer className='footer'>
-            Web Application for Organizing Traveling Trip
+            Tourism Threads Categorization for Effective Arrangement on Web Application
         </Footer>
 
         </Layout>
