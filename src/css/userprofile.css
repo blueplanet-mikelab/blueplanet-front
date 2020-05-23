@@ -55,6 +55,13 @@
     overflow: hidden;
 }
 
+.img-frame img {
+  background: 50% 50% no-repeat;
+  width: 100%;
+  max-width: 130px;
+  height: 120px;
+}
+
 .triplist-more svg {
     padding-top: 12px;
     margin-right: 25px;
