@@ -1,68 +1,161 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Blueplanet project installation
+This project consist of 3 repositories
+1. Front-end: https://gitlab.mikelab.net:65443/blueplanet/fontend (this repository) is about the user interface.
+2. Back-end: https://gitlab.mikelab.net:65443/blueplanet/backend is a bridge between front-end and database. It is used to send data from database to front-end and receive data from front-end to keep in database.
+3. Analytic: https://gitlab.mikelab.net:65443/blueplanet/analytics its work is prepare/classify data and push them into database. Please read the files explanation below for the objective of each file.
 
-## Available Scripts
+**After finish installation,** to play a web application, you need to execute back-end first by run command `nodemon server.js` on the back-end directory. Then, go to the front-end directory and run `yarn start`. There is no need to run **Analytic repository** to play the web application.
 
-In the project directory, you can run:
+# Installation
+Video Guide: [https://youtu.be/GQMlnH3kOjc](https://youtu.be/GQMlnH3kOjc)
 
-### `yarn start`
+## 0) Prerequisites
+Front-end: NodeJS<br>
+Back-end: NodeJS<br>
+Analysis: Python3.6+, MongoDB<br>
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**useful link**
+* [Python 3](https://www.python.org/downloads/)
+* [Node.js 10](https://nodejs.org/en/download/)
+* MongoDB version 3
+  * [Redhat / CentOS](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/)
+  * [Ubuntu](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
+  * [Windows](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
+  * [macOS](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## 1) Download database
+upload the initial data via mongo console so you need to run mongo server and go to `mongo console` and run command as below. Moreover, these data files can be downloaded from [drive link](https://drive.google.com/open?id=1o32lGgDkFFnpxfMkUGmORJvJnJQb1h9L).
+```bash
+> load("/path/to/parent/directory/mongo_js/initialize/[filename].js")
+```
+Here is all commands for all data to download. 
+```bash
+> load("import_classified_thread_300.js")
+> load("import_classified_thread_20200425.js")
+> load("import_countries_list.js")
+> load("import_favorites.js")
+> load("import_recently_viewed.js")
+> load("import_triplists.js")
+``` 
 
-### `yarn test`
+## 2) Clone each project
+Go to favor directory on your computer
+```bash
+$ git clone https://gitlab.mikelab.net:65443/blueplanet/fontend<br>
+$ git clone https://gitlab.mikelab.net:65443/blueplanet/backend<br>
+$ git clone https://gitlab.mikelab.net:65443/blueplanet/analytics<br>
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 3) Back-end installation (both on local and production)
+from parent directory
+```bash
+$ cd backend/
+```
 
-### `yarn build`
+install package using command `yarn` or `npm install`
+```bash
+$ yarn
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+download `serviceKeyAccount.json` and `.env` via [link](https://drive.google.com/drive/folders/1DeOhtd_30hqlwL3_cbPWbZNQRmR2YL61?usp=sharing) using .ku.th account and paste them on the parent directory.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+start server
+```bash
+$ nodemon server.js
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 4) Front-end installation
+from parent directory
+```bash
+$ cd fontend/
+```
 
-### `yarn eject`
+install package using command `yarn` or `npm install`
+```bash
+$ yarn
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+start server if on local use
+```bash
+$ yarn start
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+but on production your have to add a env
+```bash
+$ export REACT_APP_BACKEND_URL=mars.mikelab.net:30010<br>
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+and then start on production
+```bash
+$ yarn start:production
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 5) Analytics installation
+from parent directory
+```bash
+$ cd analytics/
+```
 
-## Learn More
+install required package (pip version must >10.0.0)
+```bash
+$ pip install --upgrade pip<br>
+$ pip install -r package_requirements.txt<br>
+$ pip install pythainlp<br>
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+using `python` or `python3` commands for running files. Read the exaplnation for the objective of each file and folder.
+```bash
+$ python3 [filename.py]
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### directory and files explanation
+**1. clicksteam/**<br>
+contain `ranking.py` for ranking the top country by the number of threads which related to the country. The threads are considerd in each day (now it is not an automatic run) from each collection in `clicksteam` database.
 
-### Code Splitting
+**2. config/**<br>
+config files of database and url
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+**3. utils/**<br>
+contain lot of python files which provide lot of `necessary functions`
 
-### Analyzing the Bundle Size
+**4. naiveBayes-mmscale-interval-090320/ (one of the fail version)**<br>
+- all steps from create text -> clean text -> TF-IDF -> Naive Bayes Classification -> prediction
+- The `trained data` consist of only threads which `have only one theme`.
+- In the TF-IDF step, it uses the `tf-idf` score for cutting words that have a low score.
+- In Naive Bayes classification, there is only one model to predict multiple themes of each thread.
+- But the results are unacceptable.
+- contain `train.py` which the main file for execution
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+**5. nb-mmscale-interval-yesno-230320/ (the lastest version)**<br>
+- all steps from create text -> clean text -> TF-IDF -> Naive Bayes Classification -> prediction results -> measurements.
+- The `trained data` consist of only threads which `have only one theme`.
+- In the TF-IDF step, it uses the `idf` score for cutting words that have a low score.
+- In Naive Bayes classification, there are models of each theme and predict the theme to be yes or no. So, to create the model, trained threads(data) with one theme of the current considered theme will be 'yes' and others are 'no'. For example, the current consider theme is 'Mountain'. The threads with one theme and that theme is 'Mountain' will be the 'yes' class and The threads with one theme and that theme is not 'Mountain' will be the 'no' class. These are X_train and Y_train data.
+- Using the Jaccard Similarity Index to measure the similarity between trained dataset and predicted dataset.
+- contain `train.py` which the main file for execution
+- contain many folders named `[theme]-idf-new` which keep model files.
 
-### Making a Progressive Web App
+**6. classification-accuracy.py**<br>
+aim to calculate similarity of 304 threads between classify manually and classify by program. This file writes `checked_300threads.json` and `accuracy_300threads.json`.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+**7. checked_300threads.json**<br>
+the result of chacking and calculating similarity of 304 threads between classify manually and classify by program.
 
-### Advanced Configuration
+**8. accuracy_300threads.json**<br>
+summary measurements of 304 threads which are classified manually.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+**9. co-occurrenceTest.py**<br>
+learn and try co-occurrence.
 
-### Deployment
+**10. countriesListSorted.json**<br>
+A list contain all countries's information around the world which are sorted by country code.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+**11. labeledThreadsbyHand_v2.csv**<br>
+The data of threads are classified manually (by project's members).
 
-### `yarn build` fails to minify
+**12. classificationByPattern.py**<br>
+The main file of threads classification.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+**13. scheduleClassify.py**<br>
+is used to automatically call a classification function every day for data updating.
+
