@@ -2,8 +2,8 @@
 ![Imgur](https://i.imgur.com/qX4KCRY.jpg)
 
 ## Video Links
-#### Project trailer: https://youtu.be/E7XD336SghY<br>
-#### Project presentation: https://www.youtube.com/watch?v=gHh1ErghylY<br>
+##### Project trailer: https://youtu.be/E7XD336SghY<br>
+##### Project presentation: https://www.youtube.com/watch?v=gHh1ErghylY<br>
 
 ## Short description
 This web application is developed in order to solve the difficulty of finding review posts/threads which are used as information for planning trips. At present, while planning a trip, Thai people always search for interesting travel reviews, especially the review threads of Pantip.com which are very popular in Thailand. However, not every post will match their needs. Sometimes, they have to read up to 10 threads, but just only one thread can be used. Therefore, our web application is classifying threads so that users are able to filter only the threads they want. Moreover, the application provides other services such as suggesting posts and creating your favorite triplist.
@@ -16,7 +16,7 @@ This project consist of 3 repositories
 **After finish installation,** to play a web application, you need to execute back-end first by run command `nodemon server.js` on the back-end directory. Then, go to the front-end directory and run `yarn start`. There is no need to run **Analytic repository** to play the web application.
 
 # Installation
-Video Guide: [https://youtu.be/GQMlnH3kOjc](https://youtu.be/GQMlnH3kOjc)<br>
+##### Video Guide: [https://youtu.be/GQMlnH3kOjc](https://youtu.be/GQMlnH3kOjc)<br>
 
 
 ## 0) Prerequisites
